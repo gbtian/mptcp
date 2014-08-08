@@ -145,6 +145,8 @@
 #include <net/xfrm.h>
 #include <linux/mroute.h>
 #include <linux/netlink.h>
+#include <linux/ip_mpip.h>
+#include <net/tcp.h>
 
 /*
  *	Process Router Attention IP option (RFC 2113)
@@ -361,6 +363,33 @@ static int ip_rcv_finish(struct sk_buff *skb)
 	} else if (rt->rt_type == RTN_BROADCAST)
 		IP_UPD_PO_STATS_BH(dev_net(rt->dst.dev), IPSTATS_MIB_INBCAST,
 				skb->len);
+
+	if (sysctl_mpip_enabled)
+	{
+		if (check_bad_addr(iph->saddr) && check_bad_addr(iph->daddr))
+		{
+			__be16 sport = 0, dport = 0;
+			if (get_skb_port(skb, &sport, &dport))
+			{
+				mpip_log("\nreceiving: %d, %d, %d, %d, %s, %s, %d\n", iph->id, iph->protocol, sport, dport, __FILE__, __FUNCTION__, __LINE__);
+				print_addr(iph->saddr);
+				print_addr(iph->daddr);
+			}
+		}
+
+		if (process_mpip_cm(skb) == 2)
+			return NET_RX_SUCCESS;
+
+		iph = ip_hdr(skb);
+
+//		if (sysctl_mpip_send && iph->protocol == IPPROTO_TCP)
+//		{
+//			unsigned char session_id = get_tcp_session(skb);
+//			if (session_id > 0 && add_to_tcp_skb_buf(skb, session_id))
+//				return NET_RX_SUCCESS;
+//
+//		}
+	}
 
 	return dst_input(skb);
 
