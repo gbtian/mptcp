@@ -1764,6 +1764,8 @@ static int __init inet_init(void)
 
 	arp_init();
 
+	mpip_init();
+
 	/*
 	 *	Set the IP module up
 	 */
