@@ -119,6 +119,7 @@
 #ifdef CONFIG_IP_MROUTE
 #include <linux/mroute.h>
 #endif
+#include <linux/ip_mpip.h>
 
 
 /* The inetsw table contains everything that inet_create needs to
