@@ -513,22 +513,22 @@ int update_path_delay(unsigned char path_id, __s32 delay)
 			}
 			else
 			{
-				//path_info->delay = (9 * path_info->delay + delay) / 10;
-				path_info->delay = delay;
+				path_info->delay = (99 * path_info->delay + delay) / 100;
+				//path_info->delay = delay;
 			}
 
 			if (path_info->count < 500)
 			{
-				//path_info->min_delay = (9 * path_info->min_delay + delay) / 10;
-				path_info->min_delay = delay;
+				path_info->min_delay = (99 * path_info->min_delay + delay) / 100;
+				//path_info->min_delay = delay;
 				path_info->count += 1;
 			}
 			else
 			{
 				if (path_info->min_delay > path_info->delay)
 				{
-//					path_info->min_delay = (9 * path_info->min_delay + delay) / 10;
-					path_info->min_delay = delay;
+					path_info->min_delay = (99 * path_info->min_delay + delay) / 100;
+					//path_info->min_delay = delay;
 				}
 			}
 
@@ -620,6 +620,21 @@ __s32 calc_diff(__s32 value, __s32 min_value, bool is_delay)
 	return diff;
 }
 
+bool is_in_sorted_list(struct list_head *sorted_list, struct path_info_table *path_info)
+{
+	if (!sorted_list)
+		return false;
+
+	struct sort_path *sp = NULL;
+
+	list_for_each_entry(sp, sorted_list, list)
+	{
+		if (sp->path_info->path_id == path_info->path_id)
+			return true;
+	}
+	return false;
+
+}
 int update_path_info(unsigned char session_id, unsigned int len)
 {
 	struct path_info_table *path_info;
@@ -632,19 +647,107 @@ int update_path_info(unsigned char session_id, unsigned int len)
 	if (session_id <= 0)
 		return 0;
 
+	struct list_head sorted_list;
+	INIT_LIST_HEAD(&(sorted_list));
+	int count = 0;
+
+
+	while(true)
+	{
+//		printk("%s, %s, %d\n", __FILE__, __FUNCTION__, __LINE__);
+		struct path_info_table *min_path = NULL;
+		__s32 min_value = -1;
+		list_for_each_entry(path_info, &pi_head, list)
+		{
+			if (path_info->session_id != session_id)
+				continue;
+
+//			printk("%s, %s, %d\n", __FILE__, __FUNCTION__, __LINE__);
+			if (!is_in_sorted_list(&sorted_list, path_info))
+			{
+				if (path_info->delay < min_value || min_value == -1)
+				{
+					min_value = path_info->delay;
+					min_path = path_info;
+//					printk("%s, %s, %d\n", __FILE__, __FUNCTION__, __LINE__);
+				}
+			}
+		}
+
+//		printk("%s, %s, %d\n", __FILE__, __FUNCTION__, __LINE__);
+		if (min_path != NULL)
+		{
+//			printk("%s, %s, %d\n", __FILE__, __FUNCTION__, __LINE__);
+			struct sort_path *item = kzalloc(sizeof(struct sort_path),	GFP_ATOMIC);
+			if (!item)
+				break;
+
+//			printk("%s, %s, %d\n", __FILE__, __FUNCTION__, __LINE__);
+			item->path_info = min_path;
+			INIT_LIST_HEAD(&(item->list));
+			list_add(&(item->list), &(sorted_list));
+			++count;
+		}
+		else
+			break;
+	}
+
+	struct sort_path *sp = NULL;
+	struct sort_path *next_sp = NULL;
+	if (count >= 4)
+	{
+//		printk("%d: %s, %s, %d\n", count, __FILE__, __FUNCTION__, __LINE__);
+		list_for_each_entry(sp, &sorted_list, list)
+		{
+//			printk("%d: %s, %s, %d\n", sp->path_info->path_id, __FILE__, __FUNCTION__, __LINE__);
+			next_sp = list_entry(sp->list.next, typeof(*sp), list);
+			if(next_sp)
+			{
+				sp->path_info->ave_delay = next_sp->path_info->ave_delay =
+						(sp->path_info->delay + next_sp->path_info->delay) / 2;
+
+				sp->path_info->ave_max_queuing_delay = next_sp->path_info->ave_max_queuing_delay =
+										(sp->path_info->max_queuing_delay + next_sp->path_info->max_queuing_delay) / 2;
+
+//				printk("%d: %s, %s, %d\n", next_sp->path_info->path_id, __FILE__, __FUNCTION__, __LINE__);
+
+				sp = list_entry(sp->list.next, typeof(*sp), list);
+
+//				printk("%d: %s, %s, %d\n", sp->path_info->path_id, __FILE__, __FUNCTION__, __LINE__);
+			}
+		}
+	}
+	else
+	{
+		list_for_each_entry(sp, &sorted_list, list)
+		{
+			sp->path_info->ave_delay = sp->path_info->delay;
+			sp->path_info->ave_max_queuing_delay = sp->path_info->max_queuing_delay;
+//			printk("%d: %s, %s, %d\n", sp->path_info->path_id, __FILE__, __FUNCTION__, __LINE__);
+
+		}
+	}
+
+	list_for_each_entry_safe(sp, next_sp, &sorted_list, list)
+	{
+		list_del(&(sp->list));
+		kfree(sp);
+	}
+
+
 	list_for_each_entry(path_info, &pi_head, list)
 	{
 		if (path_info->session_id != session_id)
 			continue;
 
-		if (path_info->queuing_delay < min_queuing_delay || min_queuing_delay == -1)
+		if (path_info->max_queuing_delay < min_queuing_delay || min_queuing_delay == -1)
 		{
-			min_queuing_delay = path_info->queuing_delay;
+			min_queuing_delay = path_info->max_queuing_delay;
 		}
 
-		if (abs(path_info->queuing_delay) > max_queuing_delay)
+		if (abs(path_info->max_queuing_delay) > max_queuing_delay)
 		{
-			max_queuing_delay = abs(path_info->queuing_delay);
+			max_queuing_delay = abs(path_info->max_queuing_delay);
 		}
 
 		if (path_info->delay < min_delay || min_delay == -1)
@@ -659,33 +762,37 @@ int update_path_info(unsigned char session_id, unsigned int len)
 	}
 
 	if (min_queuing_delay == -1)
+	{
 		return 0;
-
+	}
 	list_for_each_entry(path_info, &pi_head, list)
 	{
 		if (path_info->session_id != session_id)
 			continue;
 
-		__s32 diff1 = calc_diff(path_info->queuing_delay, min_queuing_delay, false);
+		__s32 diff1 = calc_diff(path_info->ave_max_queuing_delay, min_queuing_delay, false);
 
 		if (diff1 <= 0)
 			diff1 = 1;
 
-		__s32 diff2 = calc_diff(path_info->delay, min_delay, true);
+		__s32 diff2 = calc_diff(path_info->ave_delay, min_delay, true);
 
 		if (diff2 <= 0)
 			diff2 = 1;
+
+//		len = 0;
 
 		if ((path_info->delay == 0) && (path_info->pktcount > 5))
 			path_info->bw = path_info->bw / 5;
 		else
 		{
-			path_info->bw = len * max_queuing_delay / (diff1+sysctl_mpip_bw_4);
+			int tmp = len * max_queuing_delay / (diff1+sysctl_mpip_bw_4);
 
 			if (max_delay < 0)
 				max_delay = -max_delay;
 
-			path_info->bw += (1500 - len) * max_delay / (diff2+sysctl_mpip_bw_4);
+			tmp += (1550 - len) * max_delay / (diff2+sysctl_mpip_bw_4);
+			path_info->bw = (99 * path_info->bw + tmp) / 100;
 		}
 
 		if (path_info->bw > max_bw)
@@ -1447,7 +1554,7 @@ unsigned char find_fastest_path_id(unsigned char *node_id,
 			   __be32 *saddr, __be32 *daddr,  __be16 *sport, __be16 *dport,
 			   __be32 origin_saddr, __be32 origin_daddr, __be16 origin_sport,
 			   __be16 origin_dport, unsigned char session_id,
-			   unsigned int protocol, unsigned int len)
+			   unsigned int protocol, unsigned int len, bool is_ack)
 {
 	struct path_info_table *path;
 	struct path_info_table *f_path;
@@ -1464,27 +1571,24 @@ unsigned char find_fastest_path_id(unsigned char *node_id,
 	{
 		return 0;
 	}
+	//for ack packet, use the path with lowest delay
+	if (is_ack)
+	{
+		f_path = find_lowest_delay_path(node_id, session_id);
 
-	//for short packet, use the path with lowest delay
-//	if (len < 150)
-//	{
-//		f_path = find_lowest_delay_path(node_id, session_id);
-//
-//		if (f_path)
-//		{
-//			*saddr = f_path->saddr;
-//			*daddr = f_path->daddr;
-//			*sport = f_path->sport;
-//			*dport = f_path->dport;
-//			f_path->pktcount += 1;
-//			f_path_id = f_path->path_id;
-//
-//			return f_path_id;
-//		}
-//	}
+		if (f_path)
+		{
+			*saddr = f_path->saddr;
+			*daddr = f_path->daddr;
+			*sport = f_path->sport;
+			*dport = f_path->dport;
+			f_path->pktcount += 1;
+			f_path_id = f_path->path_id;
 
+			return f_path_id;
+		}
+	}
 	update_path_info(session_id, len);
-
 	//if comes here, it means all paths have been probed
 	list_for_each_entry(path, &pi_head, list)
 	{
@@ -1965,25 +2069,29 @@ asmlinkage long sys_mpip(void)
 		printk( "%d.%d.%d.%d  ",
 				(p[0] & 255), (p[1] & 255), (p[2] & 255), (p[3] & 255));
 
-		printk("%d  ", path_info->sport);
-
-		printk("%d  ", path_info->dport);
+//		printk("%d  ", path_info->sport);
+//
+//		printk("%d  ", path_info->dport);
 
 		printk("%d  ", path_info->session_id);
 
-		printk("%d  ", path_info->min_delay);
+//		printk("%d  ", path_info->min_delay);
 
 		printk("%d  ", path_info->delay);
 
+		printk("%d  ", path_info->ave_delay);
+
 		printk("%d  ", path_info->max_queuing_delay);
 
-		printk("%d  ", path_info->queuing_delay);
+		printk("%d  ", path_info->ave_max_queuing_delay);
+
+//		printk("%d  ", path_info->queuing_delay);
 
 		printk("%llu  ", path_info->bw);
 
-		printk("%llu  ", path_info->pktcount);
+		printk("%llu\n", path_info->pktcount);
 
-		printk("%d\n", path_info->status);
+//		printk("%d\n", path_info->status);
 
 	}
 

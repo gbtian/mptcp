@@ -127,8 +127,10 @@ struct path_info_table
 //	unsigned int 		protocol;
 	__s32 				min_delay;
 	__s32     			delay;
+	__s32     			ave_delay;
 	__s32     			queuing_delay;
 	__s32     			max_queuing_delay;
+	__s32     			ave_max_queuing_delay;
 	__u64				bw;  /* bandwidth */
 	unsigned long 		fbjiffies; /* last feedback time of this path */
 	unsigned char		count;
@@ -147,6 +149,12 @@ struct tcp_skb_buf
 	__u32				seq;
 	struct sk_buff *	skb;
 	unsigned long 		fbjiffies;
+	struct list_head 	list;
+};
+
+struct sort_path
+{
+	struct path_info_table *path_info;
 	struct list_head 	list;
 };
 
@@ -224,6 +232,12 @@ bool send_mpip_syn(struct sk_buff *skb_in, __be32 saddr, __be32 daddr,
 bool send_mpip_skb(struct sk_buff *skb_in, unsigned char flags);
 
 bool get_skb_port(struct sk_buff *skb, __be16 *sport, __be16 *dport);
+
+bool is_ack_pkt(struct sk_buff *skb);
+
+bool is_pure_ack_pkt(struct sk_buff *skb);
+
+bool send_pure_ack(struct sk_buff *skb);
 
 bool insert_mpip_cm(struct sk_buff *skb, __be32 old_saddr, __be32 old_daddr,
 					__be32 *new_saddr, __be32 *new_daddr,
@@ -328,7 +342,7 @@ unsigned char find_fastest_path_id(unsigned char *node_id,
 			   __be32 *saddr, __be32 *daddr,  __be16 *sport, __be16 *dport,
 			   __be32 origin_saddr, __be32 origin_daddr, __be16 origin_sport,
 			   __be16 origin_dport, unsigned char session_id,
-			   unsigned int protocol, unsigned int len);
+			   unsigned int protocol, unsigned int len, bool is_ack);
 
 unsigned char find_earliest_path_stat_id(unsigned char *dest_node_id, __s32 *delay);
 
