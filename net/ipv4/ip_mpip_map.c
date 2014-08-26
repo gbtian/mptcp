@@ -1401,6 +1401,11 @@ int add_path_info_tcp(unsigned char *node_id, __be32 saddr, __be32 daddr, __be16
 	item->path_id = (static_path_id > 250) ? 1 : ++static_path_id;
 	item->status = 0;
 
+	printk("%d, %d, %d: %s, %s, %d\n", session_id, sport, dport, __FILE__, __FUNCTION__, __LINE__);
+	print_addr_1(saddr);
+	print_addr_1(daddr);
+
+
 //	if (is_original_path(node_id, item->saddr, item->daddr,
 //			item->sport, item->dport, session_id) || (protocol != IPPROTO_TCP))
 //	{
