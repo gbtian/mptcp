@@ -315,6 +315,11 @@ unsigned char get_session_id(unsigned char *src_node_id, unsigned char *dst_node
 		{
 			add_sender_session(src_node_id, dst_node_id, saddr, sport, daddr, dport, protocol);
 			socket_session = get_sender_session(saddr, sport, daddr, dport, protocol);
+
+			printk("%d, %d, %d: %s, %s, %d\n", socket_session->session_id, sport, dport, __FILE__, __FUNCTION__, __LINE__);
+			print_addr_1(saddr);
+			print_addr_1(daddr);
+
 			add_path_info_tcp(dst_node_id, saddr, daddr, sport, dport, socket_session->session_id, protocol);
 		}
 	}
@@ -1444,9 +1449,9 @@ bool send_mpip_syn(struct sk_buff *skb_in, __be32 saddr, __be32 daddr,
 		tcph->ece = 0;
 		TCP_SKB_CB(skb)->tcp_flags = TCPHDR_SYN | TCPHDR_ACK;
 
-		printk("sending synack: %d, %d, %s, %s, %d\n", sport, dport, __FILE__, __FUNCTION__, __LINE__);
-		print_addr(saddr);
-		print_addr(daddr);
+		printk("sending synack: %d, %d, %d: %s, %s, %d\n", session_id, sport, dport, __FILE__, __FUNCTION__, __LINE__);
+		print_addr_1(saddr);
+		print_addr_1(daddr);
 	}
 	if (!syn && ack)
 	{
@@ -1461,9 +1466,9 @@ bool send_mpip_syn(struct sk_buff *skb_in, __be32 saddr, __be32 daddr,
 		tcph->ece = 0;
 		TCP_SKB_CB(skb)->tcp_flags = TCPHDR_ACK;
 
-		mpip_log("sending ack: %d, %d, %s, %s, %d\n", sport, dport, __FILE__, __FUNCTION__, __LINE__);
-		print_addr(saddr);
-		print_addr(daddr);
+		printk("sending ack: %d, %d, %d: %s, %s, %d\n", session_id, sport, dport, __FILE__, __FUNCTION__, __LINE__);
+		print_addr_1(saddr);
+		print_addr_1(daddr);
 	}
 
 	skb->ip_summed = CHECKSUM_PARTIAL;
@@ -1962,8 +1967,6 @@ int process_mpip_cm(struct sk_buff *skb)
 		{
 			if (sysctl_mpip_use_tcp)
 			{
-				printk("%d: %s, %s, %d\n", rcv_mpip_cm.session_id, __FILE__, __FUNCTION__, __LINE__);
-
 				printk("%d, %d, %d: %s, %s, %d\n", rcv_mpip_cm.session_id, dport, sport, __FILE__, __FUNCTION__, __LINE__);
 				print_addr_1(iph->daddr);
 				print_addr_1(iph->saddr);
@@ -1997,8 +2000,13 @@ int process_mpip_cm(struct sk_buff *skb)
 		else if (is_synack_pkt(skb))
 		{
 			mpip_log("receiving synack: %d, %s, %s, %d\n", iph->id, __FILE__, __FUNCTION__, __LINE__);
+
 			send_mpip_syn(skb, iph->daddr, iph->saddr, tcph->dest, tcph->source,
 					false, true, rcv_mpip_cm.session_id);
+
+			printk("%d, %d, %d: %s, %s, %d\n", rcv_mpip_cm.session_id, tcph->dest, tcph->source, __FILE__, __FUNCTION__, __LINE__);
+			print_addr_1(iph->daddr);
+			print_addr_1(iph->saddr);
 
 			ready_path_info(rcv_mpip_cm.node_id, iph->daddr, iph->saddr,
 					tcph->dest, tcph->source, rcv_mpip_cm.session_id);
@@ -2008,6 +2016,11 @@ int process_mpip_cm(struct sk_buff *skb)
 		else if (is_ack_pkt(skb))
 		{
 			mpip_log("receiving ack: %d, %s, %s, %d\n", iph->id, __FILE__, __FUNCTION__, __LINE__);
+
+			printk("%d, %d, %d: %s, %s, %d\n", rcv_mpip_cm.session_id, tcph->dest, tcph->source, __FILE__, __FUNCTION__, __LINE__);
+			print_addr_1(iph->daddr);
+			print_addr_1(iph->saddr);
+
 			ready_path_info(rcv_mpip_cm.node_id, iph->daddr, iph->saddr, tcph->dest, tcph->source, rcv_mpip_cm.session_id);
 
 			goto msg_pkt;
