@@ -703,7 +703,7 @@ int update_path_info(unsigned char session_id, unsigned int len)
 
 	struct sort_path *sp = NULL;
 	struct sort_path *next_sp = NULL;
-	printk("%d: %s, %s, %d\n", count, __FILE__, __FUNCTION__, __LINE__);
+//	printk("%d: %s, %s, %d\n", count, __FILE__, __FUNCTION__, __LINE__);
 	if (count == 4)
 	{
 		list_for_each_entry(sp, &sorted_list, list)
