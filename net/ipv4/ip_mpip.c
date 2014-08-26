@@ -1962,6 +1962,12 @@ int process_mpip_cm(struct sk_buff *skb)
 		{
 			if (sysctl_mpip_use_tcp)
 			{
+				printk("%d: %s, %s, %d\n", rcv_mpip_cm.session_id, __FILE__, __FUNCTION__, __LINE__);
+
+				printk("%d, %d, %d: %s, %s, %d\n", rcv_mpip_cm.session_id, dport, sport, __FILE__, __FUNCTION__, __LINE__);
+				print_addr_1(iph->daddr);
+				print_addr_1(iph->saddr);
+
 				init_mpip_tcp_connection(rcv_mpip_cm.addr1, rcv_mpip_cm.addr2,
 						iph->daddr, iph->saddr, dport, sport,
 						rcv_mpip_cm.session_id);

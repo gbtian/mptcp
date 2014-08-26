@@ -203,6 +203,8 @@ void print_node_id(unsigned char *node_id);
 
 void print_addr(__be32 addr);
 
+void print_addr_1(__be32 addr);
+
 __be32 convert_addr(char a1, char a2, char a3, char a4);
 
 char *in_ntoa(unsigned long in);
