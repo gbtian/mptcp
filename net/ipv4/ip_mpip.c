@@ -1411,6 +1411,8 @@ bool send_mpip_syn(struct sk_buff *skb_in, __be32 saddr, __be32 daddr,
 		return false;
 	}
 
+	unsigned int id = get_random_int() % 100000;
+
 	skb_reserve(skb, MAX_TCP_HEADER);
 //
 //	skb_orphan(skb);
@@ -1449,7 +1451,7 @@ bool send_mpip_syn(struct sk_buff *skb_in, __be32 saddr, __be32 daddr,
 		tcph->ece = 0;
 		TCP_SKB_CB(skb)->tcp_flags = TCPHDR_SYN | TCPHDR_ACK;
 
-		printk("sending synack: %d, %d, %d: %s, %s, %d\n", session_id, sport, dport, __FILE__, __FUNCTION__, __LINE__);
+		printk("%d, %d, %d, %d: %s, %s, %d\n", id, session_id, sport, dport, __FILE__, __FUNCTION__, __LINE__);
 		print_addr_1(saddr);
 		print_addr_1(daddr);
 	}
@@ -1466,7 +1468,7 @@ bool send_mpip_syn(struct sk_buff *skb_in, __be32 saddr, __be32 daddr,
 		tcph->ece = 0;
 		TCP_SKB_CB(skb)->tcp_flags = TCPHDR_ACK;
 
-		printk("sending ack: %d, %d, %d: %s, %s, %d\n", session_id, sport, dport, __FILE__, __FUNCTION__, __LINE__);
+		printk("%d, %d, %d, %d: %s, %s, %d\n", id, session_id, sport, dport, __FILE__, __FUNCTION__, __LINE__);
 		print_addr_1(saddr);
 		print_addr_1(daddr);
 	}
@@ -1513,7 +1515,7 @@ bool send_mpip_syn(struct sk_buff *skb_in, __be32 saddr, __be32 daddr,
 	iph->ihl = 5;
 	iph->tot_len = htons(skb->len);
 	iph->tos      = 0;
-	iph->id       = 0;
+	iph->id       = id;
 	iph->frag_off = 0;
 	iph->ttl      = 64;
 	iph->protocol = IPPROTO_TCP;
@@ -2004,7 +2006,7 @@ int process_mpip_cm(struct sk_buff *skb)
 			send_mpip_syn(skb, iph->daddr, iph->saddr, tcph->dest, tcph->source,
 					false, true, rcv_mpip_cm.session_id);
 
-			printk("%d, %d, %d: %s, %s, %d\n", rcv_mpip_cm.session_id, tcph->dest, tcph->source, __FILE__, __FUNCTION__, __LINE__);
+			printk("%d, %d, %d, %d: %s, %s, %d\n", iph->id, rcv_mpip_cm.session_id, tcph->dest, tcph->source, __FILE__, __FUNCTION__, __LINE__);
 			print_addr_1(iph->daddr);
 			print_addr_1(iph->saddr);
 
@@ -2017,7 +2019,7 @@ int process_mpip_cm(struct sk_buff *skb)
 		{
 			mpip_log("receiving ack: %d, %s, %s, %d\n", iph->id, __FILE__, __FUNCTION__, __LINE__);
 
-			printk("%d, %d, %d: %s, %s, %d\n", rcv_mpip_cm.session_id, tcph->dest, tcph->source, __FILE__, __FUNCTION__, __LINE__);
+			printk("%d, %d, %d, %d: %s, %s, %d\n", iph->id,  rcv_mpip_cm.session_id, tcph->dest, tcph->source, __FILE__, __FUNCTION__, __LINE__);
 			print_addr_1(iph->daddr);
 			print_addr_1(iph->saddr);
 
