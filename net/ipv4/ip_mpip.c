@@ -681,8 +681,7 @@ void send_mpip_enable(struct sk_buff *skb, bool sender, bool reverse)
 
 	item = find_mpip_enabled(addr, port);
 
-	//if (item && ((item->sent_count > 3) || (item->mpip_enabled)))
-	if (item && item->mpip_enabled)
+	if (item && ((item->sent_count > 30) || (item->mpip_enabled)))
 	{
 		return;
 	}
