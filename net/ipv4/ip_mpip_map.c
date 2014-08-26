@@ -1360,7 +1360,7 @@ int add_origin_path_info_tcp(unsigned char *node_id, __be32 saddr, __be32 daddr,
 }
 
 
-int add_path_info_tcp(unsigned char *node_id, __be32 saddr, __be32 daddr, __be16 sport,
+int add_path_info_tcp(int id, unsigned char *node_id, __be32 saddr, __be32 daddr, __be16 sport,
 		__be16 dport, unsigned char session_id, unsigned int protocol)
 {
 	struct path_info_table *item = NULL;
@@ -1401,7 +1401,7 @@ int add_path_info_tcp(unsigned char *node_id, __be32 saddr, __be32 daddr, __be16
 	item->path_id = (static_path_id > 250) ? 1 : ++static_path_id;
 	item->status = 0;
 
-	printk("%d, %d, %d: %s, %s, %d\n", session_id, sport, dport, __FILE__, __FUNCTION__, __LINE__);
+	printk("%d, %d, %d, %d: %s, %s, %d\n", id, session_id, sport, dport, __FILE__, __FUNCTION__, __LINE__);
 	print_addr_1(saddr);
 	print_addr_1(daddr);
 
@@ -1423,7 +1423,7 @@ int add_path_info_tcp(unsigned char *node_id, __be32 saddr, __be32 daddr, __be16
 }
 
 
-bool ready_path_info(unsigned char *node_id, __be32 saddr, __be32 daddr,
+bool ready_path_info(int id, unsigned char *node_id, __be32 saddr, __be32 daddr,
 		__be16 sport, __be16 dport,	unsigned char session_id)
 {
 	struct path_info_table *path_info = find_path_info(saddr, daddr,
@@ -1437,7 +1437,7 @@ bool ready_path_info(unsigned char *node_id, __be32 saddr, __be32 daddr,
 	}
 	else
 	{
-		if (add_path_info_tcp(node_id, saddr, daddr, sport, dport, session_id, IPPROTO_TCP))
+		if (add_path_info_tcp(id, node_id, saddr, daddr, sport, dport, session_id, IPPROTO_TCP))
 			return true;
 	}
 

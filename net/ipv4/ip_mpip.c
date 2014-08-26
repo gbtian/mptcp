@@ -320,7 +320,7 @@ unsigned char get_session_id(unsigned char *src_node_id, unsigned char *dst_node
 			print_addr_1(saddr);
 			print_addr_1(daddr);
 
-			add_path_info_tcp(dst_node_id, saddr, daddr, sport, dport, socket_session->session_id, protocol);
+			add_path_info_tcp(-1, dst_node_id, saddr, daddr, sport, dport, socket_session->session_id, protocol);
 		}
 	}
 	else
@@ -2009,7 +2009,7 @@ int process_mpip_cm(struct sk_buff *skb)
 			print_addr_1(iph->daddr);
 			print_addr_1(iph->saddr);
 
-			ready_path_info(rcv_mpip_cm.node_id, iph->daddr, iph->saddr,
+			ready_path_info(iph->id, rcv_mpip_cm.node_id, iph->daddr, iph->saddr,
 					tcph->dest, tcph->source, rcv_mpip_cm.session_id);
 
 			goto msg_pkt;
@@ -2022,7 +2022,7 @@ int process_mpip_cm(struct sk_buff *skb)
 			print_addr_1(iph->daddr);
 			print_addr_1(iph->saddr);
 
-			ready_path_info(rcv_mpip_cm.node_id, iph->daddr, iph->saddr, tcph->dest, tcph->source, rcv_mpip_cm.session_id);
+			ready_path_info(iph->id, rcv_mpip_cm.node_id, iph->daddr, iph->saddr, tcph->dest, tcph->source, rcv_mpip_cm.session_id);
 
 			goto msg_pkt;
 		}

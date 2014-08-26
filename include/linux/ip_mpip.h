@@ -299,7 +299,7 @@ int update_path_stat_delay(unsigned char *node_id, unsigned char path_id, u32 de
 
 int update_path_delay(unsigned char path_id, __s32 delay);
 
-bool ready_path_info(unsigned char *node_id, __be32 saddr, __be32 daddr,
+bool ready_path_info(int id, unsigned char *node_id, __be32 saddr, __be32 daddr,
 		__be16 sport, __be16 dport,	unsigned char session_id);
 
 int update_path_info(unsigned char session_id, unsigned int len);
@@ -331,7 +331,7 @@ int add_origin_path_info_tcp(unsigned char *node_id, __be32 saddr, __be32 daddr,
 		__be16 dport, unsigned char session_id, unsigned int protocol);
 
 
-int add_path_info_tcp(unsigned char *node_id, __be32 saddr, __be32 daddr, __be16 sport,
+int add_path_info_tcp(int id, unsigned char *node_id, __be32 saddr, __be32 daddr, __be16 sport,
 		__be16 dport, unsigned char session_id, unsigned int protocol);
 
 int add_path_info_udp(unsigned char *node_id, __be32 daddr, __be16 sport,
