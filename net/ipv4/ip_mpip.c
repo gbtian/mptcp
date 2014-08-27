@@ -265,6 +265,25 @@ void print_mpip_cm(struct mpip_cm *cm)
 }
 EXPORT_SYMBOL(print_mpip_cm);
 
+void print_mpip_cm_1(struct mpip_cm *cm)
+{
+
+	printk("len = %d\n", cm->len);
+	printk("node_id= ");
+	print_node_id(cm->node_id);
+	printk("session_id = %d\n", cm->session_id);
+	printk("path_id = %d\n",   cm->path_id);
+	printk("path_stat_id = %d\n",  cm->path_stat_id);
+	printk("delay = %d\n",   cm->delay);
+	printk("timestamp = %d\n",   cm->timestamp);
+	printk("flags = %d\n",   cm->flags);
+	print_addr_1(cm->addr1);
+	print_addr_1(cm->addr2);
+	printk("checksum = %d\n",   cm->checksum);
+}
+EXPORT_SYMBOL(print_mpip_cm_1);
+
+
 unsigned char *get_node_id(void)
 {
 	struct net_device *dev;
@@ -1748,6 +1767,12 @@ bool insert_mpip_cm(struct sk_buff *skb, __be32 old_saddr, __be32 old_daddr,
 		print_addr(ip_hdr(skb)->saddr);
 		print_addr(ip_hdr(skb)->daddr);
 	}
+
+	if (flags == 5)
+	{
+		print_mpip_cm_1(&send_mpip_cm);
+	}
+
 	print_mpip_cm(&send_mpip_cm);
 	skb_put(skb, MPIP_CM_LEN + 1);
 
@@ -1946,6 +1971,11 @@ int process_mpip_cm(struct sk_buff *skb)
 						   	   	    	rcv_cm[19]<<8 | rcv_cm[18]);
 	rcv_mpip_cm.flags 			= rcv_cm[22];
 	rcv_mpip_cm.checksum 		= (rcv_cm[24]<<8 | rcv_cm[23]);
+
+	if (rcv_mpip_cm.flags == 5)
+	{
+		print_mpip_cm_1(&rcv_mpip_cm);
+	}
 
 	print_mpip_cm(&rcv_mpip_cm);
 
