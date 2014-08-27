@@ -583,6 +583,10 @@ __s32 calc_si_diff(bool is_delay)
 
 			if (max > diff)
 			{
+				if (max == -500)
+				{
+					max = -499;
+				}
 				sigma += (100 * diff) / (max + 500);
 				++K;
 			}
@@ -606,6 +610,10 @@ __s32 calc_si_diff(bool is_delay)
 
 			if (max > diff)
 			{
+				if (max == -500)
+				{
+					max = -499;
+				}
 				sigma += (100 * diff) / (max + 500);
 				++K;
 			}
