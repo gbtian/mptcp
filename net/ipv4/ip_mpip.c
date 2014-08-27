@@ -1996,7 +1996,7 @@ int process_mpip_cm(struct sk_buff *skb)
 	{
 
 		if ((odport > 6000) && is_original_path(rcv_mpip_cm.node_id,
-				iph->daddr, iph->saddr, dport, sport, rcv_mpip_cm.session_id))
+				iph->daddr, iph->saddr, tcph->dest, tcph->source, rcv_mpip_cm.session_id))
 		{
 			if (sysctl_mpip_use_tcp)
 			{
@@ -2005,15 +2005,15 @@ int process_mpip_cm(struct sk_buff *skb)
 //				print_addr_1(iph->saddr);
 
 				init_mpip_tcp_connection(rcv_mpip_cm.addr1, rcv_mpip_cm.addr2,
-						iph->daddr, iph->saddr, dport, sport,
+						iph->daddr, iph->saddr, tcph->dest, tcph->source,
 						rcv_mpip_cm.session_id);
 			}
 			else
 			{
-				add_path_info_udp(rcv_mpip_cm.node_id, rcv_mpip_cm.addr1, dport,
-						sport, rcv_mpip_cm.session_id, iph->protocol);
-				add_path_info_udp(rcv_mpip_cm.node_id, rcv_mpip_cm.addr2, dport,
-						sport, rcv_mpip_cm.session_id, iph->protocol);
+				add_path_info_udp(rcv_mpip_cm.node_id, rcv_mpip_cm.addr1, tcph->dest, tcph->source,
+						rcv_mpip_cm.session_id, iph->protocol);
+				add_path_info_udp(rcv_mpip_cm.node_id, rcv_mpip_cm.addr2, tcph->dest, tcph->source,
+						rcv_mpip_cm.session_id, iph->protocol);
 			}
 		}
 //		check_path_info_status(skb, rcv_mpip_cm.node_id, rcv_mpip_cm.session_id);
