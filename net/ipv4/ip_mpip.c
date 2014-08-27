@@ -707,6 +707,7 @@ void send_mpip_enable(struct sk_buff *skb, bool sender, bool reverse)
 	else if (item)
 	{
 		mpip_log("%s, %s, %d\n", __FILE__, __FUNCTION__, __LINE__);
+
 		if (send_mpip_msg(skb, sender, reverse, 3, 0))
 			item->sent_count += 1;
 	}

@@ -112,20 +112,17 @@ int ip_local_out(struct sk_buff *skb)
 	int err;
 	struct iphdr *iph = ip_hdr(skb);
 
-//	printk("sending: %d, %d, %s, %s, %d\n", iph->id,
-//			iph->protocol, __FILE__, __FUNCTION__,	__LINE__);
-
 	if (sysctl_mpip_enabled)
 	{
 		if (check_bad_addr(iph->saddr) && check_bad_addr(iph->daddr))
 		{
-			myskb = skb_copy(skb, GFP_ATOMIC);
-			send_mpip_enable(myskb, true, false);
+//			myskb = skb_copy(skb, GFP_ATOMIC);
+			send_mpip_enable(skb, true, false);
 
 			if (iph->protocol == IPPROTO_TCP)
-				send_mpip_enabled(myskb, true, false);
+				send_mpip_enabled(skb, true, false);
 
-			kfree_skb(myskb);
+//			kfree_skb(myskb);
 		}
 
 		if (get_skb_port(skb, &sport, &dport))
