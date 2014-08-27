@@ -886,13 +886,13 @@ int update_path_info(unsigned char session_id, unsigned int len)
 		else
 		{
 			//int tmp = len * max_queuing_delay / (diff1+sysctl_mpip_bw_4);
-			int tmp = len * (max_queuing_delay - diff1);
+			int tmp = len * (max_queuing_delay - diff1) / sysctl_mpip_bw_4;
 
 			if (max_delay < 0)
 				max_delay = -max_delay;
 
 			//tmp += (1550 - len) * max_delay / (diff2+sysctl_mpip_bw_4);
-			tmp += (1550 - len) * (max_delay - diff2);
+			tmp *= (1550 - len) * (max_delay - diff2) / sysctl_mpip_bw_4;
 			path_info->bw = (999 * path_info->bw + tmp) / 1000;
 		}
 
