@@ -638,10 +638,9 @@ __s32 calc_si_diff(bool is_delay)
 __s32 calc_diff(__s32 value, __s32 min_value, bool is_delay)
 {
 	__s32 diff = value - min_value;
-	__s32 si = calc_si_diff(is_delay);
-	//printk("%d, %s, %d\n", si, __FILE__, __LINE__);
-	return diff * si;
-//	return diff;
+//	__s32 si = calc_si_diff(is_delay);
+//	return diff * si;
+	return diff;
 }
 
 bool is_in_sorted_list(struct list_head *sorted_list, struct path_info_table *path_info)
@@ -886,12 +885,14 @@ int update_path_info(unsigned char session_id, unsigned int len)
 			path_info->bw = path_info->bw / 5;
 		else
 		{
-			int tmp = len * max_queuing_delay / (diff1+sysctl_mpip_bw_4);
+			//int tmp = len * max_queuing_delay / (diff1+sysctl_mpip_bw_4);
+			int tmp = len * (max_queuing_delay - diff1);
 
 			if (max_delay < 0)
 				max_delay = -max_delay;
 
-			tmp += (1550 - len) * max_delay / (diff2+sysctl_mpip_bw_4);
+			//tmp += (1550 - len) * max_delay / (diff2+sysctl_mpip_bw_4);
+			tmp += (1550 - len) * (max_delay - diff2);
 			path_info->bw = (999 * path_info->bw + tmp) / 1000;
 		}
 
