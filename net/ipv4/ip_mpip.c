@@ -2028,6 +2028,8 @@ int process_mpip_cm(struct sk_buff *skb)
 			send_mpip_syn(skb, iph->daddr, iph->saddr, tcph->dest, tcph->source,
 					true, true, rcv_mpip_cm.session_id);
 
+			printk("%d, %d, %d, %d: %s, %s, %d\n", iph->id, rcv_mpip_cm.session_id, tcph->dest, tcph->source, __FILE__, __FUNCTION__, __LINE__);
+
 			goto msg_pkt;
 		}
 		else if (is_synack_pkt(skb))
