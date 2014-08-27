@@ -1770,7 +1770,7 @@ bool insert_mpip_cm(struct sk_buff *skb, __be32 old_saddr, __be32 old_daddr,
 
 	if (flags == 5)
 	{
-		printk("sending %d: \n", ip_hdr(skb)->id,);
+		printk("sending %d: \n", ip_hdr(skb)->id);
 		print_mpip_cm_1(&send_mpip_cm, ip_hdr(skb)->id);
 	}
 
