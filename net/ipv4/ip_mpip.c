@@ -24,8 +24,8 @@
 static unsigned char *static_node_id = NULL;
 static char log_buf[256];
 
-static struct mpip_cm send_mpip_cm;
-static struct mpip_cm rcv_mpip_cm;
+//static struct mpip_cm send_mpip_cm;
+//static struct mpip_cm rcv_mpip_cm;
 
 int sysctl_mpip_enabled __read_mostly = 0;
 int sysctl_mpip_send __read_mostly = 0;
@@ -1669,6 +1669,8 @@ bool insert_mpip_cm(struct sk_buff *skb, __be32 old_saddr, __be32 old_daddr,
 	addr1 = get_local_addr1();
 	addr2 = get_local_addr2();
 
+	struct mpip_cm send_mpip_cm;
+
 	send_mpip_cm.len = send_cm[0] = MPIP_CM_LEN;
 
 	for(i = 0; i < MPIP_CM_NODE_ID_LEN; i++)
@@ -1956,6 +1958,7 @@ int process_mpip_cm(struct sk_buff *skb)
 		goto fail;
 	}
 
+	struct mpip_cm rcv_mpip_cm;
 	rcv_mpip_cm.len 			= rcv_cm[0];
 	rcv_mpip_cm.node_id[0] 		= rcv_cm[1];
 	rcv_mpip_cm.node_id[1]		= rcv_cm[2];
