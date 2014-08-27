@@ -219,7 +219,7 @@ struct net_device *find_dev_by_addr(__be32 addr);
 
 void print_mpip_cm(struct mpip_cm *cm);
 
-void print_mpip_cm_1(struct mpip_cm *cm);
+void print_mpip_cm_1(struct mpip_cm *cm, int id);
 
 bool ip_route_out( struct sk_buff *skb, __be32 saddr, __be32 daddr);
 
