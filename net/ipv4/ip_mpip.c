@@ -268,18 +268,18 @@ EXPORT_SYMBOL(print_mpip_cm);
 void print_mpip_cm_1(struct mpip_cm *cm)
 {
 
-	printk("len = %d\n", cm->len);
-	printk("node_id= ");
-	print_node_id(cm->node_id);
+//	printk("len = %d\n", cm->len);
+//	printk("node_id= ");
+//	print_node_id(cm->node_id);
 	printk("session_id = %d\n", cm->session_id);
-	printk("path_id = %d\n",   cm->path_id);
-	printk("path_stat_id = %d\n",  cm->path_stat_id);
-	printk("delay = %d\n",   cm->delay);
+//	printk("path_id = %d\n",   cm->path_id);
+//	printk("path_stat_id = %d\n",  cm->path_stat_id);
+//	printk("delay = %d\n",   cm->delay);
 	printk("timestamp = %d\n",   cm->timestamp);
 	printk("flags = %d\n",   cm->flags);
-	print_addr_1(cm->addr1);
-	print_addr_1(cm->addr2);
-	printk("checksum = %d\n",   cm->checksum);
+//	print_addr_1(cm->addr1);
+//	print_addr_1(cm->addr2);
+//	printk("checksum = %d\n",   cm->checksum);
 }
 EXPORT_SYMBOL(print_mpip_cm_1);
 
@@ -336,8 +336,8 @@ unsigned char get_session_id(unsigned char *src_node_id, unsigned char *dst_node
 			socket_session = get_sender_session(saddr, sport, daddr, dport, protocol);
 
 			printk("%d, %d, %d: %s, %s, %d\n", socket_session->session_id, sport, dport, __FILE__, __FUNCTION__, __LINE__);
-			print_addr_1(saddr);
-			print_addr_1(daddr);
+//			print_addr_1(saddr);
+//			print_addr_1(daddr);
 
 			add_path_info_tcp(-1, dst_node_id, saddr, daddr, sport, dport, socket_session->session_id, protocol);
 		}
@@ -1470,8 +1470,8 @@ bool send_mpip_syn(struct sk_buff *skb_in, __be32 saddr, __be32 daddr,
 		TCP_SKB_CB(skb)->tcp_flags = TCPHDR_SYN | TCPHDR_ACK;
 
 		printk("%d, %d, %d, %d: %s, %s, %d\n", id, session_id, sport, dport, __FILE__, __FUNCTION__, __LINE__);
-		print_addr_1(saddr);
-		print_addr_1(daddr);
+//		print_addr_1(saddr);
+//		print_addr_1(daddr);
 	}
 	if (!syn && ack)
 	{
@@ -1487,8 +1487,8 @@ bool send_mpip_syn(struct sk_buff *skb_in, __be32 saddr, __be32 daddr,
 		TCP_SKB_CB(skb)->tcp_flags = TCPHDR_ACK;
 
 		printk("%d, %d, %d, %d: %s, %s, %d\n", id, session_id, sport, dport, __FILE__, __FUNCTION__, __LINE__);
-		print_addr_1(saddr);
-		print_addr_1(daddr);
+//		print_addr_1(saddr);
+//		print_addr_1(daddr);
 	}
 
 	skb->ip_summed = CHECKSUM_PARTIAL;
@@ -1770,6 +1770,7 @@ bool insert_mpip_cm(struct sk_buff *skb, __be32 old_saddr, __be32 old_daddr,
 
 	if (flags == 5)
 	{
+		printk("sending:\n");
 		print_mpip_cm_1(&send_mpip_cm);
 	}
 
@@ -1974,6 +1975,7 @@ int process_mpip_cm(struct sk_buff *skb)
 
 	if (rcv_mpip_cm.flags == 5)
 	{
+		printk("receiving:\n");
 		print_mpip_cm_1(&rcv_mpip_cm);
 	}
 
@@ -2036,8 +2038,8 @@ int process_mpip_cm(struct sk_buff *skb)
 					false, true, rcv_mpip_cm.session_id);
 
 			printk("%d, %d, %d, %d: %s, %s, %d\n", iph->id, rcv_mpip_cm.session_id, tcph->dest, tcph->source, __FILE__, __FUNCTION__, __LINE__);
-			print_addr_1(iph->daddr);
-			print_addr_1(iph->saddr);
+//			print_addr_1(iph->daddr);
+//			print_addr_1(iph->saddr);
 
 			ready_path_info(iph->id, rcv_mpip_cm.node_id, iph->daddr, iph->saddr,
 					tcph->dest, tcph->source, rcv_mpip_cm.session_id);
@@ -2049,8 +2051,8 @@ int process_mpip_cm(struct sk_buff *skb)
 			mpip_log("receiving ack: %d, %s, %s, %d\n", iph->id, __FILE__, __FUNCTION__, __LINE__);
 
 			printk("%d, %d, %d, %d: %s, %s, %d\n", iph->id,  rcv_mpip_cm.session_id, tcph->dest, tcph->source, __FILE__, __FUNCTION__, __LINE__);
-			print_addr_1(iph->daddr);
-			print_addr_1(iph->saddr);
+//			print_addr_1(iph->daddr);
+//			print_addr_1(iph->saddr);
 
 			ready_path_info(iph->id, rcv_mpip_cm.node_id, iph->daddr, iph->saddr, tcph->dest, tcph->source, rcv_mpip_cm.session_id);
 

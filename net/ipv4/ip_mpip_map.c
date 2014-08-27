@@ -1410,8 +1410,8 @@ int add_path_info_tcp(int id, unsigned char *node_id, __be32 saddr, __be32 daddr
 	item->status = 0;
 
 	printk("%d, %d, %d, %d: %s, %s, %d\n", id, session_id, sport, dport, __FILE__, __FUNCTION__, __LINE__);
-	print_addr_1(saddr);
-	print_addr_1(daddr);
+//	print_addr_1(saddr);
+//	print_addr_1(daddr);
 
 
 //	if (is_original_path(node_id, item->saddr, item->daddr,
