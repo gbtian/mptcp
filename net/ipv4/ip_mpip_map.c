@@ -526,9 +526,10 @@ int update_path_delay(unsigned char path_id, __s32 delay)
 				//path_info->delay = delay;
 			}
 
-			if (path_info->count < 500)
+			if (path_info->count < 5)
 			{
-				path_info->min_delay = (99 * path_info->min_delay + delay) / 100;
+				path_info->min_delay = (4 * path_info->min_delay + delay) / 5;
+				path_info->max_delay = (4 * path_info->max_delay + delay) / 5;
 				//path_info->min_delay = delay;
 				path_info->count += 1;
 			}
@@ -538,6 +539,12 @@ int update_path_delay(unsigned char path_id, __s32 delay)
 				{
 					path_info->min_delay = (99 * path_info->min_delay + delay) / 100;
 					//path_info->min_delay = delay;
+				}
+
+				if (path_info->max_delay < path_info->delay)
+				{
+					path_info->max_delay = (99 * path_info->max_delay + delay) / 100;
+					//path_info->max_delay = delay;
 				}
 			}
 
@@ -574,9 +581,9 @@ __s32 calc_si_diff(bool is_delay)
 				continue;
 
 
-			diff = (path_info->ave_delay - prev_info->ave_delay > 0) ?
-				   (path_info->ave_delay - prev_info->ave_delay) :
-				   (prev_info->ave_delay - path_info->ave_delay);
+			diff = (path_info->ave_min_delay - prev_info->ave_min_delay > 0) ?
+				   (path_info->ave_min_delay - prev_info->ave_min_delay) :
+				   (prev_info->ave_min_delay - path_info->ave_min_delay);
 
 			sigma += diff;
 			++K;
@@ -605,9 +612,9 @@ __s32 calc_si_diff(bool is_delay)
 				continue;
 
 
-			diff = (path_info->ave_max_queuing_delay - prev_info->ave_max_queuing_delay > 0) ?
-				   (path_info->ave_max_queuing_delay - prev_info->ave_max_queuing_delay) :
-				   (prev_info->ave_max_queuing_delay - path_info->ave_max_queuing_delay);
+			diff = (path_info->ave_max_delay - prev_info->ave_max_delay > 0) ?
+				   (path_info->ave_max_delay - prev_info->ave_max_delay) :
+				   (prev_info->ave_max_delay - path_info->ave_max_delay);
 
 			sigma += diff;
 			++K;
@@ -688,9 +695,9 @@ int update_path_info(unsigned char session_id, unsigned int len)
 //			printk("%s, %s, %d\n", __FILE__, __FUNCTION__, __LINE__);
 			if (!is_in_sorted_list(&sorted_list, path_info))
 			{
-				if (path_info->max_queuing_delay < min_value || min_value == -1)
+				if (path_info->max_delay < min_value || min_value == -1)
 				{
-					min_value = path_info->max_queuing_delay;
+					min_value = path_info->max_delay;
 					min_path = path_info;
 //					printk("%s, %s, %d\n", __FILE__, __FUNCTION__, __LINE__);
 				}
@@ -726,8 +733,8 @@ int update_path_info(unsigned char session_id, unsigned int len)
 			next_sp = list_entry(sp->list.next, typeof(*sp), list);
 			if(next_sp)
 			{
-				sp->path_info->ave_max_queuing_delay = next_sp->path_info->ave_max_queuing_delay =
-										(sp->path_info->max_queuing_delay + next_sp->path_info->max_queuing_delay) / 2;
+				sp->path_info->ave_max_delay = next_sp->path_info->ave_max_delay =
+										(sp->path_info->max_delay + next_sp->path_info->max_delay) / 2;
 
 //				printk("%d: %s, %s, %d\n", next_sp->path_info->path_id, __FILE__, __FUNCTION__, __LINE__);
 
@@ -741,7 +748,7 @@ int update_path_info(unsigned char session_id, unsigned int len)
 	{
 		list_for_each_entry(sp, &sorted_list, list)
 		{
-			sp->path_info->ave_max_queuing_delay = sp->path_info->max_queuing_delay;
+			sp->path_info->ave_max_delay = sp->path_info->max_delay;
 //			printk("%d: %s, %s, %d\n", sp->path_info->path_id, __FILE__, __FUNCTION__, __LINE__);
 
 		}
@@ -772,9 +779,9 @@ int update_path_info(unsigned char session_id, unsigned int len)
 //			printk("%s, %s, %d\n", __FILE__, __FUNCTION__, __LINE__);
 			if (!is_in_sorted_list(&sorted_list_1, path_info))
 			{
-				if (path_info->delay < min_value || min_value == -1)
+				if (path_info->min_delay < min_value || min_value == -1)
 				{
-					min_value = path_info->delay;
+					min_value = path_info->min_delay;
 					min_path = path_info;
 //					printk("%s, %s, %d\n", __FILE__, __FUNCTION__, __LINE__);
 				}
@@ -807,8 +814,8 @@ int update_path_info(unsigned char session_id, unsigned int len)
 			next_sp = list_entry(sp->list.next, typeof(*sp), list);
 			if(next_sp)
 			{
-				sp->path_info->ave_delay = next_sp->path_info->ave_delay =
-						(sp->path_info->delay + next_sp->path_info->delay) / 2;
+				sp->path_info->ave_min_delay = next_sp->path_info->ave_min_delay =
+						(sp->path_info->min_delay + next_sp->path_info->min_delay) / 2;
 				sp = list_entry(sp->list.next, typeof(*sp), list);
 			}
 		}
@@ -817,7 +824,7 @@ int update_path_info(unsigned char session_id, unsigned int len)
 	{
 		list_for_each_entry(sp, &sorted_list_1, list)
 		{
-			sp->path_info->ave_delay = sp->path_info->delay;
+			sp->path_info->ave_min_delay = sp->path_info->min_delay;
 		}
 	}
 
@@ -833,22 +840,22 @@ int update_path_info(unsigned char session_id, unsigned int len)
 		if (path_info->session_id != session_id)
 			continue;
 
-		if (path_info->max_queuing_delay < min_queuing_delay || min_queuing_delay == -1)
+		if (path_info->max_delay < min_queuing_delay || min_queuing_delay == -1)
 		{
-			min_queuing_delay = path_info->max_queuing_delay;
+			min_queuing_delay = path_info->max_delay;
 		}
 
-		if (abs(path_info->max_queuing_delay) > max_queuing_delay)
+		if (abs(path_info->max_delay) > max_queuing_delay)
 		{
-			max_queuing_delay = abs(path_info->max_queuing_delay);
+			max_queuing_delay = abs(path_info->max_delay);
 		}
 
 		if (path_info->delay < min_delay || min_delay == -1)
 		{
-			min_delay = path_info->delay;
+			min_delay = path_info->min_delay;
 		}
 
-		if (abs(path_info->delay) > max_delay)
+		if (abs(path_info->min_delay) > max_delay)
 		{
 			max_delay = abs(path_info->delay);
 		}
@@ -869,12 +876,12 @@ int update_path_info(unsigned char session_id, unsigned int len)
 		if (path_info->session_id != session_id)
 			continue;
 
-		__s32 diff1 = calc_diff(path_info->ave_max_queuing_delay, min_queuing_delay, false);
+		__s32 diff1 = calc_diff(path_info->ave_max_delay, min_queuing_delay, false);
 
 		if (diff1 <= 0)
 			diff1 = 1;
 
-		__s32 diff2 = calc_diff(path_info->ave_delay, min_delay, true);
+		__s32 diff2 = calc_diff(path_info->ave_min_delay, min_delay, true);
 
 		if (diff2 <= 0)
 			diff2 = 1;
@@ -1478,6 +1485,7 @@ int add_path_info_tcp(int id, unsigned char *node_id, __be32 saddr, __be32 daddr
 	item->dport = dport;
 	item->session_id = session_id;
 	item->min_delay = 0;
+	item->max_delay = 0;
 	item->delay = 0;
 	item->queuing_delay = 0;
 	item->max_queuing_delay = 0;
@@ -2199,13 +2207,15 @@ asmlinkage long sys_mpip(void)
 
 		printk("%d  ", path_info->min_delay);
 
+		printk("%d  ", path_info->ave_min_delay);
+
+		printk("%d  ", path_info->max_delay);
+
+		printk("%d  ", path_info->ave_max_delay);
+
 		printk("%d  ", path_info->delay);
 
-		printk("%d  ", path_info->ave_delay);
-
 		printk("%d  ", path_info->max_queuing_delay);
-
-		printk("%d  ", path_info->ave_max_queuing_delay);
 
 		printk("%d  ", path_info->queuing_delay);
 
