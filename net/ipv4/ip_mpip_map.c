@@ -2191,13 +2191,13 @@ asmlinkage long sys_mpip(void)
 		printk( "%d.%d.%d.%d  ",
 				(p[0] & 255), (p[1] & 255), (p[2] & 255), (p[3] & 255));
 
-		printk("%d  ", path_info->sport);
-
-		printk("%d  ", path_info->dport);
+//		printk("%d  ", path_info->sport);
+//
+//		printk("%d  ", path_info->dport);
 
 		printk("%d  ", path_info->session_id);
 
-//		printk("%d  ", path_info->min_delay);
+		printk("%d  ", path_info->min_delay);
 
 		printk("%d  ", path_info->delay);
 
@@ -2207,7 +2207,7 @@ asmlinkage long sys_mpip(void)
 
 		printk("%d  ", path_info->ave_max_queuing_delay);
 
-//		printk("%d  ", path_info->queuing_delay);
+		printk("%d  ", path_info->queuing_delay);
 
 		printk("%llu  ", path_info->bw);
 
