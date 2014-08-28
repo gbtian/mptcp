@@ -695,9 +695,9 @@ int update_path_info(unsigned char session_id, unsigned int len)
 //			printk("%s, %s, %d\n", __FILE__, __FUNCTION__, __LINE__);
 			if (!is_in_sorted_list(&sorted_list, path_info))
 			{
-				if (path_info->max_delay < min_value || min_value == -1)
+				if (path_info->delay < min_value || min_value == -1)
 				{
-					min_value = path_info->max_delay;
+					min_value = path_info->delay;
 					min_path = path_info;
 //					printk("%s, %s, %d\n", __FILE__, __FUNCTION__, __LINE__);
 				}
@@ -734,7 +734,7 @@ int update_path_info(unsigned char session_id, unsigned int len)
 			if(next_sp)
 			{
 				sp->path_info->ave_max_delay = next_sp->path_info->ave_max_delay =
-										(sp->path_info->max_delay + next_sp->path_info->max_delay) / 2;
+										(sp->path_info->delay + next_sp->path_info->delay) / 2;
 
 //				printk("%d: %s, %s, %d\n", next_sp->path_info->path_id, __FILE__, __FUNCTION__, __LINE__);
 
@@ -748,7 +748,7 @@ int update_path_info(unsigned char session_id, unsigned int len)
 	{
 		list_for_each_entry(sp, &sorted_list, list)
 		{
-			sp->path_info->ave_max_delay = sp->path_info->max_delay;
+			sp->path_info->ave_max_delay = sp->path_info->delay;
 //			printk("%d: %s, %s, %d\n", sp->path_info->path_id, __FILE__, __FUNCTION__, __LINE__);
 
 		}
@@ -840,14 +840,14 @@ int update_path_info(unsigned char session_id, unsigned int len)
 		if (path_info->session_id != session_id)
 			continue;
 
-		if (path_info->max_delay < min_queuing_delay || min_queuing_delay == -1)
+		if (path_info->delay < min_queuing_delay || min_queuing_delay == -1)
 		{
-			min_queuing_delay = path_info->max_delay;
+			min_queuing_delay = path_info->delay;
 		}
 
-		if (abs(path_info->max_delay) > max_queuing_delay)
+		if (abs(path_info->delay) > max_queuing_delay)
 		{
-			max_queuing_delay = abs(path_info->max_delay);
+			max_queuing_delay = abs(path_info->delay);
 		}
 
 		if (path_info->delay < min_delay || min_delay == -1)
@@ -898,7 +898,7 @@ int update_path_info(unsigned char session_id, unsigned int len)
 			if (max_delay < 0)
 				max_delay = -max_delay;
 
-			tmp += (1550 - len) * max_delay / (diff2+sysctl_mpip_bw_4);
+			tmp *= (1550 - len) * max_delay / (diff2+sysctl_mpip_bw_4);
 			//tmp *= (1550 - len) * (max_delay - diff2) / sysctl_mpip_bw_4;
 			path_info->bw = (999 * path_info->bw + tmp) / 1000;
 		}
