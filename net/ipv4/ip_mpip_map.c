@@ -698,9 +698,12 @@ int calc_path_similarity(unsigned char session_id)
 		if (!prev_info)
 			continue;
 
-		diff = abs(path_info->min_delay - prev_info->min_delay > 0) ?
+		diff = (path_info->min_delay - prev_info->min_delay > 0) ?
 			   (path_info->min_delay - prev_info->min_delay) :
-			   (prev_info->min_delay - path_info->min_delay);
+			   (prev_info->min_delay - path_info->min_delay)
+			   + (path_info->delay - prev_info->delay > 0) ?
+			   (path_info->delay - prev_info->delay) :
+			   (prev_info->delay - path_info->delay)
 
 		sigma += diff;
 		++K;
@@ -712,7 +715,7 @@ int calc_path_similarity(unsigned char session_id)
 	if (K == 0)
 		si = 0;
 	else
-		si = sigma / K;
+		si = sigma / (2*K);
 
 	return si;
 }
