@@ -573,84 +573,84 @@ int update_path_delay(unsigned char path_id, __s32 delay)
 
 
 
-__s32 calc_si_diff(bool is_delay)
-{
-	__s32 si = 0;
-	__s32 K = 0;
-	__s32 sigma = 0;
-	__s32 diff = 0;
-	__s32 max = 0;
-	struct path_info_table *path_info, *prev_info;
-
-	if (is_delay)
-	{
-		list_for_each_entry(path_info, &pi_head, list)
-		{
-			prev_info = list_entry(path_info->list.prev, typeof(*path_info), list);
-			if (!prev_info)
-				continue;
-
-
-			diff = (path_info->ave_min_delay - prev_info->ave_min_delay > 0) ?
-				   (path_info->ave_min_delay - prev_info->ave_min_delay) :
-				   (prev_info->ave_min_delay - path_info->ave_min_delay);
-
-			sigma += diff;
-			++K;
-
-//			max = (path_info->delay > prev_info->delay) ?
-//				   path_info->delay : prev_info->delay;
+//__s32 calc_si_diff(bool is_delay)
+//{
+//	__s32 si = 0;
+//	__s32 K = 0;
+//	__s32 sigma = 0;
+//	__s32 diff = 0;
+//	__s32 max = 0;
+//	struct path_info_table *path_info, *prev_info;
+//
+//	if (is_delay)
+//	{
+//		list_for_each_entry(path_info, &pi_head, list)
+//		{
+//			prev_info = list_entry(path_info->list.prev, typeof(*path_info), list);
+//			if (!prev_info)
+//				continue;
 //
 //
-//			if (max > diff)
-//			{
-//				if (max == -500)
-//				{
-//					max = -499;
-//				}
-//				sigma += (100 * diff) / (max + 500);
-//				++K;
-//			}
-		}
-	}
-	else
-	{
-		list_for_each_entry(path_info, &pi_head, list)
-		{
-			prev_info = list_entry(path_info->list.prev, typeof(*path_info), list);
-			if (!prev_info)
-				continue;
-
-
-			diff = (path_info->ave_max_delay - prev_info->ave_max_delay > 0) ?
-				   (path_info->ave_max_delay - prev_info->ave_max_delay) :
-				   (prev_info->ave_max_delay - path_info->ave_max_delay);
-
-			sigma += diff;
-			++K;
-
-//			max = (path_info->queuing_delay > prev_info->queuing_delay) ?
-//				   path_info->queuing_delay : prev_info->queuing_delay;
+//			diff = (path_info->ave_min_delay - prev_info->ave_min_delay > 0) ?
+//				   (path_info->ave_min_delay - prev_info->ave_min_delay) :
+//				   (prev_info->ave_min_delay - path_info->ave_min_delay);
 //
-//			if (max > diff)
-//			{
-//				if (max == -500)
-//				{
-//					max = -499;
-//				}
-//				sigma += (100 * diff) / (max + 500);
-//				++K;
-//			}
-		}
-	}
-
-	if (K == 0)
-		si = 0;
-	else
-		si = sigma / K;
-	
-	return si;
-}
+//			sigma += diff;
+//			++K;
+//
+////			max = (path_info->delay > prev_info->delay) ?
+////				   path_info->delay : prev_info->delay;
+////
+////
+////			if (max > diff)
+////			{
+////				if (max == -500)
+////				{
+////					max = -499;
+////				}
+////				sigma += (100 * diff) / (max + 500);
+////				++K;
+////			}
+//		}
+//	}
+//	else
+//	{
+//		list_for_each_entry(path_info, &pi_head, list)
+//		{
+//			prev_info = list_entry(path_info->list.prev, typeof(*path_info), list);
+//			if (!prev_info)
+//				continue;
+//
+//
+//			diff = (path_info->ave_max_delay - prev_info->ave_max_delay > 0) ?
+//				   (path_info->ave_max_delay - prev_info->ave_max_delay) :
+//				   (prev_info->ave_max_delay - path_info->ave_max_delay);
+//
+//			sigma += diff;
+//			++K;
+//
+////			max = (path_info->queuing_delay > prev_info->queuing_delay) ?
+////				   path_info->queuing_delay : prev_info->queuing_delay;
+////
+////			if (max > diff)
+////			{
+////				if (max == -500)
+////				{
+////					max = -499;
+////				}
+////				sigma += (100 * diff) / (max + 500);
+////				++K;
+////			}
+//		}
+//	}
+//
+//	if (K == 0)
+//		si = 0;
+//	else
+//		si = sigma / K;
+//
+//	return si;
+//}
 
 __s32 calc_diff(__s32 value, __s32 min_value, bool is_delay)
 {
