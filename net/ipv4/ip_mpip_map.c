@@ -928,8 +928,11 @@ int update_path_info(unsigned char session_id, unsigned int len)
 
 			//similarity, the smaller, the more similar
 			int similarity = calc_path_similarity(session_id);
+
 			int tmp = (similarity * max_queuing_delay) / diff1
 								+ (max_delay * similarity) / diff2;
+
+			printk("%d, %d, %s, %d\n", similarity, tmp, __FILE__, __LINE__);
 
 			path_info->bw = (999 * path_info->bw + tmp) / 1000;
 		}
