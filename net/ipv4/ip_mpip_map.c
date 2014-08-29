@@ -907,7 +907,7 @@ int update_path_info(unsigned char session_id, unsigned int len)
 		if (path_info->session_id != session_id)
 			continue;
 
-		__s32 diff1 = calc_diff(path_info->ave_max_delay, min_queuing_delay, false);
+		__s32 diff1 = calc_diff(path_info->ave_delay, min_queuing_delay, false);
 
 		if (diff1 <= 0)
 			diff1 = 1;
