@@ -703,7 +703,7 @@ int calc_path_similarity(unsigned char session_id)
 			   (prev_info->min_delay - path_info->min_delay)
 			   + (path_info->delay - prev_info->delay > 0) ?
 			   (path_info->delay - prev_info->delay) :
-			   (prev_info->delay - path_info->delay)
+			   (prev_info->delay - path_info->delay);
 
 		sigma += diff;
 		++K;
