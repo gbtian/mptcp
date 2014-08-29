@@ -678,7 +678,8 @@ bool is_in_sorted_list(struct list_head *sorted_list, struct path_info_table *pa
 
 int calc_path_similarity(unsigned char session_id)
 {
-	struct path_info_table *path_info = NULL, *prev_info = NULL;
+	struct path_info_table *path_info = NULL;
+	struct path_info_table *prev_info = NULL;
 	__s32 si = 0;
 	__s32 K = 0;
 	__s32 sigma = 0;
@@ -696,7 +697,11 @@ int calc_path_similarity(unsigned char session_id)
 			continue;
 
 		if (!prev_info)
+		{
+			prev_info = path_info;
 			continue;
+		}
+
 
 		diff = (path_info->min_delay - prev_info->min_delay > 0) ?
 			   (path_info->min_delay - prev_info->min_delay) :
