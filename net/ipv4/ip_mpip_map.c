@@ -678,18 +678,43 @@ bool is_in_sorted_list(struct list_head *sorted_list, struct path_info_table *pa
 
 int calc_path_similarity(unsigned char session_id)
 {
-	struct path_info_table *path_info;
+	struct path_info_table *path_info = NULL, *prev_info = NULL;
+	__s32 si = 0;
+	__s32 K = 0;
+	__s32 sigma = 0;
+	__s32 diff = 0;
+	__s32 max = 0;
 
 	if (session_id <= 0)
 		return 0;
+
+	//use the min_delay and delay value to calculate
 
 	list_for_each_entry(path_info, &pi_head, list)
 	{
 		if (path_info->session_id != session_id)
 			continue;
+
+		if (!prev_info)
+			continue;
+
+		diff = abs(path_info->min_delay - prev_info->min_delay > 0) ?
+			   (path_info->min_delay - prev_info->min_delay) :
+			   (prev_info->min_delay - path_info->min_delay);
+
+		sigma += diff;
+		++K;
+
+		prev_info = path_info;
+
 	}
 
-	return 0;
+	if (K == 0)
+		si = 0;
+	else
+		si = sigma / K;
+
+	return si;
 }
 
 int update_path_info(unsigned char session_id, unsigned int len)
@@ -752,7 +777,7 @@ int update_path_info(unsigned char session_id, unsigned int len)
 			next_sp = list_entry(sp->list.next, typeof(*sp), list);
 			if(next_sp)
 			{
-				sp->path_info->ave_max_delay = next_sp->path_info->ave_max_delay =
+				sp->path_info->ave_delay = next_sp->path_info->ave_delay =
 										(sp->path_info->delay + next_sp->path_info->delay) / 2;
 
 				sp = list_entry(sp->list.next, typeof(*sp), list);
@@ -763,7 +788,7 @@ int update_path_info(unsigned char session_id, unsigned int len)
 	{
 		list_for_each_entry(sp, &sorted_list, list)
 		{
-			sp->path_info->ave_max_delay = sp->path_info->delay;
+			sp->path_info->ave_delay = sp->path_info->delay;
 		}
 	}
 
@@ -855,16 +880,6 @@ int update_path_info(unsigned char session_id, unsigned int len)
 		{
 			max_queuing_delay = abs(path_info->delay);
 		}
-
-		if (path_info->delay < min_delay || min_delay == -1)
-		{
-			min_delay = path_info->min_delay;
-		}
-
-		if (abs(path_info->min_delay) > max_delay)
-		{
-			max_delay = abs(path_info->delay);
-		}
 	}
 
 	if (min_queuing_delay == -1)
@@ -902,7 +917,7 @@ int update_path_info(unsigned char session_id, unsigned int len)
 				max_delay = -max_delay;
 
 			//similarity, the smaller, the more similar
-			int similarity = calc_path_similarity();
+			int similarity = calc_path_similarity(session_id);
 			int tmp = (similarity * max_queuing_delay) / diff1
 								+ (max_delay * similarity) / diff2;
 
