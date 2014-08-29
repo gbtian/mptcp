@@ -880,6 +880,16 @@ int update_path_info(unsigned char session_id, unsigned int len)
 		{
 			max_queuing_delay = abs(path_info->delay);
 		}
+
+		if (path_info->min_delay < min_delay || min_delay == -1)
+		{
+			min_delay = path_info->min_delay;
+		}
+
+		if (abs(path_info->min_delay) > max_delay)
+		{
+			max_delay = abs(path_info->min_delay);
+		}
 	}
 
 	if (min_queuing_delay == -1)
@@ -2232,7 +2242,7 @@ asmlinkage long sys_mpip(void)
 
 		printk("%d  ", path_info->max_delay);
 
-		printk("%d  ", path_info->ave_max_delay);
+		printk("%d  ", path_info->ave_delay);
 
 		printk("%d  ", path_info->delay);
 
