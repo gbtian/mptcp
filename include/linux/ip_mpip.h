@@ -159,6 +159,15 @@ struct sort_path
 	struct list_head 	list;
 };
 
+struct path_bw_info
+{
+	unsigned char 		node_id[MPIP_CM_NODE_ID_LEN]; /*destination node id*/
+	unsigned char		path_id; /* path id: 0,1,2,3,4....*/
+	unsigned char		session_id;
+	__u64				bw;  /* bandwidth */
+	struct list_head 	list;
+};
+
 struct socket_session_table
 {
 	unsigned char		src_node_id[MPIP_CM_NODE_ID_LEN]; /* local node id*/
@@ -180,6 +189,7 @@ struct socket_session_table
 	unsigned long		tptotalbytes;
 	unsigned long		tprealtime;
 	unsigned long		tphighest;
+	struct list_head 	path_bw_list;
 	struct list_head 	list;
 };
 

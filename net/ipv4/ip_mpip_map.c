@@ -1121,6 +1121,7 @@ void add_sender_session(unsigned char *src_node_id, unsigned char *dst_node_id,
 	item->tprealtime = 0;
 	item->tpstartjiffies = jiffies;
 	item->tptotalbytes = 0;
+	INIT_LIST_HEAD(&(item->path_bw_list));
 	item->session_id = (static_session_id > 250) ? 1 : ++static_session_id;
 	INIT_LIST_HEAD(&(item->list));
 	list_add(&(item->list), &ss_head);
@@ -1208,6 +1209,7 @@ struct socket_session_table *get_receiver_session(unsigned char *src_node_id, un
 	item->tprealtime = 0;
 	item->tpstartjiffies = jiffies;
 	item->tptotalbytes = 0;
+	INIT_LIST_HEAD(&(item->path_bw_list));
 	item->session_id = session_id;
 	INIT_LIST_HEAD(&(item->list));
 	list_add(&(item->list), &ss_head);
@@ -1263,6 +1265,37 @@ struct socket_session_table *find_socket_session(unsigned char session_id)
 	return NULL;
 
 }
+
+void update_path_bw_list(struct socket_session_table *socket_session)
+{
+	struct path_bw_info *path_bw = NULL;
+	struct path_bw_info *tmp_path = NULL;
+	struct path_info_table *path_info = NULL;
+
+	list_for_each_entry_safe(path_bw, tmp_path, &(socket_session->path_bw_list), list)
+	{
+		list_del(&(path_bw->list));
+		kfree(path_bw);
+	}
+
+	list_for_each_entry(path_info, &pi_head, list)
+	{
+		if (path_info->session_id == socket_session->session_id)
+		{
+			struct path_bw_info *item = kzalloc(sizeof(struct path_bw_info),	GFP_ATOMIC);
+			if (!item)
+				return;
+
+			memcpy(item->node_id, path_info->node_id, MPIP_CM_NODE_ID_LEN);
+			item->path_id = path_info->path_id;
+			item->session_id = path_info->session_id;
+			item->bw = path_info->bw;
+			INIT_LIST_HEAD(&(item->list));
+			list_add(&(item->list), &(socket_session->path_bw_list));
+		}
+	}
+}
+
 void update_session_tp(unsigned char session_id, struct sk_buff *skb)
 {
 	if (!skb)
@@ -1282,7 +1315,9 @@ void update_session_tp(unsigned char session_id, struct sk_buff *skb)
 		if (tp > socket_session->tphighest)
 		{
 			socket_session->tphighest = tp;
+			update_path_bw_list(socket_session);
 		}
+
 		socket_session->tptotalbytes = 0;
 		socket_session->tpstartjiffies = jiffies;
 	}
