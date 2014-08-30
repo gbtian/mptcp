@@ -1236,6 +1236,49 @@ int get_receiver_session_info(unsigned char *node_id,	unsigned char session_id,
 	return 0;
 }
 
+struct socket_session_table *find_socket_session(unsigned char session_id)
+{
+	struct socket_session_table *socket_session;
+
+	if (session_id <= 0)
+		return NULL;
+
+	list_for_each_entry(socket_session, &ss_head, list)
+	{
+		if (socket_session->session_id == session_id)
+		{
+			return socket_session;
+		}
+	}
+
+	return NULL;
+
+}
+void update_session_tp(unsigned char session_id, struct sk_buff *skb)
+{
+	if (!skb)
+		return;
+
+	struct socket_session_table *socket_session = find_socket_session(session_id);
+
+	if(!socket_session)
+		return;
+
+	socket_session->tptotalbytes += skb->len;
+
+	if (((jiffies - socket_session->tpstartjiffies) * 1000 / HZ) >= sysctl_mpip_bw_factor)
+	{
+		unsigned long tp = socket_session->tptotalbytes / ((jiffies - socket_session->tpstartjiffies) * 100 / HZ);
+		if (tp > socket_session->tphighest)
+		{
+			socket_session->tphighest = tp;
+		}
+		socket_session->tptotalbytes = 0;
+		socket_session->tpstartjiffies = jiffies;
+	}
+}
+
+
 int add_to_tcp_skb_buf(struct sk_buff *skb, unsigned char session_id)
 {
 	struct tcphdr *tcph = NULL;
@@ -2113,62 +2156,72 @@ asmlinkage long sys_mpip(void)
 	struct local_addr_table *local_addr;
 	char *p;
 
-	printk("******************me*************\n");
-	list_for_each_entry(mpip_enbaled, &me_head, list)
+
+	printk("******************la*************\n");
+	list_for_each_entry(local_addr, &la_head, list)
 	{
-		p = (char *) &(mpip_enbaled->addr);
-		printk( "%d.%d.%d.%d  ",
+		p = (char *) &(local_addr->addr);
+		printk( "%d.%d.%d.%d\n",
 				(p[0] & 255), (p[1] & 255), (p[2] & 255), (p[3] & 255));
 
-		printk("%d  ", mpip_enbaled->port);
-
-		printk("%d  ", mpip_enbaled->sent_count);
-
-		printk("%d\n", mpip_enbaled->mpip_enabled);
 	}
 
+//	printk("******************me*************\n");
+//	list_for_each_entry(mpip_enbaled, &me_head, list)
+//	{
+//		p = (char *) &(mpip_enbaled->addr);
+//		printk( "%d.%d.%d.%d  ",
+//				(p[0] & 255), (p[1] & 255), (p[2] & 255), (p[3] & 255));
+//
+//		printk("%d  ", mpip_enbaled->port);
+//
+//		printk("%d  ", mpip_enbaled->sent_count);
+//
+//		printk("%d\n", mpip_enbaled->mpip_enabled);
+//	}
 
-	printk("******************mq*************\n");
-	list_for_each_entry(mpip_query, &mq_head, list)
-	{
-		p = (char *) &(mpip_query->saddr);
-		printk( "%d.%d.%d.%d  ",
-				(p[0] & 255), (p[1] & 255), (p[2] & 255), (p[3] & 255));
 
-		p = (char *) &(mpip_query->saddr);
-				printk( "%d.%d.%d.%d  ",
-						(p[0] & 255), (p[1] & 255), (p[2] & 255), (p[3] & 255));
+//	printk("******************mq*************\n");
+//	list_for_each_entry(mpip_query, &mq_head, list)
+//	{
+//		p = (char *) &(mpip_query->saddr);
+//		printk( "%d.%d.%d.%d  ",
+//				(p[0] & 255), (p[1] & 255), (p[2] & 255), (p[3] & 255));
+//
+//		p = (char *) &(mpip_query->saddr);
+//				printk( "%d.%d.%d.%d  ",
+//						(p[0] & 255), (p[1] & 255), (p[2] & 255), (p[3] & 255));
+//
+//		printk("%d  ", mpip_query->sport);
+//
+//		printk("%d\n", mpip_query->dport);
+//	}
 
-		printk("%d  ", mpip_query->sport);
+//	printk("******************an*************\n");
+//	list_for_each_entry(addr_notified, &an_head, list)
+//	{
+//		printk( "%02x-%02x  ",
+//				addr_notified->node_id[0], addr_notified->node_id[1]);
+//
+//		printk("%d\n", addr_notified->notified);
+//	}
 
-		printk("%d\n", mpip_query->dport);
-	}
-
-	printk("******************an*************\n");
-	list_for_each_entry(addr_notified, &an_head, list)
-	{
-		printk( "%02x-%02x  ",
-				addr_notified->node_id[0], addr_notified->node_id[1]);
-
-		printk("%d\n", addr_notified->notified);
-	}
-
-	printk("******************wi*************\n");
-	list_for_each_entry(working_ip, &wi_head, list)
-	{
-		printk( "%02x-%02x  ",
-				working_ip->node_id[0], working_ip->node_id[1]);
-
-		p = (char *) &(working_ip->addr);
-		printk( "%d.%d.%d.%d  ",
-				(p[0] & 255), (p[1] & 255), (p[2] & 255), (p[3] & 255));
-
-		printk("%d  ", working_ip->port);
-
-		printk("%d  ", working_ip->session_id);
-
-		printk("%d\n", working_ip->protocol);
-	}
+//	printk("******************wi*************\n");
+//	list_for_each_entry(working_ip, &wi_head, list)
+//	{
+//		printk( "%02x-%02x  ",
+//				working_ip->node_id[0], working_ip->node_id[1]);
+//
+//		p = (char *) &(working_ip->addr);
+//		printk( "%d.%d.%d.%d  ",
+//				(p[0] & 255), (p[1] & 255), (p[2] & 255), (p[3] & 255));
+//
+//		printk("%d  ", working_ip->port);
+//
+//		printk("%d  ", working_ip->session_id);
+//
+//		printk("%d\n", working_ip->protocol);
+//	}
 
 	printk("******************ss*************\n");
 	list_for_each_entry(socket_session, &ss_head, list)
@@ -2193,33 +2246,29 @@ asmlinkage long sys_mpip(void)
 
 		printk("%d  ", socket_session->dport);
 
+		printk("%lu  ", socket_session->tpstartjiffies);
+
+		printk("%lu  ", socket_session->tptotalbytes);
+
+		printk("%lu  ", socket_session->tphighest);
+
 		printk("%d\n", socket_session->protocol);
 	}
 
-	printk("******************ps*************\n");
-	list_for_each_entry(path_stat, &ps_head, list)
-	{
-		printk( "%02x-%02x  ",
-				path_stat->node_id[0], path_stat->node_id[1]);
-
-		printk("%d  ", path_stat->path_id);
-
-		printk("%d  ", path_stat->delay);
-
-		printk("%lu  ", path_stat->fbjiffies);
-
-		printk("%llu\n", path_stat->pktcount);
-	}
-
-
-	printk("******************la*************\n");
-	list_for_each_entry(local_addr, &la_head, list)
-	{
-		p = (char *) &(local_addr->addr);
-		printk( "%d.%d.%d.%d\n",
-				(p[0] & 255), (p[1] & 255), (p[2] & 255), (p[3] & 255));
-
-	}
+//	printk("******************ps*************\n");
+//	list_for_each_entry(path_stat, &ps_head, list)
+//	{
+//		printk( "%02x-%02x  ",
+//				path_stat->node_id[0], path_stat->node_id[1]);
+//
+//		printk("%d  ", path_stat->path_id);
+//
+//		printk("%d  ", path_stat->delay);
+//
+//		printk("%lu  ", path_stat->fbjiffies);
+//
+//		printk("%llu\n", path_stat->pktcount);
+//	}
 
 
 	printk("******************pi*************\n");

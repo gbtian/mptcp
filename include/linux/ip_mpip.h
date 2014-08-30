@@ -175,6 +175,10 @@ struct socket_session_table
 	__be32				daddr; /* destination ip address*/
 	__be16				sport; /* source port*/
 	__be16				dport; /* destination port*/
+
+	unsigned long		tpstartjiffies;
+	unsigned long		tptotalbytes;
+	unsigned long		tphighest;
 	struct list_head 	list;
 };
 
@@ -358,6 +362,10 @@ void add_sender_session(unsigned char *src_node_id, unsigned char *dst_node_id,
 					   __be32 saddr, __be16 sport,
 					   __be32 daddr, __be16 dport,
 					   unsigned int protocol);
+
+struct socket_session_table *find_socket_session(unsigned char session_id);
+
+void update_session_tp(unsigned char session_id, struct sk_buff *skb);
 
 __be32 find_local_addr(__be32 addr);
 
