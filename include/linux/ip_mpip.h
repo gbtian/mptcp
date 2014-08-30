@@ -178,6 +178,7 @@ struct socket_session_table
 
 	unsigned long		tpstartjiffies;
 	unsigned long		tptotalbytes;
+	unsigned long		tprealtime;
 	unsigned long		tphighest;
 	struct list_head 	list;
 };

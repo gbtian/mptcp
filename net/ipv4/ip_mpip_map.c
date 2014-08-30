@@ -1116,6 +1116,10 @@ void add_sender_session(unsigned char *src_node_id, unsigned char *dst_node_id,
 	item->sport = sport;
 	item->daddr = daddr;
 	item->dport = dport;
+	item->tphighest = 0;
+	item->tprealtime = 0;
+	item->tpstartjiffies = jiffies;
+	item->tptotalbytes = 0;
 	item->session_id = (static_session_id > 250) ? 1 : ++static_session_id;
 	INIT_LIST_HEAD(&(item->list));
 	list_add(&(item->list), &ss_head);
@@ -1199,6 +1203,10 @@ struct socket_session_table *get_receiver_session(unsigned char *src_node_id, un
 	item->sport = sport;
 	item->daddr = daddr;
 	item->dport = dport;
+	item->tphighest = 0;
+	item->tprealtime = 0;
+	item->tpstartjiffies = jiffies;
+	item->tptotalbytes = 0;
 	item->session_id = session_id;
 	INIT_LIST_HEAD(&(item->list));
 	list_add(&(item->list), &ss_head);
@@ -2249,6 +2257,8 @@ asmlinkage long sys_mpip(void)
 		printk("%lu  ", socket_session->tpstartjiffies);
 
 		printk("%lu  ", socket_session->tptotalbytes);
+
+		printk("%lu  ", socket_session->tprealtime);
 
 		printk("%lu  ", socket_session->tphighest);
 
