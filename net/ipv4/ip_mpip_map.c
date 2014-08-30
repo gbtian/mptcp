@@ -1277,6 +1277,7 @@ void update_session_tp(unsigned char session_id, struct sk_buff *skb)
 	if (((jiffies - socket_session->tpstartjiffies) * 1000 / HZ) >= sysctl_mpip_bw_factor)
 	{
 		unsigned long tp = socket_session->tptotalbytes / ((jiffies - socket_session->tpstartjiffies) * 100 / HZ);
+		socket_session->tprealtime = tp;
 		if (tp > socket_session->tphighest)
 		{
 			socket_session->tphighest = tp;
