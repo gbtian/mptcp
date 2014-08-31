@@ -964,15 +964,19 @@ int update_path_info(unsigned char session_id, unsigned int len)
 
 //			printk("%d, %d, %s, %d\n", similarity, tmp, __FILE__, __LINE__);
 //			path_info->bw = (999 * path_info->bw + tmp) / 1000;
+			__u64 bw = path_info->bw + tmp;
 
 			__u64 highbw = get_path_bw(path_info->path_id, session_id, path_info->bw);
 
-			if (highbw >= path_info->bw)
-			{
-				path_info->bw = highbw + tmp;
-			}
-//			path_info->bw = path_info->bw / 3 + 2 * highbw / 3;
-
+//			if (highbw >= path_info->bw)
+//			{
+//				path_info->bw = highbw + tmp
+//			}
+//			else
+//			{
+//
+//			}
+			path_info->bw = bw / 2 + highbw / 2;
 		}
 
 		if (path_info->bw > max_bw)
