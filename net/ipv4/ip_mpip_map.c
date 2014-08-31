@@ -978,11 +978,20 @@ int update_path_info(unsigned char session_id, unsigned int len)
 		if (path_info->session_id != session_id)
 			continue;
 
-		__u64 bw = path_info->bw / times;
+		if (times > 0)
+		{
+			__u64 bw = path_info->bw / times;
 
-		__u64 highbw = get_path_bw(path_info->path_id, session_id, bw);
+			__u64 highbw = get_path_bw(path_info->path_id, session_id, bw);
 
-		path_info->bw = bw / 2 + highbw / 2;
+			path_info->bw = bw / 2 + highbw / 2;
+		}
+		else
+		{
+			__u64 highbw = get_path_bw(path_info->path_id, session_id, path_info->bw);
+
+			path_info->bw = path_info->bw / 2 + highbw / 2;
+		}
 	}
 
 //	if (max_bw > 50000)
