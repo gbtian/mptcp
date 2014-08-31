@@ -724,6 +724,29 @@ int calc_path_similarity(unsigned char session_id)
 	return si;
 }
 
+__u64 get_path_bw(unsigned char path_id, unsigned char session_id, __u64 bw)
+{
+	struct path_bw_info *path_bw = NULL;
+
+	if (session_id <= 0 || path_id < 0)
+	{
+		return bw;
+	}
+
+	struct socket_session_table *socket_session = find_socket_session(session_id);
+
+	if(!socket_session)
+		return bw;
+
+	list_for_each_entry(path_bw, &(socket_session->path_bw_list), list)
+	{
+		if (path_bw->path_id == path_id)
+			return path_bw->bw;
+	}
+
+	return bw;
+}
+
 int update_path_info(unsigned char session_id, unsigned int len)
 {
 	struct path_info_table *path_info;
@@ -942,6 +965,10 @@ int update_path_info(unsigned char session_id, unsigned int len)
 //			printk("%d, %d, %s, %d\n", similarity, tmp, __FILE__, __LINE__);
 //			path_info->bw = (999 * path_info->bw + tmp) / 1000;
 			path_info->bw = path_info->bw + tmp;
+
+			__u64 highbw = get_path_bw(path_info->path_id, session_id, path_info->bw);
+
+			path_info->bw = (path_info->bw + highbw) / 2;
 		}
 
 		if (path_info->bw > max_bw)
