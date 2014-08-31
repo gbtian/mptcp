@@ -984,7 +984,7 @@ int update_path_info(unsigned char session_id, unsigned int len)
 
 			__u64 highbw = get_path_bw(path_info->path_id, session_id, bw);
 
-			path_info->bw = bw / 2 + highbw / 2;
+			path_info->bw = bw / 3 + (2 * highbw) / 3;
 		}
 		else
 		{
