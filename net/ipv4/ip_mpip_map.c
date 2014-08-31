@@ -728,7 +728,7 @@ __u64 get_path_bw(unsigned char path_id, unsigned char session_id, __u64 bw)
 {
 	struct path_bw_info *path_bw = NULL;
 
-	if (session_id <= 0 || path_id < 0)
+	if (session_id <= 0 || path_id <= 0)
 	{
 		return bw;
 	}
@@ -1313,7 +1313,6 @@ void update_path_bw_list(struct socket_session_table *socket_session)
 			if (!item)
 				return;
 
-			memcpy(item->node_id, path_info->node_id, MPIP_CM_NODE_ID_LEN);
 			item->path_id = path_info->path_id;
 			item->session_id = path_info->session_id;
 			item->bw = path_info->bw;
@@ -2224,6 +2223,7 @@ asmlinkage long sys_mpip(void)
 	struct working_ip_table *working_ip;
 	struct path_info_table *path_info;
 	struct socket_session_table *socket_session;
+	struct path_bw_info *path_bw;
 	struct path_stat_table *path_stat;
 	struct local_addr_table *local_addr;
 	char *p;
@@ -2327,6 +2327,12 @@ asmlinkage long sys_mpip(void)
 		printk("%lu  ", socket_session->tphighest);
 
 		printk("%d\n", socket_session->protocol);
+
+		list_for_each_entry(path_bw, &(socket_session->path_bw_list), list)
+		{
+			printk("%d:%lu  ", path_bw->path_id, path_bw->bw);
+		}
+		printk("\n");
 	}
 
 //	printk("******************ps*************\n");
