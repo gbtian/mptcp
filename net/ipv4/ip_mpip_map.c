@@ -964,11 +964,15 @@ int update_path_info(unsigned char session_id, unsigned int len)
 
 //			printk("%d, %d, %s, %d\n", similarity, tmp, __FILE__, __LINE__);
 //			path_info->bw = (999 * path_info->bw + tmp) / 1000;
-			path_info->bw = path_info->bw + tmp;
 
 			__u64 highbw = get_path_bw(path_info->path_id, session_id, path_info->bw);
 
-			path_info->bw = path_info->bw / 3 + 2 * highbw / 3;
+			if (highbw >= path_info->bw)
+			{
+				path_info->bw = highbw + tmp;
+			}
+//			path_info->bw = path_info->bw / 3 + 2 * highbw / 3;
+
 		}
 
 		if (path_info->bw > max_bw)
@@ -1147,6 +1151,7 @@ void add_sender_session(unsigned char *src_node_id, unsigned char *dst_node_id,
 	item->tphighest = 0;
 	item->tprealtime = 0;
 	item->tpstartjiffies = jiffies;
+	item->bwupdatejiffies = jiffies;
 	item->tptotalbytes = 0;
 	INIT_LIST_HEAD(&(item->path_bw_list));
 	item->session_id = (static_session_id > 250) ? 1 : ++static_session_id;
@@ -1235,6 +1240,7 @@ struct socket_session_table *get_receiver_session(unsigned char *src_node_id, un
 	item->tphighest = 0;
 	item->tprealtime = 0;
 	item->tpstartjiffies = jiffies;
+	item->bwupdatejiffies = jiffies;
 	item->tptotalbytes = 0;
 	INIT_LIST_HEAD(&(item->path_bw_list));
 	item->session_id = session_id;
@@ -1872,7 +1878,18 @@ unsigned char find_fastest_path_id(unsigned char *node_id,
 			return f_path_id;
 		}
 	}
-	update_path_info(session_id, len);
+
+	struct socket_session_table *socket_session = find_socket_session(session_id);
+
+	if(socket_session)
+	{
+		if (((jiffies - socket_session->bwupdatejiffies) * 1000 / HZ) >= sysctl_mpip_bw_factor)
+		{
+			update_path_info(session_id, len);
+			socket_session->bwupdatejiffies = jiffies;
+		}
+	}
+
 	//if comes here, it means all paths have been probed
 	list_for_each_entry(path, &pi_head, list)
 	{
@@ -2317,6 +2334,8 @@ asmlinkage long sys_mpip(void)
 		printk("%d  ", socket_session->sport);
 
 		printk("%d  ", socket_session->dport);
+
+		printk("%lu  ", socket_session->bwupdatejiffies);
 
 		printk("%lu  ", socket_session->tpstartjiffies);
 

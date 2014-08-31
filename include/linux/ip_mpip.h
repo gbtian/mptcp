@@ -184,6 +184,7 @@ struct socket_session_table
 	__be16				sport; /* source port*/
 	__be16				dport; /* destination port*/
 
+	unsigned long		bwupdatejiffies;
 	unsigned long		tpstartjiffies;
 	unsigned long		tptotalbytes;
 	unsigned long		tprealtime;
