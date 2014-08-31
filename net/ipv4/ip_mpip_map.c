@@ -513,7 +513,7 @@ int update_path_delay(unsigned char path_id, __s32 delay)
 		{
 			if (path_info->delay == 0)
 			{
-				path_info->bw = 1000;
+				path_info->bw = 10;
 			}
 
 			if (path_info->count == 0)
@@ -968,7 +968,7 @@ int update_path_info(unsigned char session_id, unsigned int len)
 
 			__u64 highbw = get_path_bw(path_info->path_id, session_id, path_info->bw);
 
-			path_info->bw = (path_info->bw + highbw) / 2;
+			path_info->bw = path_info->bw / 3 + 2 * highbw / 3;
 		}
 
 		if (path_info->bw > max_bw)
@@ -976,22 +976,22 @@ int update_path_info(unsigned char session_id, unsigned int len)
 
 	}
 
-	if (max_bw > 50000)
-	{
-		__u64 times = max_bw / 50000;
-		if (times > 0)
-		{
-			list_for_each_entry(path_info, &pi_head, list)
-			{
-				if (path_info->session_id != session_id)
-					continue;
-
-				path_info->bw /= times;
-				if (path_info->bw <= 0)
-					path_info->bw = 0;
-			}
-		}
-	}
+//	if (max_bw > 50000)
+//	{
+//		__u64 times = max_bw / 50000;
+//		if (times > 0)
+//		{
+//			list_for_each_entry(path_info, &pi_head, list)
+//			{
+//				if (path_info->session_id != session_id)
+//					continue;
+//
+//				path_info->bw /= times;
+//				if (path_info->bw <= 0)
+//					path_info->bw = 0;
+//			}
+//		}
+//	}
 
 	return 1;
 }
@@ -1586,7 +1586,7 @@ int add_origin_path_info_tcp(unsigned char *node_id, __be32 saddr, __be32 daddr,
 	item->queuing_delay = 0;
 	item->max_queuing_delay = 0;
 	item->count = 0;
-	item->bw = 1000;
+	item->bw = 10;
 	item->pktcount = 0;
 	item->path_id = (static_path_id > 250) ? 1 : ++static_path_id;
 
@@ -1644,7 +1644,7 @@ int add_path_info_tcp(int id, unsigned char *node_id, __be32 saddr, __be32 daddr
 	item->queuing_delay = 0;
 	item->max_queuing_delay = 0;
 	item->count = 0;
-	item->bw = 1000;
+	item->bw = 10;
 	item->pktcount = 0;
 	item->path_id = (static_path_id > 250) ? 1 : ++static_path_id;
 	item->status = 0;
@@ -1778,7 +1778,7 @@ int add_path_info_udp(unsigned char *node_id, __be32 daddr, __be16 sport,
 		item->queuing_delay = 0;
 		item->max_queuing_delay = 0;
 		item->count = 0;
-		item->bw = 1000;
+		item->bw = 10;
 		item->pktcount = 0;
 		item->path_id = (static_path_id > 250) ? 1 : ++static_path_id;
 
