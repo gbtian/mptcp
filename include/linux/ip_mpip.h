@@ -376,7 +376,9 @@ void add_sender_session(unsigned char *src_node_id, unsigned char *dst_node_id,
 
 struct socket_session_table *find_socket_session(unsigned char session_id);
 
-void update_session_tp(unsigned char session_id, struct sk_buff *skb);
+void add_session_totalbytes(unsigned char session_id, unsigned int len);
+
+void update_session_tp(unsigned char session_id, unsigned int len);
 
 __be32 find_local_addr(__be32 addr);
 

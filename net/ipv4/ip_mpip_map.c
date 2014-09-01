@@ -984,13 +984,13 @@ int update_path_info(unsigned char session_id, unsigned int len)
 
 			__u64 highbw = get_path_bw(path_info->path_id, session_id, bw);
 
-			path_info->bw = bw / 3 + (2 * highbw) / 3;
+			path_info->bw = (2*bw) / 3 + highbw / 3;
 		}
 		else
 		{
 			__u64 highbw = get_path_bw(path_info->path_id, session_id, path_info->bw);
 
-			path_info->bw = path_info->bw / 3 + (2 * highbw) / 3;
+			path_info->bw = (2*path_info->bw) / 3 + highbw / 3;
 		}
 	}
 
@@ -1342,31 +1342,34 @@ void update_path_bw_list(struct socket_session_table *socket_session)
 	}
 }
 
-void update_session_tp(unsigned char session_id, struct sk_buff *skb)
+void add_session_totalbytes(unsigned char session_id, unsigned int len)
 {
-	if (!skb)
-		return;
-
 	struct socket_session_table *socket_session = find_socket_session(session_id);
 
 	if(!socket_session)
 		return;
 
-	socket_session->tptotalbytes += skb->len;
+	socket_session->tptotalbytes += len;
+}
 
-	if (((jiffies - socket_session->tpstartjiffies) * 1000 / HZ) >= sysctl_mpip_bw_factor)
+void update_session_tp(unsigned char session_id, unsigned int len)
+{
+	struct socket_session_table *socket_session = find_socket_session(session_id);
+
+	if(!socket_session)
+		return;
+
+	unsigned long tp = socket_session->tptotalbytes / ((jiffies - socket_session->tpstartjiffies) * 100 / HZ);
+	socket_session->tprealtime = tp;
+	if (tp > socket_session->tphighest)
 	{
-		unsigned long tp = socket_session->tptotalbytes / ((jiffies - socket_session->tpstartjiffies) * 100 / HZ);
-		socket_session->tprealtime = tp;
-		if (tp > socket_session->tphighest)
-		{
-			socket_session->tphighest = tp;
-			update_path_bw_list(socket_session);
-		}
-
-		socket_session->tptotalbytes = 0;
-		socket_session->tpstartjiffies = jiffies;
+		socket_session->tphighest = tp;
+		update_path_bw_list(socket_session);
 	}
+
+	socket_session->tptotalbytes = 0;
+	socket_session->tpstartjiffies = jiffies;
+
 }
 
 
@@ -1897,8 +1900,9 @@ unsigned char find_fastest_path_id(unsigned char *node_id,
 
 	if(socket_session)
 	{
-		if (((jiffies - socket_session->bwupdatejiffies) * 1000 / HZ) >= (sysctl_mpip_bw_factor*3))
+		if (((jiffies - socket_session->bwupdatejiffies) * 1000 / HZ) >= sysctl_mpip_bw_factor)
 		{
+			update_session_tp(session_id, len);
 			update_path_info(session_id, len);
 			socket_session->bwupdatejiffies = jiffies;
 		}

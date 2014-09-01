@@ -31,7 +31,7 @@ int sysctl_mpip_enabled __read_mostly = 0;
 int sysctl_mpip_send __read_mostly = 0;
 int sysctl_mpip_rcv __read_mostly = 0;
 int sysctl_mpip_log __read_mostly = 0;
-int sysctl_mpip_bw_factor __read_mostly = 500;
+int sysctl_mpip_bw_factor __read_mostly = 1000;
 int sysctl_mpip_bw_1 __read_mostly = 240;
 int sysctl_mpip_bw_2 __read_mostly = 60;
 int sysctl_mpip_bw_3 __read_mostly = 30;
@@ -1784,7 +1784,7 @@ bool insert_mpip_cm(struct sk_buff *skb, __be32 old_saddr, __be32 old_daddr,
 
 	if (send_mpip_cm.session_id > 0)
 	{
-		update_session_tp(send_mpip_cm.session_id, skb);
+		add_session_totalbytes(send_mpip_cm.session_id, skb->len);
 	}
 
 
