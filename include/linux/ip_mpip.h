@@ -131,6 +131,7 @@ struct path_info_table
 	__s32     			ave_min_delay;
 	__s32     			ave_delay;
 	__s32     			queuing_delay;
+	__s32     			ave_queuing_delay;
 	__s32     			max_queuing_delay;
 	__u64				bw;  /* bandwidth */
 	unsigned long 		fbjiffies; /* last feedback time of this path */
