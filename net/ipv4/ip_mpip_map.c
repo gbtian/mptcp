@@ -1371,15 +1371,7 @@ void update_path_bw_list(struct socket_session_table *socket_session)
 				if (path_bw->path_id == path_info->path_id)
 				{
 					done = true;
-
-					if (path_bw->bw > path_info->bw)
-					{
-						path_bw->bw -= 2;
-					}
-					else if (path_bw->bw < path_info->bw)
-					{
-						path_bw->bw += 2;
-					}
+					path_bw->bw = (path_bw->bw + path_info->bw) / 2;
 				}
 			}
 
