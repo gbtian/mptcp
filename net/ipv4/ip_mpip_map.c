@@ -960,7 +960,7 @@ int update_path_info(unsigned char session_id, unsigned int len)
 			//similarity, the smaller, the more similar
 			int similarity = calc_path_similarity(session_id);
 
-			int tmp = similarity * (max_queuing_delay - diff1 + max_delay - diff2);
+			int tmp = (max_queuing_delay - diff1 + max_delay - diff2);
 
 			path_info->bw = path_info->bw + tmp;
 		}
