@@ -846,9 +846,9 @@ int update_path_info(unsigned char session_id, unsigned int len)
 
 			if (!is_in_sorted_list(&sorted_list_1, path_info))
 			{
-				if (path_info->queuing_delay < min_value || min_value == -1)
+				if (path_info->min_delay < min_value || min_value == -1)
 				{
-					min_value = path_info->queuing_delay;
+					min_value = path_info->min_delay;
 					min_path = path_info;
 				}
 			}
@@ -876,8 +876,8 @@ int update_path_info(unsigned char session_id, unsigned int len)
 			next_sp = list_entry(sp->list.next, typeof(*sp), list);
 			if(next_sp)
 			{
-				sp->path_info->ave_queuing_delay = next_sp->path_info->ave_queuing_delay =
-						(sp->path_info->queuing_delay + next_sp->path_info->queuing_delay) / 2;
+				sp->path_info->ave_min_delay = next_sp->path_info->ave_min_delay =
+						(sp->path_info->min_delay + next_sp->path_info->min_delay) / 2;
 				sp = list_entry(sp->list.next, typeof(*sp), list);
 			}
 		}
@@ -886,7 +886,7 @@ int update_path_info(unsigned char session_id, unsigned int len)
 	{
 		list_for_each_entry(sp, &sorted_list_1, list)
 		{
-			sp->path_info->ave_queuing_delay = sp->path_info->queuing_delay;
+			sp->path_info->ave_min_delay = sp->path_info->min_delay;
 		}
 	}
 
@@ -902,24 +902,24 @@ int update_path_info(unsigned char session_id, unsigned int len)
 		if (path_info->session_id != session_id)
 			continue;
 
-		if (path_info->queuing_delay < min_queuing_delay || min_queuing_delay == -1)
+		if (path_info->delay < min_queuing_delay || min_queuing_delay == -1)
 		{
-			min_queuing_delay = path_info->queuing_delay;
+			min_queuing_delay = path_info->delay;
 		}
 
-		if (path_info->queuing_delay > max_queuing_delay)
+		if (abs(path_info->delay) > max_queuing_delay)
 		{
-			max_queuing_delay = path_info->queuing_delay;
+			max_queuing_delay = abs(path_info->delay);
 		}
 
-		if (path_info->delay < min_delay || min_delay == -1)
+		if (path_info->min_delay < min_delay || min_delay == -1)
 		{
-			min_delay = path_info->delay;
+			min_delay = path_info->min_delay;
 		}
 
-		if (abs(path_info->delay) > max_delay)
+		if (abs(path_info->min_delay) > max_delay)
 		{
-			max_delay = abs(path_info->delay);
+			max_delay = abs(path_info->min_delay);
 		}
 	}
 
@@ -938,12 +938,12 @@ int update_path_info(unsigned char session_id, unsigned int len)
 		if (path_info->session_id != session_id)
 			continue;
 
-		__s32 diff1 = calc_diff(path_info->ave_delay, min_delay, true);
+		__s32 diff1 = calc_diff(path_info->ave_delay, min_queuing_delay, false);
 
 		if (diff1 <= 0)
 			diff1 = 1;
 
-		__s32 diff2 = calc_diff(path_info->ave_queuing_delay, min_queuing_delay, false);
+		__s32 diff2 = calc_diff(path_info->ave_min_delay, min_delay, true);
 
 		if (diff2 <= 0)
 			diff2 = 1;
@@ -960,8 +960,7 @@ int update_path_info(unsigned char session_id, unsigned int len)
 			//similarity, the smaller, the more similar
 			int similarity = calc_path_similarity(session_id);
 
-			int tmp = (similarity * max_delay) / diff1
-								+ (max_queuing_delay * similarity) / diff2;
+			int tmp = similarity * (max_queuing_delay - diff1 + max_delay - diff2);
 
 			path_info->bw = path_info->bw + tmp;
 		}
@@ -984,13 +983,13 @@ int update_path_info(unsigned char session_id, unsigned int len)
 
 			__u64 highbw = get_path_bw(path_info->path_id, session_id, bw);
 
-			path_info->bw = (2*bw) / 3 + highbw / 3;
+			path_info->bw = bw / 2 + highbw / 2;
 		}
 		else
 		{
 			__u64 highbw = get_path_bw(path_info->path_id, session_id, path_info->bw);
 
-			path_info->bw = (2*path_info->bw) / 3 + highbw / 3;
+			path_info->bw = path_info->bw / 2 + highbw / 2;
 		}
 	}
 
@@ -1607,7 +1606,6 @@ int add_origin_path_info_tcp(unsigned char *node_id, __be32 saddr, __be32 daddr,
 	item->min_delay = 0;
 	item->delay = 0;
 	item->queuing_delay = 0;
-	item->ave_queuing_delay = 0;
 	item->max_queuing_delay = 0;
 	item->count = 0;
 	item->bw = 25;
@@ -2425,8 +2423,6 @@ asmlinkage long sys_mpip(void)
 		printk("%d  ", path_info->max_queuing_delay);
 
 		printk("%d  ", path_info->queuing_delay);
-
-		printk("%d  ", path_info->ave_queuing_delay);
 
 		printk("%llu  ", path_info->bw);
 
