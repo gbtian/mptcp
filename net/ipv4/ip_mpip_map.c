@@ -813,7 +813,9 @@ int update_path_info(unsigned char session_id, unsigned int len)
 				sp->path_info->ave_delay = next_sp->path_info->ave_delay =
 										(sp->path_info->delay + next_sp->path_info->delay) / 2;
 
-				printk("%d, %d: %s, %s, %d\n", sp->path_info->path_id, next_sp->path_info->path_id, __FILE__, __FUNCTION__, __LINE__);
+				printk("%d, %d: %d, %d, %d\n", sp->path_info->path_id, next_sp->path_info->path_id,
+						sp->path_info->delay, next_sp->path_info->delay,
+						__LINE__);
 
 				sp = next_sp;
 			}
@@ -884,7 +886,10 @@ int update_path_info(unsigned char session_id, unsigned int len)
 			{
 				sp->path_info->ave_min_delay = next_sp->path_info->ave_min_delay =
 						(sp->path_info->min_delay + next_sp->path_info->min_delay) / 2;
-				printk("%d, %d: %s, %s, %d\n", sp->path_info->path_id, next_sp->path_info->path_id, __FILE__, __FUNCTION__, __LINE__);
+
+				printk("%d, %d: %d, %d, %d\n", sp->path_info->path_id, next_sp->path_info->path_id,
+						sp->path_info->min_delay, next_sp->path_info->min_delay,
+						__LINE__);
 				sp = next_sp;
 			}
 		}
@@ -953,7 +958,9 @@ int update_path_info(unsigned char session_id, unsigned int len)
 			{
 				sp->path_info->ave_queuing_delay = next_sp->path_info->ave_queuing_delay =
 						(sp->path_info->queuing_delay + next_sp->path_info->queuing_delay) / 2;
-				printk("%d, %d: %s, %s, %d\n", sp->path_info->path_id, next_sp->path_info->path_id, __FILE__, __FUNCTION__, __LINE__);
+				printk("%d, %d: %d, %d, %d\n", sp->path_info->path_id, next_sp->path_info->path_id,
+						sp->path_info->queuing_delay, next_sp->path_info->queuing_delay,
+						__LINE__);
 				sp = next_sp;
 			}
 		}
