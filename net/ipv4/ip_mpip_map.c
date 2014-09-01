@@ -899,70 +899,70 @@ int update_path_info(unsigned char session_id, unsigned int len)
 	}
 
 	struct list_head sorted_list_2;
-		INIT_LIST_HEAD(&(sorted_list_2));
-		int count_2 = 0;
+	INIT_LIST_HEAD(&(sorted_list_2));
+	int count_2 = 0;
 
 
-		while(true)
+	while(true)
+	{
+		struct path_info_table *min_path = NULL;
+		__s32 min_value = -1;
+		list_for_each_entry(path_info, &pi_head, list)
 		{
-			struct path_info_table *min_path = NULL;
-			__s32 min_value = -1;
-			list_for_each_entry(path_info, &pi_head, list)
-			{
-				if (path_info->session_id != session_id)
-					continue;
+			if (path_info->session_id != session_id)
+				continue;
 
-				if (!is_in_sorted_list(&sorted_list_2, path_info))
+			if (!is_in_sorted_list(&sorted_list_2, path_info))
+			{
+				if (path_info->queuing_delay < min_value || min_value == -1)
 				{
-					if (path_info->queuing_delay < min_value || min_value == -1)
-					{
-						min_value = path_info->queuing_delay;
-						min_path = path_info;
-					}
+					min_value = path_info->queuing_delay;
+					min_path = path_info;
 				}
 			}
-
-			if (min_path != NULL)
-			{
-				struct sort_path *item = kzalloc(sizeof(struct sort_path),	GFP_ATOMIC);
-				if (!item)
-					break;
-
-				item->path_info = min_path;
-				INIT_LIST_HEAD(&(item->list));
-				list_add(&(item->list), &(sorted_list_2));
-				++count_2;
-			}
-			else
-				break;
 		}
 
-		if (count_2 == 4)
+		if (min_path != NULL)
 		{
-			list_for_each_entry(sp, &sorted_list_2, list)
-			{
-				next_sp = list_entry(sp->list.next, typeof(*sp), list);
-				if(next_sp)
-				{
-					sp->path_info->ave_queuing_delay = next_sp->path_info->ave_queuing_delay =
-							(sp->path_info->queuing_delay + next_sp->path_info->queuing_delay) / 2;
-					sp = list_entry(sp->list.next, typeof(*sp), list);
-				}
-			}
+			struct sort_path *item = kzalloc(sizeof(struct sort_path),	GFP_ATOMIC);
+			if (!item)
+				break;
+
+			item->path_info = min_path;
+			INIT_LIST_HEAD(&(item->list));
+			list_add(&(item->list), &(sorted_list_2));
+			++count_2;
 		}
 		else
+			break;
+	}
+
+	if (count_2 == 4)
+	{
+		list_for_each_entry(sp, &sorted_list_2, list)
 		{
-			list_for_each_entry(sp, &sorted_list_2, list)
+			next_sp = list_entry(sp->list.next, typeof(*sp), list);
+			if(next_sp)
 			{
-				sp->path_info->ave_queuing_delay = sp->path_info->queuing_delay;
+				sp->path_info->ave_queuing_delay = next_sp->path_info->ave_queuing_delay =
+						(sp->path_info->queuing_delay + next_sp->path_info->queuing_delay) / 2;
+				sp = list_entry(sp->list.next, typeof(*sp), list);
 			}
 		}
-
-		list_for_each_entry_safe(sp, next_sp, &sorted_list_2, list)
+	}
+	else
+	{
+		list_for_each_entry(sp, &sorted_list_2, list)
 		{
-			list_del(&(sp->list));
-			kfree(sp);
+			sp->path_info->ave_queuing_delay = sp->path_info->queuing_delay;
 		}
+	}
+
+	list_for_each_entry_safe(sp, next_sp, &sorted_list_2, list)
+	{
+		list_del(&(sp->list));
+		kfree(sp);
+	}
 
 
 	list_for_each_entry(path_info, &pi_head, list)
@@ -1016,9 +1016,9 @@ int update_path_info(unsigned char session_id, unsigned int len)
 		if (path_info->session_id != session_id)
 			continue;
 
-		if ((path_info->delay == 0) && (path_info->pktcount > 5))
-			path_info->bw = path_info->bw / 5;
-		else
+//		if ((path_info->delay == 0) && (path_info->pktcount > 5))
+//			path_info->bw = path_info->bw / 5;
+//		else
 		{
 			int tmp = max_delay - path_info->ave_delay
 					+ max_min_delay - path_info->ave_min_delay
@@ -1037,7 +1037,7 @@ int update_path_info(unsigned char session_id, unsigned int len)
 			if (path_info->session_id != session_id)
 				continue;
 
-			path_info->bw = 250;
+			path_info->bw = 25;
 		}
 	}
 	list_for_each_entry(path_info, &pi_head, list)
@@ -1045,7 +1045,7 @@ int update_path_info(unsigned char session_id, unsigned int len)
 		if (path_info->session_id != session_id)
 			continue;
 
-		__u64 bw = (1000*path_info->bw) / totalbw;
+		__u64 bw = (100*path_info->bw) / totalbw;
 
 		__u64 highbw = get_path_bw(path_info->path_id, session_id, bw);
 
@@ -1651,7 +1651,7 @@ int add_origin_path_info_tcp(unsigned char *node_id, __be32 saddr, __be32 daddr,
 	item->queuing_delay = 0;
 	item->max_queuing_delay = 0;
 	item->count = 0;
-	item->bw = 250;
+	item->bw = 25;
 	item->pktcount = 0;
 	item->path_id = (static_path_id > 250) ? 1 : ++static_path_id;
 
@@ -1709,7 +1709,7 @@ int add_path_info_tcp(int id, unsigned char *node_id, __be32 saddr, __be32 daddr
 	item->queuing_delay = 0;
 	item->max_queuing_delay = -1;
 	item->count = 0;
-	item->bw = 250;
+	item->bw = 25;
 	item->pktcount = 0;
 	item->path_id = (static_path_id > 250) ? 1 : ++static_path_id;
 	item->status = 0;
@@ -1843,7 +1843,7 @@ int add_path_info_udp(unsigned char *node_id, __be32 daddr, __be16 sport,
 		item->queuing_delay = 0;
 		item->max_queuing_delay = 0;
 		item->count = 0;
-		item->bw = 250;
+		item->bw = 25;
 		item->pktcount = 0;
 		item->path_id = (static_path_id > 250) ? 1 : ++static_path_id;
 
