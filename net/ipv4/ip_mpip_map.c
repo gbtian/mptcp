@@ -1897,7 +1897,7 @@ unsigned char find_fastest_path_id(unsigned char *node_id,
 
 	if(socket_session)
 	{
-		if (((jiffies - socket_session->bwupdatejiffies) * 1000 / HZ) >= sysctl_mpip_bw_factor)
+		if (((jiffies - socket_session->bwupdatejiffies) * 1000 / HZ) >= (sysctl_mpip_bw_factor*3))
 		{
 			update_path_info(session_id, len);
 			socket_session->bwupdatejiffies = jiffies;
