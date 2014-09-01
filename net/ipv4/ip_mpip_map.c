@@ -910,7 +910,7 @@ int update_path_info(unsigned char session_id, unsigned int len)
 			min_delay = path_info->delay;
 		}
 
-		if (path_info->delay > max_delay)
+		if (path_info->delay > max_delay || max_delay == -1)
 		{
 			max_delay = path_info->delay;
 		}
@@ -920,7 +920,7 @@ int update_path_info(unsigned char session_id, unsigned int len)
 			min_min_delay = path_info->min_delay;
 		}
 
-		if (path_info->min_delay > max_min_delay)
+		if (path_info->min_delay > max_min_delay || max_min_delay == -1)
 		{
 			max_min_delay = path_info->min_delay;
 		}
@@ -930,7 +930,7 @@ int update_path_info(unsigned char session_id, unsigned int len)
 			min_queuing_delay = path_info->queuing_delay;
 		}
 
-		if (path_info->queuing_delay > max_queuing_delay)
+		if (path_info->queuing_delay > max_queuing_delay || max_queuing_delay == -1)
 		{
 			max_queuing_delay = path_info->queuing_delay;
 		}
