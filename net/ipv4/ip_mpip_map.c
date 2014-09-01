@@ -547,19 +547,19 @@ int update_path_delay(unsigned char path_id, __s32 delay)
 //				}
 //			}
 
-			if (path_info->min_delay > delay)
+			if (path_info->min_delay > delay || path_info->min_delay == -1)
 			{
 				path_info->min_delay = delay;
 			}
 
-			if (path_info->max_delay < delay)
+			if (path_info->max_delay < delay || path_info->max_delay == -1)
 			{
 				path_info->max_delay = delay;
 			}
 
 
 			path_info->queuing_delay = path_info->delay - path_info->min_delay;
-			if (path_info->queuing_delay > path_info->max_queuing_delay)
+			if (path_info->queuing_delay > path_info->max_queuing_delay || path_info->max_queuing_delay == -1)
 			{
 				path_info->max_queuing_delay = path_info->queuing_delay;
 			}
@@ -1621,6 +1621,7 @@ int add_origin_path_info_tcp(unsigned char *node_id, __be32 saddr, __be32 daddr,
 	item->dport = dport;
 	item->session_id = session_id;
 	item->min_delay = 0;
+	item->max_delay = 0;
 	item->delay = 0;
 	item->queuing_delay = 0;
 	item->max_queuing_delay = 0;
@@ -1677,11 +1678,11 @@ int add_path_info_tcp(int id, unsigned char *node_id, __be32 saddr, __be32 daddr
 	item->daddr = daddr;
 	item->dport = dport;
 	item->session_id = session_id;
-	item->min_delay = 0;
-	item->max_delay = 0;
+	item->min_delay = -1;
+	item->max_delay = -1;
 	item->delay = 0;
 	item->queuing_delay = 0;
-	item->max_queuing_delay = 0;
+	item->max_queuing_delay = -1;
 	item->count = 0;
 	item->bw = 250;
 	item->pktcount = 0;
