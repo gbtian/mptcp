@@ -972,7 +972,7 @@ int update_path_info(unsigned char session_id, unsigned int len)
 		totalbw += path_info->bw;
 	}
 
-	__u64 times = totalbw / 1000;
+	__u64 times = totalbw / 100;
 	list_for_each_entry(path_info, &pi_head, list)
 	{
 		if (path_info->session_id != session_id)
@@ -1606,7 +1606,7 @@ int add_origin_path_info_tcp(unsigned char *node_id, __be32 saddr, __be32 daddr,
 	item->queuing_delay = 0;
 	item->max_queuing_delay = 0;
 	item->count = 0;
-	item->bw = 250;
+	item->bw = 25;
 	item->pktcount = 0;
 	item->path_id = (static_path_id > 250) ? 1 : ++static_path_id;
 
@@ -1664,7 +1664,7 @@ int add_path_info_tcp(int id, unsigned char *node_id, __be32 saddr, __be32 daddr
 	item->queuing_delay = 0;
 	item->max_queuing_delay = 0;
 	item->count = 0;
-	item->bw = 250;
+	item->bw = 25;
 	item->pktcount = 0;
 	item->path_id = (static_path_id > 250) ? 1 : ++static_path_id;
 	item->status = 0;
@@ -1798,7 +1798,7 @@ int add_path_info_udp(unsigned char *node_id, __be32 daddr, __be16 sport,
 		item->queuing_delay = 0;
 		item->max_queuing_delay = 0;
 		item->count = 0;
-		item->bw = 250;
+		item->bw = 25;
 		item->pktcount = 0;
 		item->path_id = (static_path_id > 250) ? 1 : ++static_path_id;
 
