@@ -1020,10 +1020,11 @@ int update_path_info(unsigned char session_id, unsigned int len)
 //			path_info->bw = path_info->bw / 5;
 //		else
 		{
-			int tmp = max_delay - path_info->ave_delay
+			__s32 tmp = max_delay - path_info->ave_delay
 					+ max_min_delay - path_info->ave_min_delay
 					+ max_queuing_delay - path_info->ave_queuing_delay;
 
+			path_info->tmp = tmp;
 			path_info->bw = path_info->bw + tmp;
 		}
 
@@ -2462,19 +2463,18 @@ asmlinkage long sys_mpip(void)
 
 		printk("%d  ", path_info->min_delay);
 
-		printk("%d  ", path_info->ave_min_delay);
-
 		printk("%d  ", path_info->delay);
-
-		printk("%d  ", path_info->ave_delay);
 
 		printk("%d  ", path_info->queuing_delay);
 
+		printk("%d  ", path_info->ave_min_delay);
+		printk("%d  ", path_info->ave_delay);
 		printk("%d  ", path_info->ave_queuing_delay);
+		printk("%d  ", path_info->tmp);
 
 		printk("%llu  ", path_info->bw);
 
-		printk("%llu\n", path_info->pktcount);
+//		printk("%llu\n", path_info->pktcount);
 
 //		printk("%d\n", path_info->status);
 
