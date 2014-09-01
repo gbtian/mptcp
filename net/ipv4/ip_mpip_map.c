@@ -750,12 +750,12 @@ __u64 get_path_bw(unsigned char path_id, unsigned char session_id, __u64 bw)
 int update_path_info(unsigned char session_id, unsigned int len)
 {
 	struct path_info_table *path_info;
-	__s32 min_queuing_delay = -1;
-	__s32 min_delay = -1;
-	__s32 min_min_delay = -1;
-	__s32 max_queuing_delay = 0;
-	__s32 max_delay = 0;
-	__s32 max_min_delay = 0;
+	int min_queuing_delay = -1;
+	int min_delay = -1;
+	int min_min_delay = -1;
+	int max_queuing_delay = 0;
+	int max_delay = 0;
+	int max_min_delay = 0;
 
 	__u64 totalbw = 0;
 
@@ -1026,7 +1026,7 @@ int update_path_info(unsigned char session_id, unsigned int len)
 //			path_info->bw = path_info->bw / 5;
 //		else
 		{
-			__s32 tmp = max_delay - path_info->ave_delay
+			int tmp = max_delay - path_info->ave_delay
 					+ max_min_delay - path_info->ave_min_delay
 					+ max_queuing_delay - path_info->ave_queuing_delay;
 

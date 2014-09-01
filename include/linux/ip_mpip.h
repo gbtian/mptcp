@@ -125,15 +125,15 @@ struct path_info_table
 	__be16				sport; /* source port*/
 	__be16				dport; /* destination port*/
 //	unsigned int 		protocol;
-	__s32 				min_delay;
-	__s32     			ave_min_delay;
-	__s32				max_delay;
-	__s32     			delay;
-	__s32     			ave_delay;
-	__s32     			queuing_delay;
-	__s32     			ave_queuing_delay;
-	__s32     			max_queuing_delay;
-	__s32				tmp;
+	int 				min_delay;
+	int     			ave_min_delay;
+	int					max_delay;
+	int     			delay;
+	int     			ave_delay;
+	int     			queuing_delay;
+	int     			ave_queuing_delay;
+	int     			max_queuing_delay;
+	int					tmp;
 	__u64				bw;  /* bandwidth */
 	unsigned long 		fbjiffies; /* last feedback time of this path */
 	unsigned char		count;
