@@ -2472,7 +2472,7 @@ asmlinkage long sys_mpip(void)
 		printk("%d  ", path_info->ave_queuing_delay);
 		printk("%d  ", path_info->tmp);
 
-		printk("%llu  ", path_info->bw);
+		printk("%llu\n", path_info->bw);
 
 //		printk("%llu\n", path_info->pktcount);
 
