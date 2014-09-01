@@ -1360,22 +1360,37 @@ void update_path_bw_list(struct socket_session_table *socket_session)
 	struct path_bw_info *tmp_path = NULL;
 	struct path_info_table *path_info = NULL;
 
-	list_for_each_entry_safe(path_bw, tmp_path, &(socket_session->path_bw_list), list)
-	{
-		list_del(&(path_bw->list));
-		kfree(path_bw);
-	}
 
 	list_for_each_entry(path_info, &pi_head, list)
 	{
 		if (path_info->session_id == socket_session->session_id)
 		{
+			bool done = false;
+			list_for_each_entry(path_bw, &(socket_session->path_bw_list), list)
+			{
+				if (path_bw->path_id == path_info->path_id)
+				{
+					done = true;
+
+					if (path_bw->bw > path_info->bw)
+					{
+						path_bw->bw -= 2;
+					}
+					else if (path_bw->bw < path_info->bw)
+					{
+						path_bw->bw += 2;
+					}
+				}
+			}
+
+			if (done)
+				continue;
+
 			struct path_bw_info *item = kzalloc(sizeof(struct path_bw_info),	GFP_ATOMIC);
 			if (!item)
 				return;
 
 			item->path_id = path_info->path_id;
-			item->session_id = path_info->session_id;
 			item->bw = path_info->bw;
 			INIT_LIST_HEAD(&(item->list));
 			list_add(&(item->list), &(socket_session->path_bw_list));

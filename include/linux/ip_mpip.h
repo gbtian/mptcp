@@ -163,7 +163,6 @@ struct sort_path
 struct path_bw_info
 {
 	unsigned char		path_id; /* path id: 0,1,2,3,4....*/
-	unsigned char		session_id;
 	__u64				bw;  /* bandwidth */
 	struct list_head 	list;
 };
