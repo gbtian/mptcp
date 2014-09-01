@@ -752,149 +752,152 @@ int update_path_info(unsigned char session_id, unsigned int len)
 	struct path_info_table *path_info;
 	__s32 min_queuing_delay = -1;
 	__s32 min_delay = -1;
+	__s32 min_min_delay = -1;
 	__s32 max_queuing_delay = 0;
 	__s32 max_delay = 0;
+	__s32 max_min_delay = 0;
+
 	__u64 max_bw = 0;
 	__u64 totalbw = 0;
 
 	if (session_id <= 0)
 		return 0;
 
-	struct list_head sorted_list;
-	INIT_LIST_HEAD(&(sorted_list));
-	int count = 0;
-
-
-	while(true)
-	{
-		struct path_info_table *min_path = NULL;
-		__s32 min_value = -1;
-		list_for_each_entry(path_info, &pi_head, list)
-		{
-			if (path_info->session_id != session_id)
-				continue;
-
-			if (!is_in_sorted_list(&sorted_list, path_info))
-			{
-				if (path_info->delay < min_value || min_value == -1)
-				{
-					min_value = path_info->delay;
-					min_path = path_info;
-				}
-			}
-		}
-
-		if (min_path != NULL)
-		{
-			struct sort_path *item = kzalloc(sizeof(struct sort_path),	GFP_ATOMIC);
-			if (!item)
-				break;
-
-			item->path_info = min_path;
-			INIT_LIST_HEAD(&(item->list));
-			list_add(&(item->list), &(sorted_list));
-			++count;
-		}
-		else
-			break;
-	}
-
-	struct sort_path *sp = NULL;
-	struct sort_path *next_sp = NULL;
-	if (count == 4)
-	{
-		list_for_each_entry(sp, &sorted_list, list)
-		{
-			next_sp = list_entry(sp->list.next, typeof(*sp), list);
-			if(next_sp)
-			{
-				sp->path_info->ave_delay = next_sp->path_info->ave_delay =
-										(sp->path_info->delay + next_sp->path_info->delay) / 2;
-
-				sp = list_entry(sp->list.next, typeof(*sp), list);
-			}
-		}
-	}
-	else
-	{
-		list_for_each_entry(sp, &sorted_list, list)
-		{
-			sp->path_info->ave_delay = sp->path_info->delay;
-		}
-	}
-
-	list_for_each_entry_safe(sp, next_sp, &sorted_list, list)
-	{
-		list_del(&(sp->list));
-		kfree(sp);
-	}
-
-
-	struct list_head sorted_list_1;
-	INIT_LIST_HEAD(&(sorted_list_1));
-	int count_1 = 0;
-
-
-	while(true)
-	{
-		struct path_info_table *min_path = NULL;
-		__s32 min_value = -1;
-		list_for_each_entry(path_info, &pi_head, list)
-		{
-			if (path_info->session_id != session_id)
-				continue;
-
-			if (!is_in_sorted_list(&sorted_list_1, path_info))
-			{
-				if (path_info->min_delay < min_value || min_value == -1)
-				{
-					min_value = path_info->min_delay;
-					min_path = path_info;
-				}
-			}
-		}
-
-		if (min_path != NULL)
-		{
-			struct sort_path *item = kzalloc(sizeof(struct sort_path),	GFP_ATOMIC);
-			if (!item)
-				break;
-
-			item->path_info = min_path;
-			INIT_LIST_HEAD(&(item->list));
-			list_add(&(item->list), &(sorted_list_1));
-			++count_1;
-		}
-		else
-			break;
-	}
-
-	if (count_1 == 4)
-	{
-		list_for_each_entry(sp, &sorted_list_1, list)
-		{
-			next_sp = list_entry(sp->list.next, typeof(*sp), list);
-			if(next_sp)
-			{
-				sp->path_info->ave_min_delay = next_sp->path_info->ave_min_delay =
-						(sp->path_info->min_delay + next_sp->path_info->min_delay) / 2;
-				sp = list_entry(sp->list.next, typeof(*sp), list);
-			}
-		}
-	}
-	else
-	{
-		list_for_each_entry(sp, &sorted_list_1, list)
-		{
-			sp->path_info->ave_min_delay = sp->path_info->min_delay;
-		}
-	}
-
-	list_for_each_entry_safe(sp, next_sp, &sorted_list_1, list)
-	{
-		list_del(&(sp->list));
-		kfree(sp);
-	}
+//	struct list_head sorted_list;
+//	INIT_LIST_HEAD(&(sorted_list));
+//	int count = 0;
+//
+//
+//	while(true)
+//	{
+//		struct path_info_table *min_path = NULL;
+//		__s32 min_value = -1;
+//		list_for_each_entry(path_info, &pi_head, list)
+//		{
+//			if (path_info->session_id != session_id)
+//				continue;
+//
+//			if (!is_in_sorted_list(&sorted_list, path_info))
+//			{
+//				if (path_info->delay < min_value || min_value == -1)
+//				{
+//					min_value = path_info->delay;
+//					min_path = path_info;
+//				}
+//			}
+//		}
+//
+//		if (min_path != NULL)
+//		{
+//			struct sort_path *item = kzalloc(sizeof(struct sort_path),	GFP_ATOMIC);
+//			if (!item)
+//				break;
+//
+//			item->path_info = min_path;
+//			INIT_LIST_HEAD(&(item->list));
+//			list_add(&(item->list), &(sorted_list));
+//			++count;
+//		}
+//		else
+//			break;
+//	}
+//
+//	struct sort_path *sp = NULL;
+//	struct sort_path *next_sp = NULL;
+//	if (count == 4)
+//	{
+//		list_for_each_entry(sp, &sorted_list, list)
+//		{
+//			next_sp = list_entry(sp->list.next, typeof(*sp), list);
+//			if(next_sp)
+//			{
+//				sp->path_info->ave_delay = next_sp->path_info->ave_delay =
+//										(sp->path_info->delay + next_sp->path_info->delay) / 2;
+//
+//				sp = list_entry(sp->list.next, typeof(*sp), list);
+//			}
+//		}
+//	}
+//	else
+//	{
+//		list_for_each_entry(sp, &sorted_list, list)
+//		{
+//			sp->path_info->ave_delay = sp->path_info->delay;
+//		}
+//	}
+//
+//	list_for_each_entry_safe(sp, next_sp, &sorted_list, list)
+//	{
+//		list_del(&(sp->list));
+//		kfree(sp);
+//	}
+//
+//
+//	struct list_head sorted_list_1;
+//	INIT_LIST_HEAD(&(sorted_list_1));
+//	int count_1 = 0;
+//
+//
+//	while(true)
+//	{
+//		struct path_info_table *min_path = NULL;
+//		__s32 min_value = -1;
+//		list_for_each_entry(path_info, &pi_head, list)
+//		{
+//			if (path_info->session_id != session_id)
+//				continue;
+//
+//			if (!is_in_sorted_list(&sorted_list_1, path_info))
+//			{
+//				if (path_info->min_delay < min_value || min_value == -1)
+//				{
+//					min_value = path_info->min_delay;
+//					min_path = path_info;
+//				}
+//			}
+//		}
+//
+//		if (min_path != NULL)
+//		{
+//			struct sort_path *item = kzalloc(sizeof(struct sort_path),	GFP_ATOMIC);
+//			if (!item)
+//				break;
+//
+//			item->path_info = min_path;
+//			INIT_LIST_HEAD(&(item->list));
+//			list_add(&(item->list), &(sorted_list_1));
+//			++count_1;
+//		}
+//		else
+//			break;
+//	}
+//
+//	if (count_1 == 4)
+//	{
+//		list_for_each_entry(sp, &sorted_list_1, list)
+//		{
+//			next_sp = list_entry(sp->list.next, typeof(*sp), list);
+//			if(next_sp)
+//			{
+//				sp->path_info->ave_min_delay = next_sp->path_info->ave_min_delay =
+//						(sp->path_info->min_delay + next_sp->path_info->min_delay) / 2;
+//				sp = list_entry(sp->list.next, typeof(*sp), list);
+//			}
+//		}
+//	}
+//	else
+//	{
+//		list_for_each_entry(sp, &sorted_list_1, list)
+//		{
+//			sp->path_info->ave_min_delay = sp->path_info->min_delay;
+//		}
+//	}
+//
+//	list_for_each_entry_safe(sp, next_sp, &sorted_list_1, list)
+//	{
+//		list_del(&(sp->list));
+//		kfree(sp);
+//	}
 
 
 	list_for_each_entry(path_info, &pi_head, list)
@@ -902,24 +905,34 @@ int update_path_info(unsigned char session_id, unsigned int len)
 		if (path_info->session_id != session_id)
 			continue;
 
-		if (path_info->delay < min_queuing_delay || min_queuing_delay == -1)
+		if (path_info->delay < min_delay || min_delay == -1)
 		{
-			min_queuing_delay = path_info->delay;
+			min_delay = path_info->delay;
 		}
 
-		if (abs(path_info->delay) > max_queuing_delay)
+		if (path_info->delay > max_delay)
 		{
-			max_queuing_delay = abs(path_info->delay);
+			max_delay = path_info->delay;
 		}
 
-		if (path_info->min_delay < min_delay || min_delay == -1)
+		if (path_info->min_delay < min_min_delay || min_min_delay == -1)
 		{
-			min_delay = path_info->min_delay;
+			min_min_delay = path_info->min_delay;
 		}
 
-		if (abs(path_info->min_delay) > max_delay)
+		if (path_info->min_delay > max_min_delay)
 		{
-			max_delay = abs(path_info->min_delay);
+			max_min_delay = path_info->min_delay;
+		}
+
+		if (path_info->queuing_delay < min_queuing_delay || min_queuing_delay == -1)
+		{
+			min_queuing_delay = path_info->queuing_delay;
+		}
+
+		if (path_info->queuing_delay > max_queuing_delay)
+		{
+			max_queuing_delay = path_info->queuing_delay;
 		}
 	}
 
@@ -928,25 +941,30 @@ int update_path_info(unsigned char session_id, unsigned int len)
 		return 0;
 	}
 
-	if (max_queuing_delay <= 20)
-	{
-		max_queuing_delay = 100;
-	}
+//	if (max_queuing_delay <= 20)
+//	{
+//		max_queuing_delay = 100;
+//	}
 
 	list_for_each_entry(path_info, &pi_head, list)
 	{
 		if (path_info->session_id != session_id)
 			continue;
 
-		__s32 diff1 = calc_diff(path_info->ave_delay, min_queuing_delay, false);
+		__s32 diff1 = calc_diff(path_info->delay, min_delay, false);
 
 		if (diff1 <= 0)
 			diff1 = 1;
 
-		__s32 diff2 = calc_diff(path_info->ave_min_delay, min_delay, true);
+		__s32 diff2 = calc_diff(path_info->min_delay, min_min_delay, true);
 
 		if (diff2 <= 0)
 			diff2 = 1;
+
+		__s32 diff3 = calc_diff(path_info->queuing_delay, min_queuing_delay, true);
+
+		if (diff3 <= 0)
+			diff3 = 1;
 
 //		len = 1550;
 
@@ -954,13 +972,10 @@ int update_path_info(unsigned char session_id, unsigned int len)
 			path_info->bw = path_info->bw / 5;
 		else
 		{
-			if (max_delay < 0)
-				max_delay = -max_delay;
-
 			//similarity, the smaller, the more similar
 			int similarity = calc_path_similarity(session_id);
 
-			int tmp = (max_queuing_delay - diff1 + max_delay - diff2);
+			int tmp = (max_delay - min_delay + max_min_delay - min_min_delay + max_queuing_delay - min_queuing_delay);
 
 			path_info->bw = path_info->bw + tmp;
 		}
