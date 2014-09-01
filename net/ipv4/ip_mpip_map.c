@@ -813,7 +813,7 @@ int update_path_info(unsigned char session_id, unsigned int len)
 				sp->path_info->ave_delay = next_sp->path_info->ave_delay =
 										(sp->path_info->delay + next_sp->path_info->delay) / 2;
 
-				sp = list_entry(sp->list.next, typeof(*sp), list);
+				sp = next_sp;
 			}
 		}
 	}
@@ -871,6 +871,8 @@ int update_path_info(unsigned char session_id, unsigned int len)
 			break;
 	}
 
+	sp = NULL;
+	next_sp = NULL;
 	if (count_1 == 4)
 	{
 		list_for_each_entry(sp, &sorted_list_1, list)
@@ -880,7 +882,8 @@ int update_path_info(unsigned char session_id, unsigned int len)
 			{
 				sp->path_info->ave_min_delay = next_sp->path_info->ave_min_delay =
 						(sp->path_info->min_delay + next_sp->path_info->min_delay) / 2;
-				sp = list_entry(sp->list.next, typeof(*sp), list);
+
+				sp = next_sp;
 			}
 		}
 	}
@@ -937,6 +940,8 @@ int update_path_info(unsigned char session_id, unsigned int len)
 			break;
 	}
 
+	sp = NULL;
+	next_sp = NULL;
 	if (count_2 == 4)
 	{
 		list_for_each_entry(sp, &sorted_list_2, list)
@@ -946,7 +951,8 @@ int update_path_info(unsigned char session_id, unsigned int len)
 			{
 				sp->path_info->ave_queuing_delay = next_sp->path_info->ave_queuing_delay =
 						(sp->path_info->queuing_delay + next_sp->path_info->queuing_delay) / 2;
-				sp = list_entry(sp->list.next, typeof(*sp), list);
+
+				sp = next_sp;
 			}
 		}
 	}
