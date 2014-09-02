@@ -1066,13 +1066,13 @@ int update_path_info(unsigned char session_id, unsigned int len)
 
 		__u64 highbw = get_path_bw(path_info->path_id, session_id, bw);
 
-		if (bw > path_info->bw)
+		if (bw > highbw)
 		{
-			path_info->bw = (path_info->bw + highbw) / 2 + 1;
+			path_info->bw = (path_info->bw + highbw) / 2 + sysctl_mpip_bw_4;
 		}
-		else if (bw < path_info->bw)
+		else if (bw < highbw)
 		{
-			path_info->bw = (path_info->bw + highbw) / 2 - 1;
+			path_info->bw = (path_info->bw + highbw) / 2 - sysctl_mpip_bw_4;
 		}
 	}
 
