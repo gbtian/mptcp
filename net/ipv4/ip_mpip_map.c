@@ -1025,6 +1025,7 @@ int update_path_info(unsigned char session_id, unsigned int len)
 //	}
 
 	int min_tmp = -1;
+	int path_count = 0;
 	list_for_each_entry(path_info, &pi_head, list)
 	{
 		if (path_info->session_id != session_id)
@@ -1052,6 +1053,7 @@ int update_path_info(unsigned char session_id, unsigned int len)
 		}
 
 		totalbw += path_info->tmp_bw;
+		path_count++;
 	}
 
 	if (totalbw == 0)
@@ -1064,6 +1066,9 @@ int update_path_info(unsigned char session_id, unsigned int len)
 			path_info->bw = 25;
 		}
 	}
+
+	totalbw -= min_tmp * path_count;
+
 	list_for_each_entry(path_info, &pi_head, list)
 	{
 		if (path_info->session_id != session_id)
