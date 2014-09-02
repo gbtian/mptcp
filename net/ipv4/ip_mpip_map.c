@@ -1073,11 +1073,11 @@ int update_path_info(unsigned char session_id, unsigned int len)
 
 		if (highbw > bw)
 		{
-			path_info->bw = bw + 1;
+			path_info->bw = highbw + 1;
 		}
 		else if (highbw < bw)
 		{
-			path_info->bw = bw - 1;
+			path_info->bw = highbw - 1;
 		}
 	}
 
