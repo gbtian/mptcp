@@ -511,11 +511,6 @@ int update_path_delay(unsigned char path_id, __s32 delay)
 	{
 		if (path_info->path_id == path_id)
 		{
-			if (path_info->delay == 0)
-			{
-				path_info->bw = 10;
-			}
-
 			if (path_info->count == 0)
 			{
 				path_info->delay = delay;
@@ -1073,11 +1068,11 @@ int update_path_info(unsigned char session_id, unsigned int len)
 
 		if (bw > path_info->bw)
 		{
-			path_info->bw = path_info->bw / 2 + highbw / 2 + 1;
+			path_info->bw = (path_info->bw + highbw) / 2 + 1;
 		}
 		else if (bw < path_info->bw)
 		{
-			path_info->bw = path_info->bw / 2 + highbw / 2 - 1;
+			path_info->bw = (path_info->bw + highbw) / 2 - 1;
 		}
 	}
 
@@ -1407,7 +1402,7 @@ void update_path_bw_list(struct socket_session_table *socket_session)
 			if (done)
 				continue;
 
-			struct path_bw_info *item = kzalloc(sizeof(struct path_bw_info),	GFP_ATOMIC);
+			struct path_bw_info *item = kzalloc(sizeof(struct path_bw_info), GFP_ATOMIC);
 			if (!item)
 				return;
 
