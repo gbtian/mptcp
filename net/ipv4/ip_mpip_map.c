@@ -1024,6 +1024,7 @@ int update_path_info(unsigned char session_id, unsigned int len)
 //		max_queuing_delay = 100;
 //	}
 
+	int min_tmp = -1;
 	list_for_each_entry(path_info, &pi_head, list)
 	{
 		if (path_info->session_id != session_id)
@@ -1041,6 +1042,12 @@ int update_path_info(unsigned char session_id, unsigned int len)
 					+ max_queuing_delay - path_info->ave_queuing_delay;
 
 			path_info->tmp = tmp;
+
+			if (tmp < min_tmp || min_tmp == -1)
+			{
+				min_tmp = tmp;
+			}
+
 			path_info->tmp_bw = path_info->bw + tmp;
 		}
 
@@ -1062,7 +1069,7 @@ int update_path_info(unsigned char session_id, unsigned int len)
 		if (path_info->session_id != session_id)
 			continue;
 
-		__u64 bw = (100*path_info->tmp_bw) / totalbw;
+		__u64 bw = (100*(path_info->tmp_bw - min_tmp)) / totalbw;
 
 		__u64 highbw = get_path_bw(path_info->path_id, session_id, bw);
 
