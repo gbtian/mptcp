@@ -134,6 +134,7 @@ struct path_info_table
 	int     			ave_queuing_delay;
 	int     			max_queuing_delay;
 	int					tmp;
+	int					tmp_bw;
 	__u64				bw;  /* bandwidth */
 	unsigned long 		fbjiffies; /* last feedback time of this path */
 	unsigned char		count;

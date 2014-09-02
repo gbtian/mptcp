@@ -1034,9 +1034,9 @@ int update_path_info(unsigned char session_id, unsigned int len)
 		if (path_info->session_id != session_id)
 			continue;
 
-		if ((path_info->delay == 0) && (path_info->pktcount > 5))
-			path_info->bw = path_info->bw;
-		else
+//		if ((path_info->delay == 0) && (path_info->pktcount > 5))
+//			path_info->bw = path_info->bw;
+//		else
 		{
 			//int tmp = max_queuing_delay / (path_info->ave_queuing_delay - min_queuing_delay + 1)
 
@@ -1046,10 +1046,10 @@ int update_path_info(unsigned char session_id, unsigned int len)
 					+ max_queuing_delay - path_info->ave_queuing_delay;
 
 			path_info->tmp = tmp;
-			path_info->bw = path_info->bw + tmp;
+			path_info->tmp_bw = path_info->bw + tmp;
 		}
 
-		totalbw += path_info->bw;
+		totalbw += path_info->tmp_bw;
 	}
 
 	if (totalbw == 0)
@@ -1067,17 +1067,17 @@ int update_path_info(unsigned char session_id, unsigned int len)
 		if (path_info->session_id != session_id)
 			continue;
 
-		__u64 bw = (100*path_info->bw) / totalbw;
+		__u64 bw = (100*path_info->tmp_bw) / totalbw;
 
 		__u64 highbw = get_path_bw(path_info->path_id, session_id, bw);
 
-		if (highbw > bw)
+		if (bw > path_info->bw)
 		{
-			path_info->bw = highbw + 1;
+			path_info->bw = path_info->bw / 2 + highbw / 2 + 1;
 		}
-		else if (highbw < bw)
+		else if (bw < path_info->bw)
 		{
-			path_info->bw = highbw - 1;
+			path_info->bw = path_info->bw / 2 + highbw / 2 - 1;
 		}
 	}
 
