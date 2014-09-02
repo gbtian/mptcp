@@ -988,34 +988,34 @@ int update_path_info(unsigned char session_id, unsigned int len)
 		if (path_info->session_id != session_id)
 			continue;
 
-		if (path_info->delay < min_delay || min_delay == -1)
+		if (path_info->ave_delay < min_delay || min_delay == -1)
 		{
-			min_delay = path_info->delay;
+			min_delay = path_info->ave_delay;
 		}
 
-		if (path_info->delay > max_delay || max_delay == -1)
+		if (path_info->ave_delay > max_delay || max_delay == -1)
 		{
-			max_delay = path_info->delay;
+			max_delay = path_info->ave_delay;
 		}
 
-		if (path_info->min_delay < min_min_delay || min_min_delay == -1)
+		if (path_info->ave_min_delay < min_min_delay || min_min_delay == -1)
 		{
-			min_min_delay = path_info->min_delay;
+			min_min_delay = path_info->ave_min_delay;
 		}
 
-		if (path_info->min_delay > max_min_delay || max_min_delay == -1)
+		if (path_info->ave_min_delay > max_min_delay || max_min_delay == -1)
 		{
-			max_min_delay = path_info->min_delay;
+			max_min_delay = path_info->ave_min_delay;
 		}
 
-		if (path_info->queuing_delay < min_queuing_delay || min_queuing_delay == -1)
+		if (path_info->ave_queuing_delay < min_queuing_delay || min_queuing_delay == -1)
 		{
-			min_queuing_delay = path_info->queuing_delay;
+			min_queuing_delay = path_info->ave_queuing_delay;
 		}
 
-		if (path_info->queuing_delay > max_queuing_delay || max_queuing_delay == -1)
+		if (path_info->ave_queuing_delay > max_queuing_delay || max_queuing_delay == -1)
 		{
-			max_queuing_delay = path_info->queuing_delay;
+			max_queuing_delay = path_info->ave_queuing_delay;
 		}
 	}
 
