@@ -1069,6 +1069,13 @@ int update_path_info(unsigned char session_id, unsigned int len)
 
 	totalbw -= min_tmp * path_count;
 
+	struct socket_session_table *ss = find_socket_session(session_id);
+	int diff = 0;
+	if (ss)
+	{
+		diff = 100 - (ss->tprealtime * 100) / ss->tphighest;
+	}
+
 	list_for_each_entry(path_info, &pi_head, list)
 	{
 		if (path_info->session_id != session_id)
@@ -1080,11 +1087,11 @@ int update_path_info(unsigned char session_id, unsigned int len)
 
 		if (bw > highbw)
 		{
-			path_info->bw = (path_info->bw + highbw) / 2 + sysctl_mpip_bw_4;
+			path_info->bw = ((100 - diff) * path_info->bw + diff * highbw) / 100 + sysctl_mpip_bw_4;
 		}
 		else if (bw < highbw)
 		{
-			path_info->bw = (path_info->bw + highbw) / 2 - sysctl_mpip_bw_4;
+			path_info->bw = ((100 - diff) * path_info->bw + diff * highbw) / 100 - sysctl_mpip_bw_4 / 2;
 		}
 	}
 
