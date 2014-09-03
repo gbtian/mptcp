@@ -1085,13 +1085,13 @@ int update_path_info(unsigned char session_id, unsigned int len)
 
 		__u64 highbw = get_path_bw(path_info->path_id, session_id, bw);
 
-		if (bw > highbw)
+		if (bw > path_info->bw)
 		{
 			path_info->bw = ((100 - diff) * path_info->bw + diff * highbw) / 100 + sysctl_mpip_bw_4;
 		}
-		else if (bw < highbw)
+		else if (bw < path_info->bw)
 		{
-			path_info->bw = ((100 - diff) * path_info->bw + diff * highbw) / 100 - sysctl_mpip_bw_4 / 2;
+			path_info->bw = ((100 - diff) * path_info->bw + diff * highbw) / 100 - sysctl_mpip_bw_4;
 		}
 	}
 
@@ -2282,6 +2282,10 @@ void reset_mpip(void)
 
 	struct socket_session_table *socket_session;
 	struct socket_session_table *tmp_session;
+	struct path_bw_info *path_bw;
+	struct path_bw_info *tmp_bw;
+	struct tcp_skb_buf *tcp_buf;
+	struct tcp_skb_buf *tmp_buf;
 
 	struct path_stat_table *path_stat;
 	struct path_stat_table *tmp_stat;
@@ -2316,8 +2320,20 @@ void reset_mpip(void)
 
 	list_for_each_entry_safe(socket_session, tmp_session, &ss_head, list)
 	{
-			list_del(&(socket_session->list));
-			kfree(socket_session);
+		list_for_each_entry_safe(path_bw, tmp_bw, &(socket_session->path_bw_list), list)
+		{
+			list_del(&(path_bw->list));
+			kfree(path_bw);
+		}
+
+		list_for_each_entry_safe(tcp_buf, tmp_buf, &(socket_session->tcp_buf), list)
+		{
+			list_del(&(tcp_buf->list));
+			kfree(tcp_buf);
+		}
+
+		list_del(&(socket_session->list));
+		kfree(socket_session);
 	}
 
 	list_for_each_entry_safe(path_stat, tmp_stat, &ps_head, list)
