@@ -1087,11 +1087,11 @@ int update_path_info(unsigned char session_id, unsigned int len)
 
 		if (bw > path_info->bw)
 		{
-			path_info->bw = ((100 - diff) * path_info->bw + diff * highbw) / 100 + sysctl_mpip_bw_4;
+			path_info->bw = ((100 - diff) * (path_info->bw + sysctl_mpip_bw_4) + diff * highbw) / 100;
 		}
 		else if (bw < path_info->bw)
 		{
-			path_info->bw = ((100 - diff) * path_info->bw + diff * highbw) / 100 - sysctl_mpip_bw_4;
+			path_info->bw = ((100 - diff) * path_info->bw + diff * highbw) / 100;
 		}
 	}
 
