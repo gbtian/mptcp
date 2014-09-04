@@ -753,6 +753,7 @@ int update_path_info(unsigned char session_id, unsigned int len)
 	int max_min_delay = 0;
 
 	__u64 totalbw = 0;
+	__u64 totaltmp = 0;
 
 	if (session_id <= 0)
 		return 0;
@@ -1031,70 +1032,41 @@ int update_path_info(unsigned char session_id, unsigned int len)
 		if (path_info->session_id != session_id)
 			continue;
 
-//		if ((path_info->delay == 0) && (path_info->pktcount > 5))
-//			path_info->bw = path_info->bw;
-//		else
+		int tmp = max_delay - path_info->ave_delay
+				+ max_min_delay - path_info->ave_min_delay
+				+ max_queuing_delay - path_info->ave_queuing_delay;
+
+		path_info->tmp = tmp;
+
+		totaltmp += tmp;
+		if (tmp < min_tmp || min_tmp == -1)
 		{
-			//int tmp = max_queuing_delay / (path_info->ave_queuing_delay - min_queuing_delay + 1)
-
-
-			int tmp = max_delay - path_info->ave_delay
-					+ max_min_delay - path_info->ave_min_delay
-					+ max_queuing_delay - path_info->ave_queuing_delay;
-
-			path_info->tmp = tmp;
-
-			if (tmp < min_tmp || min_tmp == -1)
-			{
-				min_tmp = tmp;
-			}
-
-			path_info->tmp_bw = path_info->bw + tmp;
+			min_tmp = tmp;
 		}
+
+		path_info->tmp_bw = path_info->bw + tmp;
 
 		totalbw += path_info->tmp_bw;
 		path_count++;
 	}
 
-	if (totalbw == 0)
+	if (totaltmp == 0)
 	{
-		list_for_each_entry(path_info, &pi_head, list)
-		{
-			if (path_info->session_id != session_id)
-				continue;
-
-			path_info->bw = 25;
-		}
+		return 1;
 	}
 
-	totalbw -= min_tmp * path_count;
-
-	struct socket_session_table *ss = find_socket_session(session_id);
-	int diff = 0;
-	if (ss)
-	{
-		diff = 100 - (ss->tprealtime * 100) / ss->tphighest;
-	}
+	int averatio = 100 / path_count;
 
 	list_for_each_entry(path_info, &pi_head, list)
 	{
 		if (path_info->session_id != session_id)
 			continue;
 
-		__u64 bw = (100*(path_info->tmp_bw - min_tmp)) / totalbw;
-
-		__u64 highbw = get_path_bw(path_info->path_id, session_id, bw);
-
-		path_info->bw = ((100 - diff) * bw + diff * highbw) / 100;
-
-//		if (bw > highbw)
-//		{
-//			path_info->bw = ((100 - diff) * (path_info->bw + sysctl_mpip_bw_4) + diff * highbw) / 100;
-//		}
-//		else if (bw < highbw)
-//		{
-//			path_info->bw = ((100 - diff) * path_info->bw + diff * highbw) / 100;
-//		}
+		int ratio = (100 * path_info->tmp) / totaltmp;
+		if (ratio > averatio)
+			path_info->bw += 1;
+		else
+			path_info->bw -= 1;
 	}
 
 	return 1;
