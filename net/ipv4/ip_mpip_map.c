@@ -493,7 +493,7 @@ int update_path_stat_delay(unsigned char *node_id, unsigned char path_id, u32 de
 	if (path_stat)
 	{
 		getnstimeofday(&tv);
-		midtime = (tv.tv_sec % 86400) * MSEC_PER_SEC * 10  + (tv.tv_nsec * 10) / NSEC_PER_MSEC;
+		midtime = (tv.tv_sec % 86400) * MSEC_PER_SEC * 100  + (tv.tv_nsec * 100) / NSEC_PER_MSEC;
 
 		path_stat->delay = midtime - delay;
 		path_stat->feedbacked = false;
@@ -1032,9 +1032,12 @@ int update_path_info(unsigned char session_id, unsigned int len)
 		if (path_info->session_id != session_id)
 			continue;
 
-		int tmp = max_delay - path_info->ave_delay
-				+ max_min_delay - path_info->ave_min_delay
-				+ max_queuing_delay - path_info->ave_queuing_delay;
+//		int tmp = max_delay - path_info->ave_delay
+//				+ max_min_delay - path_info->ave_min_delay
+//				+ max_queuing_delay - path_info->ave_queuing_delay;
+
+		int tmp = max_queuing_delay - path_info->ave_queuing_delay;
+
 
 		path_info->tmp = tmp;
 
@@ -1064,9 +1067,19 @@ int update_path_info(unsigned char session_id, unsigned int len)
 
 		int ratio = (100 * path_info->tmp) / totaltmp;
 		if (ratio > averatio)
+		{
 			path_info->bw += 1;
+
+			if (path_info->bw > 100)
+				path_info->bw = 100;
+		}
 		else
-			path_info->bw -= 1;
+		{
+			if (path_info->bw >= 1)
+				path_info->bw -= 1;
+			else
+				path_info->bw = 0;
+		}
 	}
 
 	return 1;
