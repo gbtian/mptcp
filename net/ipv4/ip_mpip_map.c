@@ -1036,7 +1036,7 @@ int update_path_info(unsigned char session_id, unsigned int len)
 //				+ max_min_delay - path_info->ave_min_delay
 //				+ max_queuing_delay - path_info->ave_queuing_delay;
 
-		int tmp = max_queuing_delay - path_info->ave_queuing_delay;
+		int tmp = max_delay - path_info->ave_delay;
 
 
 		path_info->tmp = tmp;
