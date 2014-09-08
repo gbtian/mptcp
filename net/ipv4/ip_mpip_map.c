@@ -553,7 +553,8 @@ int update_path_delay(unsigned char path_id, __s32 delay)
 				path_info->max_delay = (99 * path_info->max_delay + delay) / 100;;
 			}
 
-			path_info->queuing_delay = (99 * path_info->queuing_delay + path_info->delay - path_info->min_delay) / 100;
+			//path_info->queuing_delay = (99 * path_info->queuing_delay + path_info->delay - path_info->min_delay) / 100;
+			path_info->queuing_delay = path_info->delay - path_info->min_delay;
 
 			if (path_info->queuing_delay > path_info->max_queuing_delay || path_info->max_queuing_delay == -1)
 			{
@@ -1077,9 +1078,10 @@ int update_path_info(unsigned char session_id, unsigned int len)
 		}
 		else
 		{
-			path_info->bw -= 1;
 			if (path_info->bw == 0)
 				path_info->bw = 0;
+			else
+				path_info->bw -= 1;
 		}
 	}
 
