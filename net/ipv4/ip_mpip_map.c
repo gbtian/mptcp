@@ -1072,7 +1072,7 @@ int update_path_info(unsigned char session_id, unsigned int len)
 		int ratio = (1000 * path_info->tmp) / totaltmp;
 		if (ratio > averatio)
 		{
-			path_info->bw += 1;
+			path_info->bw += sysctl_mpip_bw_step;
 			if (path_info->bw >= 1000)
 				path_info->bw = 1000;
 		}
@@ -1081,7 +1081,7 @@ int update_path_info(unsigned char session_id, unsigned int len)
 			if (path_info->bw <= 10)
 				path_info->bw = 10;
 			else
-				path_info->bw -= 1;
+				path_info->bw -= sysctl_mpip_bw_step;
 		}
 	}
 
@@ -1982,7 +1982,7 @@ unsigned char find_fastest_path_id(unsigned char *node_id,
 
 	if(socket_session)
 	{
-		if (((jiffies - socket_session->bwupdatejiffies) * 1000 / HZ) >= sysctl_mpip_bw_factor)
+		if (((jiffies - socket_session->bwupdatejiffies) * 1000 / HZ) >= sysctl_mpip_bw_time)
 		{
 			update_session_tp(session_id, len);
 			update_path_info(session_id, len);

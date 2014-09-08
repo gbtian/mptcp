@@ -31,8 +31,8 @@ int sysctl_mpip_enabled __read_mostly = 0;
 int sysctl_mpip_send __read_mostly = 0;
 int sysctl_mpip_rcv __read_mostly = 0;
 int sysctl_mpip_log __read_mostly = 0;
-int sysctl_mpip_bw_factor __read_mostly = 1000;
-int sysctl_mpip_bw_1 __read_mostly = 240;
+int sysctl_mpip_bw_time __read_mostly = 100;
+int sysctl_mpip_bw_step __read_mostly = 2;
 int sysctl_mpip_bw_2 __read_mostly = 60;
 int sysctl_mpip_bw_3 __read_mostly = 30;
 int sysctl_mpip_bw_4 __read_mostly = 4;
@@ -73,36 +73,15 @@ static struct ctl_table mpip_table[] =
  	 		.proc_handler = &proc_dointvec
  	},
  	{
- 	 		.procname = "mpip_bw_factor",
- 	 		.data = &sysctl_mpip_bw_factor,
+ 	 		.procname = "mpip_bw_time",
+ 	 		.data = &sysctl_mpip_bw_time,
  	 		.maxlen = sizeof(int),
  	 		.mode = 0644,
  	 		.proc_handler = &proc_dointvec
  	},
  	{
- 	 		.procname = "mpip_bw_1",
- 	 		.data = &sysctl_mpip_bw_1,
- 	 		.maxlen = sizeof(int),
- 	 		.mode = 0644,
- 	 		.proc_handler = &proc_dointvec
- 	},
- 	{
- 	 		.procname = "mpip_bw_2",
- 	 		.data = &sysctl_mpip_bw_2,
- 	 		.maxlen = sizeof(int),
- 	 		.mode = 0644,
- 	 		.proc_handler = &proc_dointvec
- 	},
- 	{
- 	 		.procname = "mpip_bw_3",
- 	 		.data = &sysctl_mpip_bw_3,
- 	 		.maxlen = sizeof(int),
- 	 		.mode = 0644,
- 	 		.proc_handler = &proc_dointvec
- 	},
- 	{
- 	 		.procname = "mpip_bw_4",
- 	 		.data = &sysctl_mpip_bw_4,
+ 	 		.procname = "mpip_bw_step",
+ 	 		.data = &sysctl_mpip_bw_step,
  	 		.maxlen = sizeof(int),
  	 		.mode = 0644,
  	 		.proc_handler = &proc_dointvec
