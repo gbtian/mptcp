@@ -544,16 +544,17 @@ int update_path_delay(unsigned char path_id, __s32 delay)
 
 			if (path_info->min_delay > delay || path_info->min_delay == -1)
 			{
-				path_info->min_delay = delay;
+
+				path_info->min_delay = (99 * path_info->min_delay + delay) / 100;;
 			}
 
 			if (path_info->max_delay < delay || path_info->max_delay == -1)
 			{
-				path_info->max_delay = delay;
+				path_info->max_delay = (99 * path_info->max_delay + delay) / 100;;
 			}
 
+			path_info->queuing_delay = (99 * path_info->queuing_delay + path_info->delay - path_info->min_delay) / 100;
 
-			path_info->queuing_delay = path_info->delay - path_info->min_delay;
 			if (path_info->queuing_delay > path_info->max_queuing_delay || path_info->max_queuing_delay == -1)
 			{
 				path_info->max_queuing_delay = path_info->queuing_delay;
@@ -1036,7 +1037,7 @@ int update_path_info(unsigned char session_id, unsigned int len)
 //				+ max_min_delay - path_info->ave_min_delay
 //				+ max_queuing_delay - path_info->ave_queuing_delay;
 
-		int tmp = max_delay - path_info->ave_delay;
+		int tmp = max_queuing_delay - path_info->ave_queuing_delay;
 
 
 		path_info->tmp = tmp;
@@ -1067,27 +1068,18 @@ int update_path_info(unsigned char session_id, unsigned int len)
 
 		__u64 highbw = get_path_bw(path_info->path_id, session_id, path_info->bw);
 
-		if (highbw > averatio)
+		int ratio = (100 * path_info->tmp) / totaltmp;
+		if (ratio > averatio)
 		{
-			path_info->bw = highbw + 1;
-		}
-		else if (highbw < averatio)
-		{
-			path_info->bw = highbw - 1;
+			path_info->bw += 1;
+			if (path_info->bw == 100)
+				path_info->bw = 100;
 		}
 		else
 		{
-			int ratio = (100 * path_info->tmp) / totaltmp;
-			if (ratio > averatio)
-			{
-				path_info->bw = highbw + 1;
-			}
-			else
-			{
-				path_info->bw = highbw - 1;
-				if (highbw == 0)
-					path_info->bw = 0;
-			}
+			path_info->bw -= 1;
+			if (path_info->bw == 0)
+				path_info->bw = 0;
 		}
 	}
 
