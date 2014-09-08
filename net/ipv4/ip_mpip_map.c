@@ -1058,29 +1058,27 @@ int update_path_info(unsigned char session_id, unsigned int len)
 		return 1;
 	}
 
-//	int averatio = 100 / path_count;
-//
-//	list_for_each_entry(path_info, &pi_head, list)
-//	{
-//		if (path_info->session_id != session_id)
-//			continue;
-//
-//		int ratio = (100 * path_info->tmp) / totaltmp;
-//		if (ratio > averatio)
-//		{
-//			path_info->bw += 1;
-//
-//			if (path_info->bw > 100)
-//				path_info->bw = 100;
-//		}
-//		else
-//		{
-//			if (path_info->bw >= 1)
-//				path_info->bw -= 1;
-//			else
-//				path_info->bw = 0;
-//		}
-//	}
+	int averatio = 100 / path_count;
+
+	list_for_each_entry(path_info, &pi_head, list)
+	{
+		if (path_info->session_id != session_id)
+			continue;
+
+		__u64 highbw = get_path_bw(path_info->path_id, session_id, path_info->bw);
+
+		int ratio = (100 * path_info->tmp) / totaltmp;
+		if (ratio > averatio)
+		{
+			path_info->bw = highbw + 1;
+		}
+		else
+		{
+			path_info->bw = highbw - 1;
+			if (highbw == 0)
+				path_info->bw = 0;
+		}
+	}
 
 	return 1;
 }
