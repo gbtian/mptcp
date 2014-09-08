@@ -1069,7 +1069,7 @@ int update_path_info(unsigned char session_id, unsigned int len)
 
 		__u64 highbw = get_path_bw(path_info->path_id, session_id, path_info->bw);
 
-		int ratio = (100 * path_info->tmp) / totaltmp;
+		int ratio = (1000 * path_info->tmp) / totaltmp;
 		if (ratio > averatio)
 		{
 			path_info->bw += 1;
