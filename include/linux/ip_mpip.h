@@ -33,6 +33,9 @@
 #define MPIP_CM_NODE_ID_LEN 2
 #define MPIP_TCP_BUF_LEN 5
 
+#define MPIP_DELAY_PRIORITY 0
+#define MPIP_QUEUING_DELAY_PRIORITY 1
+
 //#define MPIP_FLAG_
 
 extern int sysctl_mpip_enabled;
@@ -109,6 +112,16 @@ struct working_ip_table
 	struct list_head 	list;
 };
 
+struct route_rule_table
+{
+	char *				dest_addr; /* receiver' ip seen by sender */
+	char *				dest_port;
+	int 				protocol;
+	int					startlen;
+	int					endlen;
+	int					priority; /* 0: delay; 1: queuing delay; -1: invalid */
+	struct list_head 	list;
+};
 
 struct path_info_table
 {
@@ -361,7 +374,7 @@ unsigned char find_fastest_path_id(unsigned char *node_id,
 			   __be32 *saddr, __be32 *daddr,  __be16 *sport, __be16 *dport,
 			   __be32 origin_saddr, __be32 origin_daddr, __be16 origin_sport,
 			   __be16 origin_dport, unsigned char session_id,
-			   unsigned int protocol, unsigned int len, bool is_ack);
+			   unsigned int protocol, unsigned int len, bool is_short);
 
 unsigned char find_earliest_path_stat_id(unsigned char *dest_node_id, __s32 *delay);
 
@@ -388,6 +401,13 @@ void update_addr_change(void);
 int add_to_tcp_skb_buf(struct sk_buff *skb, unsigned char session_id);
 
 //unsigned char get_session(struct sk_buff *skb);
+
+void add_route_rule(const char *dest_addr, const char *dest_port,
+					int protocol, int startlen,
+					int endlen, int priority);
+
+int get_pkt_priority(__be32 dest_addr, __be16 dest_port,
+					unsigned int protocol, unsigned int len);
 
 void reset_mpip(void);
 

@@ -322,6 +322,7 @@
 313	common	finit_module		sys_finit_module
 314	common	mpip		sys_mpip
 315	common	reset_mpip		sys_reset_mpip
+316	common	add_mpip_route_rule		sys_add_mpip_route_rule
 
 #
 # x32-specific system call numbers start at 512 to avoid cache impact

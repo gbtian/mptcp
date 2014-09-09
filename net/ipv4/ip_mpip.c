@@ -334,7 +334,7 @@ unsigned char get_path_id(unsigned char *node_id,
 		__be32 *saddr, __be32 *daddr, __be16 *sport, __be16 *dport,
 		__be32 origin_saddr, __be32 origin_daddr, __be16 origin_sport,
 		__be16 origin_dport, unsigned char session_id,
-		unsigned int protocol, unsigned int len, bool is_ack)
+		unsigned int protocol, unsigned int len, bool is_short)
 {
 	if (!node_id || session_id <= 0)
 		return 0;
@@ -347,7 +347,7 @@ unsigned char get_path_id(unsigned char *node_id,
 	return find_fastest_path_id(node_id, saddr, daddr, sport, dport,
 								origin_saddr, origin_daddr, origin_sport,
 								origin_dport, session_id,
-								protocol, len, is_ack);
+								protocol, len, is_short);
 }
 
 

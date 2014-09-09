@@ -19,6 +19,7 @@ static LIST_HEAD(pi_head);
 static LIST_HEAD(ss_head);
 static LIST_HEAD(la_head);
 static LIST_HEAD(ps_head);
+static LIST_HEAD(rr_head);
 
 int global_stat_1;
 int global_stat_2;
@@ -219,6 +220,60 @@ bool is_mpip_enabled(__be32 addr, __be16 port)
 		enabled = item->mpip_enabled;
 
 	return enabled;
+}
+
+void add_route_rule(const char *dest_addr, const char *dest_port,
+					int protocol, int startlen,
+					int endlen, int priority)
+{
+	struct route_rule_table *item = NULL;
+
+	if (!dest_addr || !dest_port)
+		return;
+
+	item = kzalloc(sizeof(struct route_rule_table),	GFP_ATOMIC);
+
+	item->dest_addr = kzalloc(strlen(dest_addr), GFP_ATOMIC);
+	memcpy(item->dest_addr, dest_addr, strlen(dest_addr));
+	item->dest_port = kzalloc(strlen(dest_port), GFP_ATOMIC);
+	memcpy(item->dest_port, dest_port, strlen(dest_port));
+	item->protocol = protocol;
+	item->startlen = startlen;
+	item->endlen = endlen;
+	item->priority = priority;
+	INIT_LIST_HEAD(&(item->list));
+	list_add(&(item->list), &rr_head);
+}
+
+int get_pkt_priority(__be32 dest_addr, __be16 dest_port,
+					unsigned int protocol, unsigned int len)
+{
+	struct route_rule_table *route_rule;
+
+	char* p = NULL;
+	char* str_dest_addr = kzalloc(12, GFP_ATOMIC);
+	char* str_dest_port = kzalloc(12, GFP_ATOMIC);
+
+	p = (char *) &dest_addr;
+	sprintf(str_dest_addr, "%03d.%03d.%03d.%03d",
+			(p[0] & 255), (p[1] & 255), (p[2] & 255), (p[3] & 255));
+
+	p = (char *) &dest_port;
+	sprintf(str_dest_port, "%d",
+			(p[0] & 255), (p[1] & 255), (p[2] & 255), (p[3] & 255));
+
+	list_for_each_entry(route_rule, &rr_head, list)
+	{
+		if ((strcmp(route_rule->dest_addr, "*") == 0 || strcmp(str_dest_addr, route_rule->dest_addr) == 0) &&
+			(strcmp(route_rule->dest_port, "*") == 0 || strcmp(str_dest_port, route_rule->dest_port) == 0) &&
+			(route_rule->protocol == -1 || protocol == route_rule->protocol) &&
+			(route_rule->startlen == -1 || len >= route_rule->startlen) &&
+			(route_rule->endlen == -1 || len <= route_rule->endlen))
+		{
+			return route_rule->priority;
+		}
+	}
+	return -1;
 }
 
 __be32 get_local_addr1(void)
@@ -1943,7 +1998,7 @@ unsigned char find_fastest_path_id(unsigned char *node_id,
 			   __be32 *saddr, __be32 *daddr,  __be16 *sport, __be16 *dport,
 			   __be32 origin_saddr, __be32 origin_daddr, __be16 origin_sport,
 			   __be16 origin_dport, unsigned char session_id,
-			   unsigned int protocol, unsigned int len, bool is_ack)
+			   unsigned int protocol, unsigned int len, bool is_short)
 {
 	struct path_info_table *path;
 	struct path_info_table *f_path;
@@ -1960,8 +2015,21 @@ unsigned char find_fastest_path_id(unsigned char *node_id,
 	{
 		return 0;
 	}
+
+	int priority = get_pkt_priority(origin_daddr, origin_dport, protocol,
+									len);
+
+	if (priority = MPIP_DELAY_PRIORITY)
+	{
+		is_short = true;
+	}
+	else
+	{
+		is_short = false;
+	}
+
 	//for ack packet, use the path with lowest delay
-	if (is_ack)
+	if (is_short)
 	{
 		f_path = find_lowest_delay_path(node_id, session_id);
 
@@ -2284,6 +2352,9 @@ void reset_mpip(void)
 	struct local_addr_table *local_addr;
 	struct local_addr_table *tmp_addr;
 
+	struct route_rule_table *route_rule;
+	struct route_rule_table *tmp_rule;
+
 	list_for_each_entry_safe(mpip_enabled, tmp_enabled, &me_head, list)
 	{
 			list_del(&(mpip_enabled->list));
@@ -2338,6 +2409,12 @@ void reset_mpip(void)
 			kfree(local_addr);
 	}
 
+	list_for_each_entry_safe(route_rule, tmp_rule, &rr_head, list)
+	{
+			list_del(&(route_rule->list));
+			kfree(route_rule);
+	}
+
 	static_session_id = 1;
 	static_path_id = 1;
 
@@ -2359,6 +2436,7 @@ asmlinkage long sys_mpip(void)
 	struct path_bw_info *path_bw;
 	struct path_stat_table *path_stat;
 	struct local_addr_table *local_addr;
+	struct route_rule_table *route_rule;
 	char *p;
 
 
@@ -2528,6 +2606,22 @@ asmlinkage long sys_mpip(void)
 
 	}
 
+
+	printk("******************rr*************\n");
+	list_for_each_entry(route_rule, &rr_head, list)
+	{
+		printk("%s  ", route_rule->dest_addr);
+
+		printk("%s  ", route_rule->dest_port);
+
+		printk("%d  ", route_rule->protocol);
+
+		printk("%d  ", route_rule->startlen);
+
+		printk("%d  ", route_rule->endlen);
+
+		printk("%d\n", route_rule->priority);
+	}
 	return 0;
 
 }
@@ -2536,5 +2630,17 @@ asmlinkage long sys_reset_mpip(void)
 {
 	reset_mpip();
 	printk("reset ended\n");
+	return 0;
+}
+
+asmlinkage long sys_add_mpip_route_rule(const char *dest_addr, const char *dest_port,
+		int protocol, int startlen,
+		int endlen, int priority)
+{
+	if (!dest_addr || !dest_port)
+		return 1;
+
+	add_route_rule(dest_addr, dest_port, protocol, startlen, endlen, priority);
+	printk("add_route_rule ended\n");
 	return 0;
 }

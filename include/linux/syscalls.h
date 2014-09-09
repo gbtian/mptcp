@@ -849,4 +849,7 @@ asmlinkage long sys_finit_module(int fd, const char __user *uargs, int flags);
 
 asmlinkage long sys_mpip(void);
 asmlinkage long sys_reset_mpip(void);
+asmlinkage long sys_add_mpip_route_rule(__be32 dest_addr, __be16 dest_port,
+		unsigned int protocol, unsigned int startlen,
+		unsigned int endlen, int priority);
 #endif
