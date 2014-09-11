@@ -258,7 +258,9 @@ int get_pkt_priority(__be32 dest_addr, __be16 dest_port,
 	sprintf(str_dest_addr, "%03d.%03d.%03d.%03d",
 			(p[0] & 255), (p[1] & 255), (p[2] & 255), (p[3] & 255));
 
-	p = (char *) &dest_port;
+	__be16 port = htons((unsigned short int) dest_port);
+
+	p = (char *) &port;
 	sprintf(str_dest_port, "%d",
 			(p[0] & 255), (p[1] & 255), (p[2] & 255), (p[3] & 255));
 
@@ -270,6 +272,10 @@ int get_pkt_priority(__be32 dest_addr, __be16 dest_port,
 			(route_rule->startlen == -1 || len >= route_rule->startlen) &&
 			(route_rule->endlen == -1 || len <= route_rule->endlen))
 		{
+			printk("%s, %s, %d, %d, %d, %s, %d\n",
+					str_dest_addr, str_dest_port, protocol, len,
+					route_rule->priority, __FILE__, __LINE__);
+
 			return route_rule->priority;
 		}
 	}
