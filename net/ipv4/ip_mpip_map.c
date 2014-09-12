@@ -266,8 +266,8 @@ int get_pkt_priority(__be32 dest_addr, __be16 dest_port,
 
 	list_for_each_entry(route_rule, &rr_head, list)
 	{
-		if ((strcmp(route_rule->dest_addr, "*") == 0 || strcmp(str_dest_addr, route_rule->dest_addr) == 0) &&
-			(strcmp(route_rule->dest_port, "*") == 0 || strcmp(str_dest_port, route_rule->dest_port) == 0) &&
+		if ((strcmp(route_rule->dest_addr, "-1") == 0 || strcmp(str_dest_addr, route_rule->dest_addr) == 0) &&
+			(strcmp(route_rule->dest_port, "-1") == 0 || strcmp(str_dest_port, route_rule->dest_port) == 0) &&
 			(route_rule->protocol == -1 || protocol == route_rule->protocol) &&
 			(route_rule->startlen == -1 || len >= route_rule->startlen) &&
 			(route_rule->endlen == -1 || len <= route_rule->endlen))
