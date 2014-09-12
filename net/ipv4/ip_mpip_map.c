@@ -2648,7 +2648,7 @@ asmlinkage long sys_add_mpip_route_rule(const char *dest_addr, const char *dest_
 
 	add_route_rule(dest_addr, dest_port, protocol, startlen, endlen, priority);
 
-	printk("%s, %s, %d, %d, %d, %s, %d\n",
+	printk("%s, %s, %d, %d, %d, %d, %s, %d\n",
 			dest_addr, dest_port, protocol, startlen,endlen,
 			priority, __FILE__, __LINE__);
 
