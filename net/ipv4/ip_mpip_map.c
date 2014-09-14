@@ -264,6 +264,10 @@ int get_pkt_priority(__be32 dest_addr, __be16 dest_port,
 	sprintf(str_dest_port, "%d",
 			(p[0] & 255), (p[1] & 255), (p[2] & 255), (p[3] & 255));
 
+	printk("%s, %s, %d, %d, %s, %d\n",
+			str_dest_addr, str_dest_port, protocol, len,
+			 __FILE__, __LINE__);
+
 	list_for_each_entry(route_rule, &rr_head, list)
 	{
 		if ((strcmp(route_rule->dest_addr, "-1") == 0 || strcmp(str_dest_addr, route_rule->dest_addr) == 0) &&
