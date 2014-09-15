@@ -169,6 +169,7 @@ struct path_info_table
 	unsigned long		tpstartjiffies;
 	unsigned long		tptotalbytes;
 	unsigned long		tp;
+	int					logcount;
 	struct list_head	mpip_log;
 
 	struct list_head 	list;

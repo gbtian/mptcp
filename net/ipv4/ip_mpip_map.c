@@ -266,9 +266,9 @@ int get_pkt_priority(__be32 dest_addr, __be16 dest_port,
 
 	sprintf(str_dest_port, "%d", port);
 
-	printk("%s, %s, %d, %d, %d, %s, %d\n",
-			str_dest_addr, str_dest_port, dest_port, protocol, len,
-			 __FILE__, __LINE__);
+//	printk("%s, %s, %d, %d, %d, %s, %d\n",
+//			str_dest_addr, str_dest_port, dest_port, protocol, len,
+//			 __FILE__, __LINE__);
 
 	list_for_each_entry(route_rule, &rr_head, list)
 	{
@@ -278,9 +278,9 @@ int get_pkt_priority(__be32 dest_addr, __be16 dest_port,
 			(route_rule->startlen == -1 || len >= route_rule->startlen) &&
 			(route_rule->endlen == -1 || len <= route_rule->endlen))
 		{
-			printk("%s, %s, %d, %d, %d, %s, %d\n",
-					str_dest_addr, str_dest_port, protocol, len,
-					route_rule->priority, __FILE__, __LINE__);
+//			printk("%s, %s, %d, %d, %d, %s, %d\n",
+//					str_dest_addr, str_dest_port, protocol, len,
+//					route_rule->priority, __FILE__, __LINE__);
 
 			return route_rule->priority;
 		}
@@ -1508,7 +1508,6 @@ void update_path_tp(struct path_info_table *path)
 	unsigned long tp = path->tptotalbytes / ((jiffies - path->tpstartjiffies) * 100 / HZ);
 	path->tp = tp;
 	path->tptotalbytes = 0;
-	path->tpstartjiffies = jiffies;
 
 }
 
@@ -1758,6 +1757,10 @@ int add_origin_path_info_tcp(unsigned char *node_id, __be32 saddr, __be32 daddr,
 	item = kzalloc(sizeof(struct path_info_table),	GFP_ATOMIC);
 
 	memcpy(item->node_id, node_id, MPIP_CM_NODE_ID_LEN);
+	INIT_LIST_HEAD(&(item->mpip_log));
+	item->tp = 0;
+	item->tpstartjiffies = jiffies;
+	item->tptotalbytes = 0;
 	item->fbjiffies = jiffies;
 	item->saddr = saddr;
 	item->sport = sport;
@@ -1772,6 +1775,7 @@ int add_origin_path_info_tcp(unsigned char *node_id, __be32 saddr, __be32 daddr,
 	item->count = 0;
 	item->bw = 250;
 	item->pktcount = 0;
+	item->logcount = 0;
 	item->path_id = (static_path_id > 250) ? 1 : ++static_path_id;
 
 	if (is_original_path(node_id, item->saddr, item->daddr,
@@ -1834,6 +1838,7 @@ int add_path_info_tcp(int id, unsigned char *node_id, __be32 saddr, __be32 daddr
 	item->count = 0;
 	item->bw = 250;
 	item->pktcount = 0;
+	item->logcount = 0;
 	item->path_id = (static_path_id > 250) ? 1 : ++static_path_id;
 	item->status = 0;
 
@@ -1972,6 +1977,7 @@ int add_path_info_udp(unsigned char *node_id, __be32 daddr, __be16 sport,
 		item->count = 0;
 		item->bw = 250;
 		item->pktcount = 0;
+		item->logcount = 0;
 		item->path_id = (static_path_id > 250) ? 1 : ++static_path_id;
 
 		if (is_original_path(node_id, item->saddr, item->daddr,
@@ -2050,6 +2056,9 @@ void add_mpip_log(unsigned char session_id)
 		item->tp = path_info->tp;
 		INIT_LIST_HEAD(&(item->list));
 		list_add(&(item->list), &(path_info->mpip_log));
+		path_info->logcount += 1;
+
+		printk("%s, %d\n", __FILE__, __LINE__);
 	}
 
 }
@@ -2058,6 +2067,7 @@ void write_mpip_log_to_file(unsigned char session_id)
 {
 	struct path_info_table *path_info;
 	struct mpip_log_table *mpip_log;
+	struct mpip_log_table *tmp_mpip;
 	mm_segment_t old_fs;
 	struct file* fp = NULL;
 
@@ -2088,6 +2098,13 @@ void write_mpip_log_to_file(unsigned char session_id)
 			fp->f_op->write(fp, (char*)buf, sizeof(buf), &fp->f_pos);
 			set_fs(old_fs);
 		}
+
+		list_for_each_entry_safe(mpip_log, tmp_mpip, &(path_info->mpip_log), list)
+		{
+			list_del(&(mpip_log->list));
+			kfree(mpip_log);
+		}
+		path_info->logcount = 0;
 	}
 }
 
@@ -2122,6 +2139,7 @@ unsigned char find_fastest_path_id(unsigned char *node_id,
 			update_session_tp(session_id, len);
 			update_path_info(session_id, len);
 			socket_session->tpstartjiffies = jiffies;
+			printk("%s, %d\n", __FILE__, __LINE__);
 			add_mpip_log(session_id);
 		}
 
@@ -2252,6 +2270,7 @@ ret:
 		if (((jiffies - f_path->tpstartjiffies) * 1000 / HZ) >= sysctl_mpip_bw_time)
 		{
 			update_path_tp(f_path);
+			path->tpstartjiffies = jiffies;
 		}
 	}
 
@@ -2455,6 +2474,8 @@ void reset_mpip(void)
 
 	struct path_info_table *path_info;
 	struct path_info_table *tmp_info;
+	struct mpip_log_table *mpip_log;
+	struct mpip_log_table *tmp_mpip;
 
 	struct socket_session_table *socket_session;
 	struct socket_session_table *tmp_session;
@@ -2493,8 +2514,14 @@ void reset_mpip(void)
 
 	list_for_each_entry_safe(path_info, tmp_info, &pi_head, list)
 	{
-			list_del(&(path_info->list));
-			kfree(path_info);
+		list_for_each_entry_safe(mpip_log, tmp_mpip, &(path_info->mpip_log), list)
+		{
+			list_del(&(mpip_log->list));
+			kfree(mpip_log);
+		}
+
+		list_del(&(path_info->list));
+		kfree(path_info);
 	}
 
 	list_for_each_entry_safe(socket_session, tmp_session, &ss_head, list)
@@ -2716,6 +2743,12 @@ asmlinkage long sys_mpip(void)
 		printk("%d  ", path_info->ave_queuing_delay);
 		printk("%d  ", path_info->tmp);
 
+
+		printk("%lu  ", path_info->tpstartjiffies);
+		printk("%lu  ", path_info->tptotalbytes);
+		printk("%lu  ", path_info->tp);
+		printk("%d  ", path_info->logcount);
+
 		printk("%llu\n", path_info->bw);
 
 //		printk("%llu\n", path_info->pktcount);
@@ -2760,9 +2793,9 @@ asmlinkage long sys_add_mpip_route_rule(const char *dest_addr, const char *dest_
 
 	add_route_rule(dest_addr, dest_port, protocol, startlen, endlen, priority);
 
-	printk("%s, %s, %d, %d, %d, %d, %s, %d\n",
-			dest_addr, dest_port, protocol, startlen,endlen,
-			priority, __FILE__, __LINE__);
+//	printk("%s, %s, %d, %d, %d, %d, %s, %d\n",
+//			dest_addr, dest_port, protocol, startlen,endlen,
+//			priority, __FILE__, __LINE__);
 
 	printk("add_route_rule ended\n");
 	return 0;
