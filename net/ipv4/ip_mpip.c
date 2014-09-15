@@ -32,6 +32,7 @@ int sysctl_mpip_send __read_mostly = 0;
 int sysctl_mpip_rcv __read_mostly = 0;
 int sysctl_mpip_log __read_mostly = 0;
 int sysctl_mpip_bw_time __read_mostly = 100;
+int sysctl_mpip_exp_time __read_mostly = 6000;
 int sysctl_mpip_bw_step __read_mostly = 2;
 int sysctl_mpip_bw_2 __read_mostly = 60;
 int sysctl_mpip_bw_3 __read_mostly = 30;
@@ -75,6 +76,13 @@ static struct ctl_table mpip_table[] =
  	{
  	 		.procname = "mpip_bw_time",
  	 		.data = &sysctl_mpip_bw_time,
+ 	 		.maxlen = sizeof(int),
+ 	 		.mode = 0644,
+ 	 		.proc_handler = &proc_dointvec
+ 	},
+ 	{
+ 	 		.procname = "mpip_exp_time",
+ 	 		.data = &sysctl_mpip_exp_time,
  	 		.maxlen = sizeof(int),
  	 		.mode = 0644,
  	 		.proc_handler = &proc_dointvec

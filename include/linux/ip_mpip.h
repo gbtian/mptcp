@@ -43,6 +43,7 @@ extern int sysctl_mpip_send;
 extern int sysctl_mpip_rcv;
 extern int sysctl_mpip_log;
 extern int sysctl_mpip_bw_time;
+extern int sysctl_mpip_exp_time;
 extern int sysctl_mpip_bw_step;
 extern int sysctl_mpip_hb;
 extern int sysctl_mpip_use_tcp;
@@ -74,6 +75,16 @@ struct mpip_cm
 	unsigned char	flags;
 	__s16			checksum;
 };
+
+struct mpip_log_table
+{
+	unsigned long				logjiffies;
+	int							delay;
+	int 						queuing_delay;
+	unsigned long				tp;
+	struct list_head 			list;
+};
+
 
 struct mpip_query_table
 {
@@ -154,9 +165,14 @@ struct path_info_table
 	 	 	 	 	 	 	 	1: syn sent
 	 	 	 	 	 	 	 	2: synack sent
 	 	 	 	 	 	 	 	3: ack sent*/
+
+	unsigned long		tpstartjiffies;
+	unsigned long		tptotalbytes;
+	unsigned long		tp;
+	struct list_head	mpip_log;
+
 	struct list_head 	list;
 };
-
 
 struct tcp_skb_buf
 {
@@ -196,12 +212,12 @@ struct socket_session_table
 	__be16				sport; /* source port*/
 	__be16				dport; /* destination port*/
 
-	unsigned long		bwupdatejiffies;
+	unsigned long		tpinitjiffies;
 	unsigned long		tpstartjiffies;
 	unsigned long		tptotalbytes;
 	unsigned long		tprealtime;
 	unsigned long		tphighest;
-	struct list_head 	path_bw_list;
+	struct list_head 	path_bw_list; //path bw of highest tp
 	struct list_head 	list;
 };
 

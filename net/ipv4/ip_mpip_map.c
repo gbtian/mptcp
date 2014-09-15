@@ -3,6 +3,10 @@
 #include <net/tcp.h>
 #include <net/xfrm.h>
 #include <net/icmp.h>
+#include <linux/fs.h>
+#include <linux/string.h>
+#include <linux/uaccess.h>
+#include <linux/unistd.h>
 #include <linux/ip_mpip.h>
 
 
@@ -1302,7 +1306,7 @@ void add_sender_session(unsigned char *src_node_id, unsigned char *dst_node_id,
 	item->tphighest = 0;
 	item->tprealtime = 0;
 	item->tpstartjiffies = jiffies;
-	item->bwupdatejiffies = jiffies;
+	item->tpinitjiffies = jiffies;
 	item->tptotalbytes = 0;
 	INIT_LIST_HEAD(&(item->path_bw_list));
 	item->session_id = (static_session_id > 250) ? 1 : ++static_session_id;
@@ -1391,7 +1395,7 @@ struct socket_session_table *get_receiver_session(unsigned char *src_node_id, un
 	item->tphighest = 0;
 	item->tprealtime = 0;
 	item->tpstartjiffies = jiffies;
-	item->bwupdatejiffies = jiffies;
+	item->tpinitjiffies = jiffies;
 	item->tptotalbytes = 0;
 	INIT_LIST_HEAD(&(item->path_bw_list));
 	item->session_id = session_id;
@@ -1494,6 +1498,18 @@ void add_session_totalbytes(unsigned char session_id, unsigned int len)
 		return;
 
 	socket_session->tptotalbytes += len;
+}
+
+void update_path_tp(struct path_info_table *path)
+{
+	if(!path)
+		return;
+
+	unsigned long tp = path->tptotalbytes / ((jiffies - path->tpstartjiffies) * 100 / HZ);
+	path->tp = tp;
+	path->tptotalbytes = 0;
+	path->tpstartjiffies = jiffies;
+
 }
 
 void update_session_tp(unsigned char session_id, unsigned int len)
@@ -1800,6 +1816,10 @@ int add_path_info_tcp(int id, unsigned char *node_id, __be32 saddr, __be32 daddr
 	item = kzalloc(sizeof(struct path_info_table),	GFP_ATOMIC);
 
 	memcpy(item->node_id, node_id, MPIP_CM_NODE_ID_LEN);
+	INIT_LIST_HEAD(&(item->mpip_log));
+	item->tp = 0;
+	item->tpstartjiffies = jiffies;
+	item->tptotalbytes = 0;
 	item->fbjiffies = jiffies;
 	item->saddr = saddr;
 	item->sport = sport;
@@ -1935,6 +1955,10 @@ int add_path_info_udp(unsigned char *node_id, __be32 daddr, __be16 sport,
 		item = kzalloc(sizeof(struct path_info_table),	GFP_ATOMIC);
 
 		memcpy(item->node_id, node_id, MPIP_CM_NODE_ID_LEN);
+		INIT_LIST_HEAD(&(item->mpip_log));
+		item->tp = 0;
+		item->tpstartjiffies = jiffies;
+		item->tptotalbytes = 0;
 		item->fbjiffies = jiffies;
 		item->saddr = local_addr->addr;
 		item->sport = sport;
@@ -2002,6 +2026,71 @@ struct path_info_table *find_lowest_delay_path(unsigned char *node_id,
 	return f_path;
 }
 
+void add_mpip_log(unsigned char session_id)
+{
+	struct path_info_table *path_info;
+
+	if (session_id <= 0)
+		return;
+
+	list_for_each_entry(path_info, &pi_head, list)
+	{
+		if (path_info->session_id != session_id)
+		{
+			continue;
+		}
+
+		struct mpip_log_table* item = kzalloc(sizeof(struct mpip_log_table), GFP_ATOMIC);
+		if (!item)
+			return;
+
+		item->logjiffies = jiffies;
+		item->delay = path_info->delay;
+		item->queuing_delay = path_info->queuing_delay;
+		item->tp = path_info->tp;
+		INIT_LIST_HEAD(&(item->list));
+		list_add(&(item->list), &(path_info->mpip_log));
+	}
+
+}
+
+void write_mpip_log_to_file(unsigned char session_id)
+{
+	struct path_info_table *path_info;
+	struct mpip_log_table *mpip_log;
+	mm_segment_t old_fs;
+	struct file* fp = NULL;
+
+	if (session_id <= 0)
+		return;
+
+	list_for_each_entry(path_info, &pi_head, list)
+	{
+		if (path_info->session_id != session_id)
+		{
+			continue;
+		}
+
+		char filename[20];
+		sprintf(filename, "%s_%d_%d.csv", path_info->node_id, session_id, path_info->path_id);
+
+		fp = filp_open(filename, O_RDWR | O_APPEND | O_CREAT, 0644);
+
+		list_for_each_entry(mpip_log, &(path_info->mpip_log), list)
+		{
+			char buf[100];
+			sprintf(buf, "%lu,%d,%d,%lu", mpip_log->logjiffies,
+										mpip_log->delay,
+										mpip_log->queuing_delay,
+										mpip_log->tp);
+			old_fs = get_fs();
+			set_fs(KERNEL_DS);
+			fp->f_op->write(fp, (char*)buf, sizeof(buf), &fp->f_pos);
+			set_fs(old_fs);
+		}
+	}
+}
+
 unsigned char find_fastest_path_id(unsigned char *node_id,
 			   __be32 *saddr, __be32 *daddr,  __be16 *sport, __be16 *dport,
 			   __be32 origin_saddr, __be32 origin_daddr, __be16 origin_sport,
@@ -2023,6 +2112,26 @@ unsigned char find_fastest_path_id(unsigned char *node_id,
 	{
 		return 0;
 	}
+
+	struct socket_session_table *socket_session = find_socket_session(session_id);
+
+	if(socket_session)
+	{
+		if (((jiffies - socket_session->tpstartjiffies) * 1000 / HZ) >= sysctl_mpip_bw_time)
+		{
+			update_session_tp(session_id, len);
+			update_path_info(session_id, len);
+			socket_session->tpstartjiffies = jiffies;
+			add_mpip_log(session_id);
+		}
+
+		if (((jiffies - socket_session->tpinitjiffies) * 1000 / HZ) >= sysctl_mpip_exp_time)
+		{
+			write_mpip_log_to_file(session_id);
+			socket_session->tpinitjiffies = jiffies;
+		}
+	}
+
 
 	int priority = get_pkt_priority(origin_daddr, origin_dport, protocol,
 									len);
@@ -2050,21 +2159,11 @@ unsigned char find_fastest_path_id(unsigned char *node_id,
 			f_path->pktcount += 1;
 			f_path_id = f_path->path_id;
 
-			return f_path_id;
+			goto ret;
+
 		}
 	}
 
-	struct socket_session_table *socket_session = find_socket_session(session_id);
-
-	if(socket_session)
-	{
-		if (((jiffies - socket_session->bwupdatejiffies) * 1000 / HZ) >= sysctl_mpip_bw_time)
-		{
-			update_session_tp(session_id, len);
-			update_path_info(session_id, len);
-			socket_session->bwupdatejiffies = jiffies;
-		}
-	}
 
 	//if comes here, it means all paths have been probed
 	list_for_each_entry(path, &pi_head, list)
@@ -2141,7 +2240,18 @@ unsigned char find_fastest_path_id(unsigned char *node_id,
 			*sport = f_path->sport;
 			*dport = f_path->dport;
 			f_path->pktcount += 1;
+
 			f_path_id = f_path->path_id;
+		}
+	}
+
+ret:
+	if (f_path)
+	{
+		f_path->tptotalbytes += len;
+		if (((jiffies - f_path->tpstartjiffies) * 1000 / HZ) >= sysctl_mpip_bw_time)
+		{
+			update_path_tp(f_path);
 		}
 	}
 
@@ -2537,7 +2647,7 @@ asmlinkage long sys_mpip(void)
 
 		printk("%d  ", socket_session->dport);
 
-		printk("%lu  ", socket_session->bwupdatejiffies);
+		printk("%lu  ", socket_session->tpinitjiffies);
 
 		printk("%lu  ", socket_session->tpstartjiffies);
 
