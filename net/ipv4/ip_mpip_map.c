@@ -2070,6 +2070,7 @@ void write_mpip_log_to_file(unsigned char session_id)
 	struct mpip_log_table *tmp_mpip;
 	mm_segment_t old_fs;
 	struct file* fp = NULL;
+	loff_t pos;
 
 	if (session_id <= 0)
 		return;
@@ -2081,24 +2082,29 @@ void write_mpip_log_to_file(unsigned char session_id)
 			continue;
 		}
 
-		char filename[20];
-		sprintf(filename, "/home/%s_%d_%d.csv", path_info->node_id, session_id, path_info->path_id);
+		char filename[100];
+		sprintf(filename, "/home/%d_%d.csv", session_id, path_info->path_id);
 
-		fp = filp_open(filename, O_RDWR | O_APPEND | O_CREAT, 0644);
+		fp = filp_open(filename, O_RDWR | O_CREAT, 0644);
+		if (IS_ERR(fp))
+		{
+			printk("create file error\n");
+			return;
+		}
 		old_fs = get_fs();
 		set_fs(KERNEL_DS);
 
 		list_for_each_entry(mpip_log, &(path_info->mpip_log), list)
 		{
-			char buf[100];
-			sprintf(buf, "%lu,%d,%d,%lu", mpip_log->logjiffies,
+			char buf[200];
+			sprintf(buf, "%lu,%d,%d,%lu\n", mpip_log->logjiffies,
 										mpip_log->delay,
 										mpip_log->queuing_delay,
 										mpip_log->tp);
-			vfs_write(fp, (char*)buf, sizeof(buf), &fp->f_pos);
+			pos = fp->f_dentry->d_inode->i_size;
+			vfs_write(fp, buf, strlen(buf), &pos);
 		}
 		filp_close(fp, NULL);
-
 		set_fs(old_fs);
 
 		list_for_each_entry_safe(mpip_log, tmp_mpip, &(path_info->mpip_log), list)
