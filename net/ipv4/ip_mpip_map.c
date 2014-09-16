@@ -2076,7 +2076,7 @@ void write_mpip_log_to_file(unsigned char session_id)
 		return;
 
 	char filename[100];
-	sprintf(filename, "/home/bill/%d.csv", session_id);
+	sprintf(filename, "/home/bill/log/%d.csv", session_id);
 
 	fp = filp_open(filename, O_RDWR | O_CREAT, 0644);
 	if (IS_ERR(fp))
