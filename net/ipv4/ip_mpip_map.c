@@ -2058,7 +2058,7 @@ void add_mpip_log(unsigned char session_id)
 		list_add(&(item->list), &(path_info->mpip_log));
 		path_info->logcount += 1;
 
-		printk("%s, %d\n", __FILE__, __LINE__);
+//		printk("%s, %d\n", __FILE__, __LINE__);
 	}
 
 }
@@ -2147,7 +2147,7 @@ unsigned char find_fastest_path_id(unsigned char *node_id,
 			update_session_tp(session_id, len);
 			update_path_info(session_id, len);
 			socket_session->tpstartjiffies = jiffies;
-			printk("%s, %d\n", __FILE__, __LINE__);
+//			printk("%s, %d\n", __FILE__, __LINE__);
 			add_mpip_log(session_id);
 		}
 
