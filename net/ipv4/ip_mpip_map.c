@@ -2085,6 +2085,8 @@ void write_mpip_log_to_file(unsigned char session_id)
 		sprintf(filename, "%s_%d_%d.csv", path_info->node_id, session_id, path_info->path_id);
 
 		fp = filp_open(filename, O_RDWR | O_APPEND | O_CREAT, 0644);
+		old_fs = get_fs();
+		set_fs(KERNEL_DS);
 
 		list_for_each_entry(mpip_log, &(path_info->mpip_log), list)
 		{
@@ -2093,11 +2095,11 @@ void write_mpip_log_to_file(unsigned char session_id)
 										mpip_log->delay,
 										mpip_log->queuing_delay,
 										mpip_log->tp);
-			old_fs = get_fs();
-			set_fs(KERNEL_DS);
-			fp->f_op->write(fp, (char*)buf, sizeof(buf), &fp->f_pos);
-			set_fs(old_fs);
+			vfs_write(fp, (char*)buf, sizeof(buf), &fp->f_pos);
 		}
+		filp_close(fp, NULL);
+
+		set_fs(old_fs);
 
 		list_for_each_entry_safe(mpip_log, tmp_mpip, &(path_info->mpip_log), list)
 		{
