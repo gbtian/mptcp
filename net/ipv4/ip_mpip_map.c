@@ -2100,8 +2100,7 @@ void write_mpip_log_to_file(unsigned char session_id)
 	if (sysctl_mpip_rcv)
 		return;
 
-	old_fs = get_fs();
-	set_fs(KERNEL_DS);
+
 
 	list_for_each_entry(path_info, &pi_head, list)
 	{
@@ -2123,14 +2122,20 @@ void write_mpip_log_to_file(unsigned char session_id)
 
 		list_for_each_entry(mpip_log, &(path_info->mpip_log), list)
 		{
-			char buf[200];
+			char buf[100];
 			sprintf(buf, "%lu,%d,%d,%lu\n", mpip_log->logjiffies,
 										mpip_log->delay,
 										mpip_log->queuing_delay,
 										mpip_log->tp);
 
 			pos = fp->f_dentry->d_inode->i_size;
+
+			old_fs = get_fs();
+			set_fs(KERNEL_DS);
+
 			vfs_write(fp, buf, strlen(buf), &pos);
+
+			set_fs(old_fs);
 		}
 
 		filp_close(fp, NULL);
@@ -2143,7 +2148,7 @@ void write_mpip_log_to_file(unsigned char session_id)
 		path_info->logcount = 0;
 	}
 
-	set_fs(old_fs);
+
 }
 
 unsigned char find_fastest_path_id(unsigned char *node_id,
