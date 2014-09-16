@@ -2082,32 +2082,33 @@ void write_mpip_log_to_file(unsigned char session_id)
 			continue;
 		}
 
-		char filename[100];
-		sprintf(filename, "/home/bill/%d_%d.csv", session_id, path_info->path_id);
-
-		fp = filp_open("/home/bill/log", O_RDWR | O_CREAT, 0644);
-		if (IS_ERR(fp))
-		{
-			printk("create file error\n");
-			return;
-		}
-		old_fs = get_fs();
-		set_fs(KERNEL_DS);
+//		char filename[100];
+//		sprintf(filename, "/home/bill/%d_%d.csv", session_id, path_info->path_id);
+//
+//		fp = filp_open("/home/bill/log", O_RDWR | O_CREAT, 0644);
+//		if (IS_ERR(fp))
+//		{
+//			printk("create file error\n");
+//			return;
+//		}
+//		old_fs = get_fs();
+//		set_fs(KERNEL_DS);
 
 		list_for_each_entry(mpip_log, &(path_info->mpip_log), list)
 		{
 			char buf[200];
-//			sprintf(buf, "%lu,%d,%d,%lu\n", mpip_log->logjiffies,
-//										mpip_log->delay,
-//										mpip_log->queuing_delay,
-//										mpip_log->tp);
-			sprintf(buf, "%s:%d\n", __FILE__, __LINE__);
-			pos = fp->f_dentry->d_inode->i_size;
-			vfs_write(fp, buf, strlen(buf), &pos);
-		}
+			sprintf(buf, "%lu,%d,%d,%lu\n", mpip_log->logjiffies,
+										mpip_log->delay,
+										mpip_log->queuing_delay,
+										mpip_log->tp);
+			printk("%s", buf);
 
-		filp_close(fp, NULL);
-		set_fs(old_fs);
+//			pos = fp->f_dentry->d_inode->i_size;
+//			vfs_write(fp, buf, strlen(buf), &pos);
+		}
+//
+//		filp_close(fp, NULL);
+//		set_fs(old_fs);
 
 		list_for_each_entry_safe(mpip_log, tmp_mpip, &(path_info->mpip_log), list)
 		{
