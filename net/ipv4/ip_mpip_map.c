@@ -2075,72 +2075,75 @@ void write_mpip_log_to_file(unsigned char session_id)
 	if (session_id <= 0)
 		return;
 
-	char filename[100];
-	sprintf(filename, "/home/bill/log/%d.csv", session_id);
+//	char filename[100];
+//	sprintf(filename, "/home/bill/log/%d.csv", session_id);
+//
+//	fp = filp_open(filename, O_RDWR | O_CREAT, 0644);
+//	if (IS_ERR(fp))
+//	{
+//		printk("create file error\n");
+//		return;
+//	}
+//	old_fs = get_fs();
+//	set_fs(KERNEL_DS);
+//
+//	char buf[200];
+//	sprintf(buf, "/home/bill/%d.csv", session_id);
+//
+//	pos = fp->f_dentry->d_inode->i_size;
+//	vfs_write(fp, buf, strlen(buf), &pos);
+//	filp_close(fp, NULL);
+//	set_fs(old_fs);
+//
+//	return;
 
-	fp = filp_open(filename, O_RDWR | O_CREAT, 0644);
-	if (IS_ERR(fp))
-	{
-		printk("create file error\n");
+	if (sysctl_mpip_rcv)
 		return;
-	}
+
 	old_fs = get_fs();
 	set_fs(KERNEL_DS);
 
-	char buf[200];
-	sprintf(buf, "/home/bill/%d.csv", session_id);
+	list_for_each_entry(path_info, &pi_head, list)
+	{
+		if (path_info->session_id != session_id)
+		{
+			continue;
+		}
 
-	pos = fp->f_dentry->d_inode->i_size;
-	vfs_write(fp, buf, strlen(buf), &pos);
-	filp_close(fp, NULL);
+		char filename[100];
+		sprintf(filename, "/home/bill/%d_%d.csv", session_id, path_info->path_id);
+
+		fp = filp_open(filename, O_RDWR | O_CREAT, 0644);
+		if (IS_ERR(fp))
+		{
+			printk("create file error\n");
+			return;
+		}
+
+
+		list_for_each_entry(mpip_log, &(path_info->mpip_log), list)
+		{
+			char buf[200];
+			sprintf(buf, "%lu,%d,%d,%lu\n", mpip_log->logjiffies,
+										mpip_log->delay,
+										mpip_log->queuing_delay,
+										mpip_log->tp);
+
+			pos = fp->f_dentry->d_inode->i_size;
+			vfs_write(fp, buf, strlen(buf), &pos);
+		}
+
+		filp_close(fp, NULL);
+
+		list_for_each_entry_safe(mpip_log, tmp_mpip, &(path_info->mpip_log), list)
+		{
+			list_del(&(mpip_log->list));
+			kfree(mpip_log);
+		}
+		path_info->logcount = 0;
+	}
+
 	set_fs(old_fs);
-
-	return;
-
-
-
-//	list_for_each_entry(path_info, &pi_head, list)
-//	{
-//		if (path_info->session_id != session_id)
-//		{
-//			continue;
-//		}
-//
-//		char filename[100];
-//		sprintf(filename, "/home/bill/%d_%d.csv", session_id, path_info->path_id);
-//
-//		fp = filp_open(filename, O_RDWR | O_CREAT, 0644);
-//		if (IS_ERR(fp))
-//		{
-//			printk("create file error\n");
-//			return;
-//		}
-////		old_fs = get_fs();
-////		set_fs(KERNEL_DS);
-//
-//		list_for_each_entry(mpip_log, &(path_info->mpip_log), list)
-//		{
-//			char buf[200];
-//			sprintf(buf, "%lu,%d,%d,%lu\n", mpip_log->logjiffies,
-//										mpip_log->delay,
-//										mpip_log->queuing_delay,
-//										mpip_log->tp);
-//			printk("%s", buf);
-//
-////			pos = fp->f_dentry->d_inode->i_size;
-////			vfs_write(fp, buf, strlen(buf), &pos);
-//		}
-//
-//		filp_close(fp, NULL);
-////		set_fs(old_fs);
-//
-//		list_for_each_entry_safe(mpip_log, tmp_mpip, &(path_info->mpip_log), list)
-//		{
-//			list_del(&(mpip_log->list));
-//			kfree(mpip_log);
-//		}
-//		path_info->logcount = 0;
-//	}
 }
 
 unsigned char find_fastest_path_id(unsigned char *node_id,
