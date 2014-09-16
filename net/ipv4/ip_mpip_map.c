@@ -2145,6 +2145,7 @@ void write_mpip_log_to_file(unsigned char session_id)
 			list_del(&(mpip_log->list));
 			kfree(mpip_log);
 		}
+		INIT_LIST_HEAD(&(path_info->mpip_log));
 		path_info->logcount = 0;
 	}
 
