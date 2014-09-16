@@ -2085,6 +2085,14 @@ void write_mpip_log_to_file(unsigned char session_id)
 		char filename[100];
 		sprintf(filename, "/home/bill/%d_%d.csv", session_id, path_info->path_id);
 
+		fp = filp_open("/home/bill/log", O_RDWR | O_CREAT, 0644);
+		if (IS_ERR(fp))
+		{
+			printk("create file error\n");
+			return;
+		}
+		old_fs = get_fs();
+		set_fs(KERNEL_DS);
 
 		list_for_each_entry(mpip_log, &(path_info->mpip_log), list)
 		{
@@ -2093,24 +2101,13 @@ void write_mpip_log_to_file(unsigned char session_id)
 //										mpip_log->delay,
 //										mpip_log->queuing_delay,
 //										mpip_log->tp);
-
 			sprintf(buf, "%s:%d\n", __FILE__, __LINE__);
-
-			fp = filp_open(filename, O_RDWR | O_CREAT, 0644);
-			if (IS_ERR(fp))
-			{
-				printk("create file error\n");
-				return;
-			}
-			old_fs = get_fs();
-			set_fs(KERNEL_DS);
-
 			pos = fp->f_dentry->d_inode->i_size;
 			vfs_write(fp, buf, strlen(buf), &pos);
-
-			filp_close(fp, NULL);
-			set_fs(old_fs);
 		}
+
+		filp_close(fp, NULL);
+		set_fs(old_fs);
 
 		list_for_each_entry_safe(mpip_log, tmp_mpip, &(path_info->mpip_log), list)
 		{
