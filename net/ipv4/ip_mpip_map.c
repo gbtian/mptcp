@@ -2082,7 +2082,7 @@ void write_mpip_log_to_file(unsigned char session_id)
 		}
 
 		char filename[20];
-		sprintf(filename, "%s_%d_%d.csv", path_info->node_id, session_id, path_info->path_id);
+		sprintf(filename, "/home/%s_%d_%d.csv", path_info->node_id, session_id, path_info->path_id);
 
 		fp = filp_open(filename, O_RDWR | O_APPEND | O_CREAT, 0644);
 		old_fs = get_fs();
