@@ -2108,10 +2108,11 @@ void write_mpip_log_to_file(unsigned char session_id)
 										mpip_log->queuing_delay,
 										mpip_log->tp);
 
-			//pos = fp->f_dentry->d_inode->i_size;
+			pos = fp->f_dentry->d_inode->i_size;
 			vfs_write(fp, buf, strlen(buf), &pos);
 //			fp->f_op->write(fp, buf, strlen(buf), &(fp->f_pos));
-//			vfs_fsync(fp, 0);
+			vfs_fsync(fp, 0);
+			printk("%s, %d, %d\n", filename, pos, fp->f_pos);
 		}
 
 		set_fs(old_fs);
