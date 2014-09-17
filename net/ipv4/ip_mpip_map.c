@@ -582,48 +582,23 @@ int update_path_delay(unsigned char path_id, __s32 delay)
 			if (path_info->count == 0)
 			{
 				path_info->delay = delay;
+				path_info->min_delay = delay;
+				path_info->max_delay = delay;
 			}
 			else
 			{
 				path_info->delay = (99 * path_info->delay + delay) / 100;
-				//path_info->delay = delay;
+				if (path_info->min_delay > delay)
+				{
+					path_info->min_delay = (99 * path_info->min_delay + delay) / 100;;
+				}
+				if (path_info->max_delay < delay)
+				{
+					path_info->max_delay = (99 * path_info->max_delay + delay) / 100;;
+				}
 			}
 
-//			if (path_info->count < 5)
-//			{
-//				path_info->min_delay = (4 * path_info->min_delay + delay) / 5;
-//				path_info->max_delay = (4 * path_info->max_delay + delay) / 5;
-//				//path_info->min_delay = delay;
-//				path_info->count += 1;
-//			}
-//			else
-//			{
-//				if (path_info->min_delay > path_info->delay)
-//				{
-//					path_info->min_delay = delay;
-//				}
-//
-//				if (path_info->max_delay < path_info->delay)
-//				{
-//					path_info->max_delay = (99 * path_info->max_delay + delay) / 100;
-//					//path_info->max_delay = delay;
-//				}
-//			}
-
-			if (path_info->min_delay > delay || path_info->min_delay == -1)
-			{
-
-				path_info->min_delay = (99 * path_info->min_delay + delay) / 100;;
-			}
-
-			if (path_info->max_delay < delay || path_info->max_delay == -1)
-			{
-				path_info->max_delay = (99 * path_info->max_delay + delay) / 100;;
-			}
-
-			//path_info->queuing_delay = (99 * path_info->queuing_delay + path_info->delay - path_info->min_delay) / 100;
 			path_info->queuing_delay = path_info->delay - path_info->min_delay;
-
 			if (path_info->queuing_delay > path_info->max_queuing_delay || path_info->max_queuing_delay == -1)
 			{
 				path_info->max_queuing_delay = path_info->queuing_delay;
@@ -2178,7 +2153,12 @@ unsigned char find_fastest_path_id(unsigned char *node_id,
 
 	if(socket_session)
 	{
-		if (((jiffies - socket_session->tpstartjiffies) * 1000 / HZ) >= sysctl_mpip_bw_time)
+		if (((jiffies - socket_session->tpinitjiffies) * 1000 / HZ) >= sysctl_mpip_exp_time)
+		{
+			write_mpip_log_to_file(session_id);
+			socket_session->tpinitjiffies = jiffies;
+		}
+		else if (((jiffies - socket_session->tpstartjiffies) * 1000 / HZ) >= sysctl_mpip_bw_time)
 		{
 			update_session_tp(session_id, len);
 			update_path_info(session_id, len);
@@ -2187,11 +2167,7 @@ unsigned char find_fastest_path_id(unsigned char *node_id,
 			add_mpip_log(session_id);
 		}
 
-		if (((jiffies - socket_session->tpinitjiffies) * 1000 / HZ) >= sysctl_mpip_exp_time)
-		{
-			write_mpip_log_to_file(session_id);
-			socket_session->tpinitjiffies = jiffies;
-		}
+
 	}
 
 
