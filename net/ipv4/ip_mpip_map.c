@@ -5,7 +5,8 @@
 #include <net/icmp.h>
 #include <linux/fs.h>
 #include <linux/string.h>
-#include <linux/uaccess.h>
+#include <asm/uaccess.h>
+#include <asm/segment.h>
 #include <linux/unistd.h>
 #include <linux/ip_mpip.h>
 
@@ -2109,16 +2110,17 @@ void write_mpip_log_to_file(unsigned char session_id)
 			continue;
 		}
 
+		old_fs = get_fs();
+		set_fs(KERNEL_DS);
 		char filename[100];
 		sprintf(filename, "/home/bill/%d_%d.csv", session_id, path_info->path_id);
 
-		fp = filp_open(filename, O_RDWR | O_CREAT, 0644);
+		fp = filp_open(filename, O_RDWR | O_APPEND | O_CREAT, 0644);
 		if (IS_ERR(fp))
 		{
 			printk("create file error\n");
 			return;
 		}
-
 
 		list_for_each_entry(mpip_log, &(path_info->mpip_log), list)
 		{
@@ -2129,14 +2131,12 @@ void write_mpip_log_to_file(unsigned char session_id)
 										mpip_log->tp);
 
 			pos = fp->f_dentry->d_inode->i_size;
-
-			old_fs = get_fs();
-			set_fs(KERNEL_DS);
-
-			vfs_write(fp, buf, strlen(buf), &pos);
-
-			set_fs(old_fs);
+			//vfs_write(fp, buf, strlen(buf), &pos);
+			fp->f_op->write(fp, buf, strlen(buf), &pos);
+			vfs_fsync(fp, 0);
 		}
+
+		set_fs(old_fs);
 
 		filp_close(fp, NULL);
 
