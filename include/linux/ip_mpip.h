@@ -219,6 +219,9 @@ struct socket_session_table
 	unsigned long		tprealtime;
 	unsigned long		tphighest;
 	struct list_head 	path_bw_list; //path bw of highest tp
+
+	bool 				done;
+
 	struct list_head 	list;
 };
 

@@ -1284,6 +1284,7 @@ void add_sender_session(unsigned char *src_node_id, unsigned char *dst_node_id,
 	item->tpstartjiffies = jiffies;
 	item->tpinitjiffies = jiffies;
 	item->tptotalbytes = 0;
+	item->done = false;
 	INIT_LIST_HEAD(&(item->path_bw_list));
 	item->session_id = (static_session_id > 250) ? 1 : ++static_session_id;
 	INIT_LIST_HEAD(&(item->list));
@@ -1373,6 +1374,7 @@ struct socket_session_table *get_receiver_session(unsigned char *src_node_id, un
 	item->tpstartjiffies = jiffies;
 	item->tpinitjiffies = jiffies;
 	item->tptotalbytes = 0;
+	item->done = false;
 	INIT_LIST_HEAD(&(item->path_bw_list));
 	item->session_id = session_id;
 	INIT_LIST_HEAD(&(item->list));
@@ -2087,6 +2089,7 @@ void write_mpip_log_to_file(unsigned char session_id)
 
 		old_fs = get_fs();
 		set_fs(KERNEL_DS);
+
 		char filename[100];
 		sprintf(filename, "/home/bill/%d_%d.csv", session_id, path_info->path_id);
 
@@ -2106,9 +2109,9 @@ void write_mpip_log_to_file(unsigned char session_id)
 										mpip_log->tp);
 
 			//pos = fp->f_dentry->d_inode->i_size;
-			//vfs_write(fp, buf, strlen(buf), &pos);
-			fp->f_op->write(fp, buf, strlen(buf), &(fp->f_pos));
-			vfs_fsync(fp, 0);
+			vfs_write(fp, buf, strlen(buf), &pos);
+//			fp->f_op->write(fp, buf, strlen(buf), &(fp->f_pos));
+//			vfs_fsync(fp, 0);
 		}
 
 		set_fs(old_fs);
@@ -2155,10 +2158,12 @@ unsigned char find_fastest_path_id(unsigned char *node_id,
 	{
 		if (((jiffies - socket_session->tpinitjiffies) * 1000 / HZ) >= sysctl_mpip_exp_time)
 		{
+			socket_session->done = true;
 			write_mpip_log_to_file(session_id);
 			socket_session->tpinitjiffies = jiffies;
 		}
-		else if (((jiffies - socket_session->tpstartjiffies) * 1000 / HZ) >= sysctl_mpip_bw_time)
+		else if (!(socket_session->done) &&
+				((jiffies - socket_session->tpstartjiffies) * 1000 / HZ) >= sysctl_mpip_bw_time)
 		{
 			update_session_tp(session_id, len);
 			update_path_info(session_id, len);
