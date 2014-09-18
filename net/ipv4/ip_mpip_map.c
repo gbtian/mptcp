@@ -5,8 +5,6 @@
 #include <net/icmp.h>
 #include <linux/fs.h>
 #include <linux/string.h>
-#include <asm/uaccess.h>
-#include <asm/segment.h>
 #include <linux/unistd.h>
 #include <linux/ip_mpip.h>
 
@@ -588,7 +586,6 @@ int update_path_delay(unsigned char path_id, __s32 delay)
 				path_info->delay = (99 * path_info->delay + delay) / 100;
 			}
 
-
 			if (path_info->min_delay > delay || path_info->min_delay == -1)
 			{
 
@@ -599,6 +596,7 @@ int update_path_delay(unsigned char path_id, __s32 delay)
 			{
 				path_info->max_delay = (99 * path_info->max_delay + delay) / 100;;
 			}
+
 			path_info->queuing_delay = path_info->delay - path_info->min_delay;
 			if (path_info->queuing_delay > path_info->max_queuing_delay || path_info->max_queuing_delay == -1)
 			{
@@ -2054,32 +2052,8 @@ void write_mpip_log_to_file(unsigned char session_id)
 	if (session_id <= 0)
 		return;
 
-//	char filename[100];
-//	sprintf(filename, "/home/bill/log/%d.csv", session_id);
-//
-//	fp = filp_open(filename, O_RDWR | O_CREAT, 0644);
-//	if (IS_ERR(fp))
-//	{
-//		printk("create file error\n");
-//		return;
-//	}
-//	old_fs = get_fs();
-//	set_fs(KERNEL_DS);
-//
-//	char buf[200];
-//	sprintf(buf, "/home/bill/%d.csv", session_id);
-//
-//	pos = fp->f_dentry->d_inode->i_size;
-//	vfs_write(fp, buf, strlen(buf), &pos);
-//	filp_close(fp, NULL);
-//	set_fs(old_fs);
-//
-//	return;
-
 	if (sysctl_mpip_rcv)
 		return;
-
-
 
 	list_for_each_entry(path_info, &pi_head, list)
 	{
@@ -2088,45 +2062,18 @@ void write_mpip_log_to_file(unsigned char session_id)
 			continue;
 		}
 
-//		old_fs = get_fs();
-//		set_fs(KERNEL_DS);
-
-//		char filename[100];
-//		sprintf(filename, "/home/bill/%d_%d.csv", session_id, path_info->path_id);
-//
-//		fp = filp_open(filename, O_RDWR | O_APPEND | O_CREAT, 0644);
-//		if (IS_ERR(fp))
-//		{
-//			printk("create file error\n");
-//			return;
-//		}
-
+		printk("******start: %d %d******\n", session_id, path_info->path_id);
 		list_for_each_entry(mpip_log, &(path_info->mpip_log), list)
 		{
 
-			printk("%lu,%d,%d,%lu\n", mpip_log->logjiffies,
+			printk("%d,%d,%lu,%d,%d,%lu\n", session_id, path_info->path_id,
+										mpip_log->logjiffies,
 										mpip_log->delay,
 										mpip_log->queuing_delay,
 										mpip_log->tp);
 
-
-//			char buf[100];
-//			sprintf(buf, "%lu,%d,%d,%lu\n", mpip_log->logjiffies,
-//										mpip_log->delay,
-//										mpip_log->queuing_delay,
-//										mpip_log->tp);
-
-
-//			pos = fp->f_dentry->d_inode->i_size;
-//			vfs_write(fp, buf, strlen(buf), &pos);
-//			fp->f_op->write(fp, buf, strlen(buf), &(fp->f_pos));
-//			vfs_fsync(fp, 0);
-//			printk("%s, %d, %d\n", filename, pos, fp->f_pos);
 		}
-
-//		set_fs(old_fs);
-//
-//		filp_close(fp, NULL);
+		printk("******end: %d %d******\n", session_id, path_info->path_id);
 
 		list_for_each_entry_safe(mpip_log, tmp_mpip, &(path_info->mpip_log), list)
 		{
