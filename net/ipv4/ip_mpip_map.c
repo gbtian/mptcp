@@ -2134,17 +2134,17 @@ unsigned char find_fastest_path_id(unsigned char *node_id,
 	}
 
 
-	int priority = get_pkt_priority(origin_daddr, origin_dport, protocol,
-									len);
-
-	if (priority = MPIP_DELAY_PRIORITY)
-	{
-		is_short = true;
-	}
-	else
-	{
-		is_short = false;
-	}
+//	int priority = get_pkt_priority(origin_daddr, origin_dport, protocol,
+//									len);
+//
+//	if (priority = MPIP_DELAY_PRIORITY)
+//	{
+//		is_short = true;
+//	}
+//	else
+//	{
+//		is_short = false;
+//	}
 
 	//for ack packet, use the path with lowest delay
 	if (is_short)
