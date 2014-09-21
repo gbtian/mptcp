@@ -1484,7 +1484,7 @@ void update_path_tp(struct path_info_table *path)
 	if(!path)
 		return;
 
-	unsigned long tp = path->tptotalbytes / ((jiffies - path->tpstartjiffies) * 100 / HZ);
+	unsigned long tp = path->tptotalbytes / ((jiffies - path->tpstartjiffies) * 1000 / HZ);
 	path->tp = tp;
 	path->tptotalbytes = 0;
 
@@ -2162,8 +2162,7 @@ unsigned char find_fastest_path_id(unsigned char *node_id,
 			f_path->pktcount += 1;
 			f_path_id = f_path->path_id;
 
-			return f_path_id;
-			//goto ret;
+			goto ret;
 
 		}
 	}
