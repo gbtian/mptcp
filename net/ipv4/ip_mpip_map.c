@@ -2160,7 +2160,8 @@ unsigned char find_fastest_path_id(unsigned char *node_id,
 			f_path->pktcount += 1;
 			f_path_id = f_path->path_id;
 
-			goto ret;
+			return f_path_id;
+			//goto ret;
 
 		}
 	}
