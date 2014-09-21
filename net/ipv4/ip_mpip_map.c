@@ -1081,8 +1081,9 @@ int update_path_info(unsigned char session_id, unsigned int len)
 //				+ max_min_delay - path_info->ave_min_delay
 //				+ max_queuing_delay - path_info->ave_queuing_delay;
 
-		int tmp = max_queuing_delay - path_info->ave_queuing_delay;
+		//int tmp = max_queuing_delay - path_info->ave_queuing_delay;
 
+		int tmp = max_delay - path_info->ave_delay;
 
 		path_info->tmp = tmp;
 
@@ -1745,11 +1746,11 @@ int add_origin_path_info_tcp(unsigned char *node_id, __be32 saddr, __be32 daddr,
 	item->daddr = daddr;
 	item->dport = dport;
 	item->session_id = session_id;
-	item->min_delay = 0;
-	item->max_delay = 0;
+	item->min_delay = -1;
+	item->max_delay = -1;
 	item->delay = 0;
 	item->queuing_delay = 0;
-	item->max_queuing_delay = 0;
+	item->max_queuing_delay = -1;
 	item->count = 0;
 	item->bw = 250;
 	item->pktcount = 0;
@@ -1948,7 +1949,8 @@ int add_path_info_udp(unsigned char *node_id, __be32 daddr, __be16 sport,
 		item->daddr = daddr;
 		item->dport = dport;
 		item->session_id = session_id;
-		item->min_delay = 0;
+		item->min_delay = -1;
+		item->max_delay = -1;
 		item->delay = 0;
 		item->queuing_delay = 0;
 		item->max_queuing_delay = 0;
@@ -1989,7 +1991,7 @@ struct path_info_table *find_lowest_delay_path(unsigned char *node_id,
 
 
 	if (session_id <= 0)
-		return 0;
+		return NULL;
 
 	list_for_each_entry(path_info, &pi_head, list)
 	{
