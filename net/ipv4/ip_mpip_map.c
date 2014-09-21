@@ -2255,7 +2255,7 @@ ret:
 		if (((jiffies - f_path->tpstartjiffies) * 1000 / HZ) >= sysctl_mpip_bw_time)
 		{
 			update_path_tp(f_path);
-			path->tpstartjiffies = jiffies;
+			f_path->tpstartjiffies = jiffies;
 		}
 	}
 
