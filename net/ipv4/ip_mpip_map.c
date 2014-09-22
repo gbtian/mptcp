@@ -1088,14 +1088,14 @@ int update_path_info(unsigned char session_id, unsigned int len)
 		path_info->tmp = tmp;
 
 		totaltmp += tmp;
-		if (tmp < min_tmp || min_tmp == -1)
-		{
-			min_tmp = tmp;
-		}
+//		if (tmp < min_tmp || min_tmp == -1)
+//		{
+//			min_tmp = tmp;
+//		}
 
-		path_info->tmp_bw = path_info->bw + tmp;
-
-		totalbw += path_info->tmp_bw;
+//		path_info->tmp_bw = path_info->bw + tmp;
+//
+//		totalbw += path_info->tmp_bw;
 		path_count++;
 	}
 
@@ -1114,7 +1114,7 @@ int update_path_info(unsigned char session_id, unsigned int len)
 		__u64 highbw = get_path_bw(path_info->path_id, session_id, path_info->bw);
 
 		int ratio = (1000 * path_info->tmp) / totaltmp;
-		if (ratio > averatio)
+		if (ratio >= averatio)
 		{
 			path_info->bw += sysctl_mpip_bw_step;
 			if (path_info->bw >= 1000)
