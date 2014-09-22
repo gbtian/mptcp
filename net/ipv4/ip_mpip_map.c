@@ -1122,8 +1122,8 @@ int update_path_info(unsigned char session_id, unsigned int len)
 		}
 		else
 		{
-			if (path_info->bw <= 10)
-				path_info->bw = 10;
+			if (path_info->bw <= 1)
+				path_info->bw = 1;
 			else
 				path_info->bw -= sysctl_mpip_bw_step;
 		}
@@ -1539,7 +1539,7 @@ int add_to_tcp_skb_buf(struct sk_buff *skb, unsigned char session_id)
 			if ((ntohl(tcph->seq) < socket_session->next_seq) &&
 				(socket_session->next_seq) - ntohl(tcph->seq) < 0xFFFFFFF)
 			{
-				printk("late: %d %u, %u, %s, %d\n", socket_session->buf_count,
+				mpip_log("late: %d %u, %u, %s, %d\n", socket_session->buf_count,
 						ntohl(tcph->seq), socket_session->next_seq, __FILE__, __LINE__);
 				dst_input(skb);
 				goto success;
@@ -1549,7 +1549,7 @@ int add_to_tcp_skb_buf(struct sk_buff *skb, unsigned char session_id)
 				(ntohl(tcph->seq) == socket_session->next_seq) ||
 				(ntohl(tcph->seq) == socket_session->next_seq + 1)) //for three-way handshake
 			{
-				printk("send: %d, %u, %u, %s, %d\n", socket_session->buf_count,
+				mpip_log("send: %d, %u, %u, %s, %d\n", socket_session->buf_count,
 						ntohl(tcph->seq), socket_session->next_seq, __FILE__, __LINE__);
 				socket_session->next_seq = skb->len - ip_hdr(skb)->ihl * 4 - tcph->doff * 4 + ntohl(tcph->seq);
 				dst_input(skb);
@@ -1563,7 +1563,7 @@ recursive:
 						{
 							socket_session->next_seq = tcp_buf->skb->len - ip_hdr(tcp_buf->skb)->ihl * 4 -
 																		   tcp_hdr(tcp_buf->skb)->doff * 4 + tcp_buf->seq;
-							printk("push: %d, %u, %u, %s, %d\n", socket_session->buf_count,
+							mpip_log("push: %d, %u, %u, %s, %d\n", socket_session->buf_count,
 									tcp_buf->seq, socket_session->next_seq, __FILE__, __LINE__);
 
 							dst_input(tcp_buf->skb);
@@ -1593,7 +1593,7 @@ recursive:
 			list_add(&(item->list), &(socket_session->tcp_buf));
 			socket_session->buf_count += 1;
 
-			printk("out of order: %d, %u, %u, %s, %d\n", socket_session->buf_count,
+			mpip_log("out of order: %d, %u, %u, %s, %d\n", socket_session->buf_count,
 					ntohl(tcph->seq), socket_session->next_seq,
 					__FILE__, __LINE__);
 
@@ -1646,9 +1646,9 @@ bool init_mpip_tcp_connection(__be32 daddr1, __be32 daddr2,
 			{
 				if ((daddr2 != 0) && !find_path_info(local_addr->addr, daddr2, sport + 1, dport, session_id))
 				{
-					printk("%d, %d, %d: %s, %s, %d\n", session_id, sport + 1, dport, __FILE__, __FUNCTION__, __LINE__);
-					print_addr_1(local_addr->addr);
-					print_addr_1(daddr2);
+					mpip_log("%d, %d, %d: %s, %s, %d\n", session_id, sport + 1, dport, __FILE__, __FUNCTION__, __LINE__);
+					print_addr(local_addr->addr);
+					print_addr(daddr2);
 
 					send_mpip_syn(NULL, local_addr->addr, daddr2,
 							sport + 1, dport, true, false, session_id);
@@ -1658,9 +1658,9 @@ bool init_mpip_tcp_connection(__be32 daddr1, __be32 daddr2,
 			{
 				if ((daddr1 != 0) && !find_path_info(local_addr->addr, daddr1, sport + 1, dport, session_id))
 				{
-					printk("%d, %d, %d: %s, %s, %d\n", session_id, sport + 1, dport, __FILE__, __FUNCTION__, __LINE__);
-					print_addr_1(local_addr->addr);
-					print_addr_1(daddr1);
+					mpip_log("%d, %d, %d: %s, %s, %d\n", session_id, sport + 1, dport, __FILE__, __FUNCTION__, __LINE__);
+					print_addr(local_addr->addr);
+					print_addr(daddr1);
 
 					send_mpip_syn(NULL, local_addr->addr, daddr1,
 							sport + 1, dport, true, false, session_id);
@@ -1671,9 +1671,9 @@ bool init_mpip_tcp_connection(__be32 daddr1, __be32 daddr2,
 		{
 			if ((daddr1 != 0) && !find_path_info(local_addr->addr, daddr1, sport + 2, dport, session_id))
 			{
-				printk("%d, %d, %d: %s, %s, %d\n", session_id, sport + 2, dport, __FILE__, __FUNCTION__, __LINE__);
-				print_addr_1(local_addr->addr);
-				print_addr_1(daddr1);
+				mpip_log("%d, %d, %d: %s, %s, %d\n", session_id, sport + 2, dport, __FILE__, __FUNCTION__, __LINE__);
+				print_addr(local_addr->addr);
+				print_addr(daddr1);
 
 				send_mpip_syn(NULL, local_addr->addr, daddr1,
 						sport + 2, dport, true, false, session_id);
@@ -1681,9 +1681,9 @@ bool init_mpip_tcp_connection(__be32 daddr1, __be32 daddr2,
 
 			if ((daddr2 != 0) && !find_path_info(local_addr->addr, daddr2, sport + 3, dport, session_id))
 			{
-				printk("%d, %d, %d: %s, %s, %d\n", session_id, sport + 3, dport, __FILE__, __FUNCTION__, __LINE__);
-				print_addr_1(local_addr->addr);
-				print_addr_1(daddr2);
+				mpip_log("%d, %d, %d: %s, %s, %d\n", session_id, sport + 3, dport, __FILE__, __FUNCTION__, __LINE__);
+				print_addr(local_addr->addr);
+				print_addr(daddr2);
 
 				send_mpip_syn(NULL, local_addr->addr, daddr2,
 						sport + 3, dport, true, false, session_id);
@@ -1821,7 +1821,7 @@ int add_path_info_tcp(int id, unsigned char *node_id, __be32 saddr, __be32 daddr
 	item->path_id = (static_path_id > 250) ? 1 : ++static_path_id;
 	item->status = 0;
 
-	printk("%d, %d, %d, %d: %s, %s, %d\n", id, session_id, sport, dport, __FILE__, __FUNCTION__, __LINE__);
+	mpip_log("%d, %d, %d, %d: %s, %s, %d\n", id, session_id, sport, dport, __FILE__, __FUNCTION__, __LINE__);
 //	print_addr_1(saddr);
 //	print_addr_1(daddr);
 
