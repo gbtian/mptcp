@@ -1762,7 +1762,7 @@ bool insert_mpip_cm(struct sk_buff *skb, __be32 old_saddr, __be32 old_daddr,
 	if (flags == 5)
 	{
 		mpip_log("sending %d: \n", ip_hdr(skb)->id);
-		print_mpip_cm(&send_mpip_cm, ip_hdr(skb)->id);
+//		print_mpip_cm_1(&send_mpip_cm, ip_hdr(skb)->id);
 	}
 
 	print_mpip_cm(&send_mpip_cm);
@@ -1974,7 +1974,7 @@ int process_mpip_cm(struct sk_buff *skb)
 	if (rcv_mpip_cm.flags == 5)
 	{
 		mpip_log("receiving %d: \n", iph->id);
-		print_mpip_cm(&rcv_mpip_cm, iph->id);
+//		print_mpip_cm_1(&rcv_mpip_cm, iph->id);
 	}
 
 	print_mpip_cm(&rcv_mpip_cm);
