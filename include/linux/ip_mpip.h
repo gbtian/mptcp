@@ -45,6 +45,7 @@ extern int sysctl_mpip_log;
 extern int sysctl_mpip_bw_time;
 extern int sysctl_mpip_exp_time;
 extern int sysctl_mpip_bw_step;
+extern int sysctl_mpip_path_diff;
 extern int sysctl_mpip_hb;
 extern int sysctl_mpip_use_tcp;
 extern int sysctl_mpip_tcp_buf_count;
@@ -155,7 +156,6 @@ struct path_info_table
 	int     			ave_queuing_delay;
 	int     			max_queuing_delay;
 	int					tmp;
-	int					tmp_bw;
 	__u64				bw;  /* bandwidth */
 	unsigned long 		fbjiffies; /* last feedback time of this path */
 	unsigned char		count;

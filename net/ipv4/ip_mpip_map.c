@@ -1065,11 +1065,6 @@ int update_path_info(unsigned char session_id, unsigned int len)
 		return 0;
 	}
 
-//	if (max_queuing_delay <= 20)
-//	{
-//		max_queuing_delay = 100;
-//	}
-
 	int min_tmp = -1;
 	int path_count = 0;
 	list_for_each_entry(path_info, &pi_head, list)
@@ -1077,25 +1072,22 @@ int update_path_info(unsigned char session_id, unsigned int len)
 		if (path_info->session_id != session_id)
 			continue;
 
-//		int tmp = max_delay - path_info->ave_delay
-//				+ max_min_delay - path_info->ave_min_delay
-//				+ max_queuing_delay - path_info->ave_queuing_delay;
-
-		//int tmp = max_queuing_delay - path_info->ave_queuing_delay;
+//		int tmp = 0;
+//		if (max_min_delay - min_min_delay > sysctl_mpip_path_diff)
+//		{
+//			tmp = max_delay - path_info->ave_delay;
+//		}
+//		else
+//		{
+//			tmp = max_queuing_delay - path_info->ave_queuing_delay;
+//		}
 
 		int tmp = max_delay - path_info->ave_delay;
 
 		path_info->tmp = tmp;
 
 		totaltmp += tmp;
-//		if (tmp < min_tmp || min_tmp == -1)
-//		{
-//			min_tmp = tmp;
-//		}
 
-//		path_info->tmp_bw = path_info->bw + tmp;
-//
-//		totalbw += path_info->tmp_bw;
 		path_count++;
 	}
 
