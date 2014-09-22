@@ -81,6 +81,7 @@ struct mpip_log_table
 {
 	unsigned long				logjiffies;
 	int							delay;
+	int							min_delay;
 	int 						queuing_delay;
 	unsigned long				tp;
 	struct list_head 			list;

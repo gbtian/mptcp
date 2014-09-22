@@ -2024,6 +2024,7 @@ void add_mpip_log(unsigned char session_id)
 
 		item->logjiffies = jiffies;
 		item->delay = path_info->delay;
+		item->min_delay = path_info->min_delay;
 		item->queuing_delay = path_info->queuing_delay;
 		item->tp = path_info->tp;
 		INIT_LIST_HEAD(&(item->list));
@@ -2061,9 +2062,11 @@ void write_mpip_log_to_file(unsigned char session_id)
 		list_for_each_entry(mpip_log, &(path_info->mpip_log), list)
 		{
 
-			printk("%d,%d,%lu,%d,%d,%lu\n", session_id, path_info->path_id,
+			printk("%d,%d,%lu,%d,%d,%d,%d,%lu\n", session_id, path_info->path_id,
 										mpip_log->logjiffies,
 										mpip_log->delay,
+										mpip_log->min_delay,
+										mpip_log->delay - mpip_log->min_delay,
 										mpip_log->queuing_delay,
 										mpip_log->tp);
 
