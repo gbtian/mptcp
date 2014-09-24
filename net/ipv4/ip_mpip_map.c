@@ -577,20 +577,20 @@ int update_path_delay(unsigned char path_id, __s32 delay)
 	{
 		if (path_info->path_id == path_id)
 		{
-			if (path_info->delay < delay)
-			{
-				if (path_info->bw <= sysctl_mpip_bw_step)
-					path_info->bw = 1;
-				else
-					path_info->bw -= sysctl_mpip_bw_step;
-			}
-			else if (path_info->delay > delay)
-			{
-				path_info->bw += sysctl_mpip_bw_step;
-
-				if (path_info->bw >= 1000)
-					path_info->bw = 1000;
-			}
+//			if (path_info->delay < delay)
+//			{
+//				if (path_info->bw <= sysctl_mpip_bw_step)
+//					path_info->bw = 1;
+//				else
+//					path_info->bw -= sysctl_mpip_bw_step;
+//			}
+//			else if (path_info->delay > delay)
+//			{
+//				path_info->bw += sysctl_mpip_bw_step;
+//
+//				if (path_info->bw >= 1000)
+//					path_info->bw = 1000;
+//			}
 
 
 			if (path_info->count == 0)
@@ -621,9 +621,12 @@ int update_path_delay(unsigned char path_id, __s32 delay)
 				path_info->max_queuing_delay = path_info->queuing_delay;
 			}
 
+			update_path_info(path_info->session_id);
+
 			break;
 		}
 	}
+
 
 	return 1;
 }
@@ -804,7 +807,7 @@ __u64 get_path_bw(unsigned char path_id, unsigned char session_id, __u64 bw)
 	return bw;
 }
 
-int update_path_info(unsigned char session_id, unsigned int len)
+int update_path_info(unsigned char session_id)
 {
 	struct path_info_table *path_info;
 	int min_queuing_delay = -1;
