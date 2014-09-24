@@ -584,6 +584,22 @@ int update_path_delay(unsigned char path_id, __s32 delay)
 			else
 			{
 				//path_info->delay = (99 * path_info->delay + delay) / 100;
+
+				if (path_info->delay < delay)
+				{
+					if (path_info->bw <= sysctl_mpip_bw_step)
+						path_info->bw = 1;
+					else
+						path_info->bw -= sysctl_mpip_bw_step;
+				}
+				else if (path_info->delay > delay)
+				{
+					path_info->bw += sysctl_mpip_bw_step;
+
+					if (path_info->bw >= 1000)
+						path_info->bw = 1000;
+				}
+
 				path_info->delay = delay;
 			}
 
@@ -2122,16 +2138,12 @@ unsigned char find_fastest_path_id(unsigned char *node_id,
 				((jiffies - socket_session->tpstartjiffies) * 1000 / HZ) >= sysctl_mpip_bw_time)
 		{
 			update_session_tp(session_id, len);
-			update_path_info(session_id, len);
+//			update_path_info(session_id, len);
 			socket_session->tpstartjiffies = jiffies;
 //			printk("%s, %d\n", __FILE__, __LINE__);
 			add_mpip_log(session_id);
 		}
-
-
 	}
-
-	update_path_info(session_id, len);
 
 //	int priority = get_pkt_priority(origin_daddr, origin_dport, protocol,
 //									len);
