@@ -2131,6 +2131,7 @@ unsigned char find_fastest_path_id(unsigned char *node_id,
 
 	}
 
+	update_path_info(session_id, len);
 
 //	int priority = get_pkt_priority(origin_daddr, origin_dport, protocol,
 //									len);
