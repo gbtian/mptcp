@@ -1704,9 +1704,11 @@ bool insert_mpip_cm(struct sk_buff *skb, __be32 old_saddr, __be32 old_daddr,
     send_mpip_cm.path_id = send_cm[4] = path_id;
     send_mpip_cm.path_stat_id = send_cm[5] = path_stat_id;
 
-    getnstimeofday(&tv);
-    send_mpip_cm.timestamp = midtime = (tv.tv_sec % 86400) * MSEC_PER_SEC * 100
-    		+ (tv.tv_nsec * 100) / NSEC_PER_MSEC;
+//    getnstimeofday(&tv);
+//    send_mpip_cm.timestamp = midtime = (tv.tv_sec % 86400) * MSEC_PER_SEC * 100
+//    		+ (tv.tv_nsec * 100) / NSEC_PER_MSEC;
+
+    send_mpip_cm.timestamp = midtime = jiffies * 100000 / HZ;
 
 	send_cm[6] = midtime & 0xff;
 	send_cm[7] = (midtime>>8) & 0xff;
@@ -1967,16 +1969,31 @@ int process_mpip_cm(struct sk_buff *skb)
 	rcv_mpip_cm.session_id		= rcv_cm[3];
 	rcv_mpip_cm.path_id  		= rcv_cm[4];
 	rcv_mpip_cm.path_stat_id  	= rcv_cm[5];
-	rcv_mpip_cm.timestamp  		= (rcv_cm[9]<<24 | rcv_cm[8]<<16 |
-				   	   	    	rcv_cm[7]<<8 | rcv_cm[6]);
-	rcv_mpip_cm.delay 	 		= (rcv_cm[13]<<24 | rcv_cm[12]<<16 |
-				   	   	    	rcv_cm[11]<<8 | rcv_cm[10]);
-	rcv_mpip_cm.addr1 	 		= (rcv_cm[17]<<24 | rcv_cm[16]<<16 |
-					   	   	    	rcv_cm[15]<<8 | rcv_cm[14]);
-	rcv_mpip_cm.addr2 	 		= (rcv_cm[21]<<24 | rcv_cm[20]<<16 |
-						   	   	    	rcv_cm[19]<<8 | rcv_cm[18]);
+
+	rcv_mpip_cm.timestamp  		= (rcv_cm[9]<<24 |
+								   rcv_cm[8]<<16 |
+								   rcv_cm[7]<<8 |
+								   rcv_cm[6]);
+
+	rcv_mpip_cm.delay 	 		= (rcv_cm[13]<<24 |
+								   rcv_cm[12]<<16 |
+								   rcv_cm[11]<<8 |
+								   rcv_cm[10]);
+
+	rcv_mpip_cm.addr1 	 		= (rcv_cm[17]<<24 |
+								   rcv_cm[16]<<16 |
+					   	   	       rcv_cm[15]<<8 |
+					   	   	       rcv_cm[14]);
+
+	rcv_mpip_cm.addr2 	 		= (rcv_cm[21]<<24 |
+								   rcv_cm[20]<<16 |
+						   	   	   rcv_cm[19]<<8 |
+						   	   	   rcv_cm[18]);
+
 	rcv_mpip_cm.flags 			= rcv_cm[22];
-	rcv_mpip_cm.checksum 		= (rcv_cm[24]<<8 | rcv_cm[23]);
+
+	rcv_mpip_cm.checksum 		= (rcv_cm[24]<<8 |
+								   rcv_cm[23]);
 
 	if (rcv_mpip_cm.flags == 5)
 	{

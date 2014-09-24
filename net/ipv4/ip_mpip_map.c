@@ -541,7 +541,7 @@ void process_addr_notified_event(unsigned char *node_id, unsigned char flags)
 	}
 }
 
-int update_path_stat_delay(unsigned char *node_id, unsigned char path_id, u32 delay)
+int update_path_stat_delay(unsigned char *node_id, unsigned char path_id, u32 timestamp)
 {
 /* todo: need sanity checks, leave it for now */
 	/* todo: need locks */
@@ -558,10 +558,10 @@ int update_path_stat_delay(unsigned char *node_id, unsigned char path_id, u32 de
 	path_stat = find_path_stat(node_id, path_id);
 	if (path_stat)
 	{
-		getnstimeofday(&tv);
-		midtime = (tv.tv_sec % 86400) * MSEC_PER_SEC * 100  + (tv.tv_nsec * 100) / NSEC_PER_MSEC;
-
-		path_stat->delay = midtime - delay;
+		//getnstimeofday(&tv);
+		//midtime = (tv.tv_sec % 86400) * MSEC_PER_SEC * 100  + (tv.tv_nsec * 100) / NSEC_PER_MSEC;
+		midtime = jiffies * 100000 / HZ;
+		path_stat->delay = midtime - timestamp;
 		path_stat->feedbacked = false;
 		path_stat->pktcount += 1;
 	}
@@ -1490,7 +1490,7 @@ void update_session_tp(unsigned char session_id, unsigned int len)
 	if(!socket_session)
 		return;
 
-	unsigned long tp = socket_session->tptotalbytes / ((jiffies - socket_session->tpstartjiffies) * 100 / HZ);
+	unsigned long tp = socket_session->tptotalbytes / ((jiffies - socket_session->tpstartjiffies) * 1000 / HZ);
 	socket_session->tprealtime = tp;
 	if (tp > socket_session->tphighest)
 	{

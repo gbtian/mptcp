@@ -346,7 +346,7 @@ struct path_stat_table *find_path_stat(unsigned char *node_id, unsigned char pat
 
 int add_path_stat(unsigned char *node_id, unsigned char path_id);
 
-int update_path_stat_delay(unsigned char *node_id, unsigned char path_id, u32 delay);
+int update_path_stat_delay(unsigned char *node_id, unsigned char path_id, u32 timestamp);
 
 int update_path_delay(unsigned char path_id, __s32 delay);
 
