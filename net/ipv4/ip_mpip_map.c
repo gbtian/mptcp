@@ -577,6 +577,22 @@ int update_path_delay(unsigned char path_id, __s32 delay)
 	{
 		if (path_info->path_id == path_id)
 		{
+			if (path_info->delay < delay)
+			{
+				if (path_info->bw <= sysctl_mpip_bw_step)
+					path_info->bw = 1;
+				else
+					path_info->bw -= sysctl_mpip_bw_step;
+			}
+			else if (path_info->delay > delay)
+			{
+				path_info->bw += sysctl_mpip_bw_step;
+
+				if (path_info->bw >= 1000)
+					path_info->bw = 1000;
+			}
+
+
 			if (path_info->count == 0)
 			{
 				path_info->delay = delay;
@@ -584,22 +600,6 @@ int update_path_delay(unsigned char path_id, __s32 delay)
 			else
 			{
 				//path_info->delay = (99 * path_info->delay + delay) / 100;
-
-				if (path_info->delay < delay)
-				{
-					if (path_info->bw <= sysctl_mpip_bw_step)
-						path_info->bw = 1;
-					else
-						path_info->bw -= sysctl_mpip_bw_step;
-				}
-				else if (path_info->delay > delay)
-				{
-					path_info->bw += sysctl_mpip_bw_step;
-
-					if (path_info->bw >= 1000)
-						path_info->bw = 1000;
-				}
-
 				path_info->delay = delay;
 			}
 
