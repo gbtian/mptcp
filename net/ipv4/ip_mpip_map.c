@@ -621,7 +621,7 @@ int update_path_delay(unsigned char path_id, __s32 delay)
 				path_info->max_queuing_delay = path_info->queuing_delay;
 			}
 
-			update_path_info(path_info->session_id);
+			//update_path_info(path_info->session_id);
 
 			break;
 		}
@@ -1295,6 +1295,7 @@ void add_sender_session(unsigned char *src_node_id, unsigned char *dst_node_id,
 	item->tphighest = 0;
 	item->tprealtime = 0;
 	item->tpstartjiffies = jiffies;
+	item->tpbwjiffies = jiffies;
 	item->tpinitjiffies = jiffies;
 	item->tptotalbytes = 0;
 	item->done = false;
@@ -1385,6 +1386,7 @@ struct socket_session_table *get_receiver_session(unsigned char *src_node_id, un
 	item->tphighest = 0;
 	item->tprealtime = 0;
 	item->tpstartjiffies = jiffies;
+	item->tpbwjiffies = jiffies;
 	item->tpinitjiffies = jiffies;
 	item->tptotalbytes = 0;
 	item->done = false;
@@ -2137,14 +2139,17 @@ unsigned char find_fastest_path_id(unsigned char *node_id,
 			write_mpip_log_to_file(session_id);
 			socket_session->tpinitjiffies = jiffies;
 		}
-		else if (!(socket_session->done) &&
-				((jiffies - socket_session->tpstartjiffies) * 1000 / HZ) >= sysctl_mpip_bw_time)
+		if (!(socket_session->done) &&
+				((jiffies - socket_session->tpstartjiffies) * 1000 / HZ) >= sysctl_mpip_tp_time)
 		{
 			update_session_tp(session_id, len);
-//			update_path_info(session_id, len);
 			socket_session->tpstartjiffies = jiffies;
-//			printk("%s, %d\n", __FILE__, __LINE__);
 			add_mpip_log(session_id);
+		}
+		if (((jiffies - socket_session->tpbwjiffies) * 1000 / HZ) >= sysctl_mpip_bw_time)
+		{
+			update_path_info(session_id);
+			socket_session->tpbwjiffies = jiffies;
 		}
 	}
 
@@ -2735,16 +2740,16 @@ asmlinkage long sys_mpip(void)
 
 		printk("%d  ", path_info->queuing_delay);
 
-		printk("%d  ", path_info->ave_min_delay);
-		printk("%d  ", path_info->ave_delay);
-		printk("%d  ", path_info->ave_queuing_delay);
+//		printk("%d  ", path_info->ave_min_delay);
+//		printk("%d  ", path_info->ave_delay);
+//		printk("%d  ", path_info->ave_queuing_delay);
 		printk("%d  ", path_info->tmp);
 
 
-		printk("%lu  ", path_info->tpstartjiffies);
-		printk("%lu  ", path_info->tptotalbytes);
-		printk("%lu  ", path_info->tp);
-		printk("%d  ", path_info->logcount);
+//		printk("%lu  ", path_info->tpstartjiffies);
+//		printk("%lu  ", path_info->tptotalbytes);
+//		printk("%lu  ", path_info->tp);
+//		printk("%d  ", path_info->logcount);
 
 		printk("%llu\n", path_info->bw);
 

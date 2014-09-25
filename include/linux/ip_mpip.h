@@ -42,6 +42,7 @@ extern int sysctl_mpip_enabled;
 extern int sysctl_mpip_send;
 extern int sysctl_mpip_rcv;
 extern int sysctl_mpip_log;
+extern int sysctl_mpip_tp_time;
 extern int sysctl_mpip_bw_time;
 extern int sysctl_mpip_exp_time;
 extern int sysctl_mpip_bw_step;
@@ -216,6 +217,7 @@ struct socket_session_table
 
 	unsigned long		tpinitjiffies;
 	unsigned long		tpstartjiffies;
+	unsigned long		tpbwjiffies;
 	unsigned long		tptotalbytes;
 	unsigned long		tprealtime;
 	unsigned long		tphighest;
