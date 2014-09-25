@@ -1712,11 +1712,11 @@ bool insert_mpip_cm(struct sk_buff *skb, __be32 old_saddr, __be32 old_daddr,
     send_mpip_cm.path_id = send_cm[4] = path_id;
     send_mpip_cm.path_stat_id = send_cm[5] = path_stat_id;
 
-    getnstimeofday(&tv);
-    send_mpip_cm.timestamp = midtime = (tv.tv_sec % 86400) * MSEC_PER_SEC * 100
-    		+ (tv.tv_nsec * 100) / NSEC_PER_MSEC;
+//    getnstimeofday(&tv);
+//    send_mpip_cm.timestamp = midtime = (tv.tv_sec % 86400) * MSEC_PER_SEC * 100
+//    		+ (tv.tv_nsec * 100) / NSEC_PER_MSEC;
 
-//    send_mpip_cm.timestamp = midtime = jiffies * 100000 / HZ;
+    send_mpip_cm.timestamp = midtime = jiffies * 10000 / HZ;
 
 	send_cm[6] = midtime & 0xff;
 	send_cm[7] = (midtime>>8) & 0xff;
