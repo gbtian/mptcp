@@ -70,7 +70,7 @@ struct mpip_cm
 	unsigned char	session_id;
 	unsigned char	path_id;
 	unsigned char	path_stat_id;
-	__s32			timestamp;
+	u32				timestamp;
 	__s32			delay;
 	__be32          addr1;
 	__be32          addr2;

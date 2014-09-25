@@ -560,7 +560,7 @@ int update_path_stat_delay(unsigned char *node_id, unsigned char path_id, u32 ti
 	{
 //		getnstimeofday(&tv);
 //		midtime = (tv.tv_sec % 86400) * MSEC_PER_SEC * 100  + (tv.tv_nsec * 100) / NSEC_PER_MSEC;
-		midtime = jiffies * 10000 / HZ;
+		midtime = jiffies;
 		path_stat->delay = midtime - timestamp;
 		path_stat->feedbacked = false;
 		path_stat->pktcount += 1;
