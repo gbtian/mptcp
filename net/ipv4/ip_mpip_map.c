@@ -1563,7 +1563,7 @@ int add_to_tcp_skb_buf(struct sk_buff *skb, unsigned char session_id)
 				(ntohl(tcph->seq) == socket_session->next_seq) ||
 				(ntohl(tcph->seq) == socket_session->next_seq + 1)) //for three-way handshake
 			{
-				printk("send: %d, %u, %u, %s, %d\n", socket_session->buf_count,
+				mpip_log("send: %d, %u, %u, %s, %d\n", socket_session->buf_count,
 						ntohl(tcph->seq), socket_session->next_seq, __FILE__, __LINE__);
 				socket_session->next_seq = skb->len - ip_hdr(skb)->ihl * 4 - tcph->doff * 4 + ntohl(tcph->seq);
 				dst_input(skb);
