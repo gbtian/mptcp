@@ -1595,23 +1595,42 @@ recursive:
 				goto success;
 			}
 
+			if (socket_session->buf_count > sysctl_mpip_tcp_buf_count)
+			{
+				list_for_each_entry_safe(tcp_buf, tmp_buf, &(socket_session->tcp_buf), list)
+				{
+					printk("force push: %d, %u, %u, %s, %d\n", socket_session->buf_count,
+							tcp_buf->seq, socket_session->next_seq, __FILE__, __LINE__);
 
-			item = kzalloc(sizeof(struct tcp_skb_buf),	GFP_ATOMIC);
-			if (!item)
-				goto fail;
+					dst_input(tcp_buf->skb);
 
-			item->seq = ntohl(tcph->seq);
-			item->skb = skb;
-			item->fbjiffies = jiffies;
-			INIT_LIST_HEAD(&(item->list));
-			list_add(&(item->list), &(socket_session->tcp_buf));
-			socket_session->buf_count += 1;
+					list_del(&(tcp_buf->list));
+					kfree(tcp_buf);
 
-			printk("out of order: %d, %u, %u, %s, %d\n", socket_session->buf_count,
-					ntohl(tcph->seq), socket_session->next_seq,
-					__FILE__, __LINE__);
+					socket_session->buf_count -= 1;
+				}
+				dst_input(skb);
+				goto success;
+			}
+			else
+			{
+				item = kzalloc(sizeof(struct tcp_skb_buf),	GFP_ATOMIC);
+				if (!item)
+					goto fail;
 
-			goto success;
+				item->seq = ntohl(tcph->seq);
+				item->skb = skb;
+				item->fbjiffies = jiffies;
+				INIT_LIST_HEAD(&(item->list));
+				list_add(&(item->list), &(socket_session->tcp_buf));
+				socket_session->buf_count += 1;
+
+				printk("out of order: %d, %u, %u, %s, %d\n", socket_session->buf_count,
+						ntohl(tcph->seq), socket_session->next_seq,
+						__FILE__, __LINE__);
+
+				goto success;
+			}
 		}
 	}
 
