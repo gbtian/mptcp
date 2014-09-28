@@ -1533,6 +1533,7 @@ int add_to_tcp_skb_buf(struct sk_buff *skb, unsigned char session_id)
 	struct tcp_skb_buf *tcp_buf = NULL;
 	struct tcp_skb_buf *tmp_buf = NULL;
 
+	__u32 tmpseq = 0;
 	//rcu_read_lock();
 
 	//printk("%d, %s, %s, %d\n", session_id, __FILE__, __FUNCTION__, __LINE__);
@@ -1576,7 +1577,7 @@ recursive:
 						if (tcp_buf->seq == socket_session->next_seq)
 						{
 							socket_session->next_seq = tcp_buf->skb->len - ip_hdr(tcp_buf->skb)->ihl * 4 -
-																		   tcp_hdr(tcp_buf->skb)->doff * 4 + tcp_buf->seq;
+													   tcp_hdr(tcp_buf->skb)->doff * 4 + tcp_buf->seq;
 							printk("push: %d, %u, %u, %s, %d\n", socket_session->buf_count,
 									tcp_buf->seq, socket_session->next_seq, __FILE__, __LINE__);
 
@@ -1595,13 +1596,16 @@ recursive:
 				goto success;
 			}
 
-			if (socket_session->buf_count > sysctl_mpip_tcp_buf_count)
+			int count = socket_session->buf_count;
+			if (count > sysctl_mpip_tcp_buf_count)
 			{
 				list_for_each_entry_safe(tcp_buf, tmp_buf, &(socket_session->tcp_buf), list)
 				{
 					printk("force push: %d, %u, %u, %s, %d\n", socket_session->buf_count,
 							tcp_buf->seq, socket_session->next_seq, __FILE__, __LINE__);
 
+					socket_session->next_seq = tcp_buf->skb->len - ip_hdr(tcp_buf->skb)->ihl * 4 -
+				   	  							tcp_hdr(tcp_buf->skb)->doff * 4 + tcp_buf->seq;
 					dst_input(tcp_buf->skb);
 
 					list_del(&(tcp_buf->list));
@@ -1609,6 +1613,9 @@ recursive:
 
 					socket_session->buf_count -= 1;
 				}
+
+				socket_session->next_seq = skb->len - ip_hdr(skb)->ihl * 4 - tcph->doff * 4 + ntohl(tcph->seq);
+
 				dst_input(skb);
 				goto success;
 			}
