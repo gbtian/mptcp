@@ -2750,10 +2750,8 @@ asmlinkage long sys_mpip(void)
 //		printk("%lu  ", path_info->tptotalbytes);
 //		printk("%lu  ", path_info->tp);
 //		printk("%d  ", path_info->logcount);
-
+		printk("%llu  ", path_info->pktcount);
 		printk("%llu\n", path_info->bw);
-
-//		printk("%llu\n", path_info->pktcount);
 
 //		printk("%d\n", path_info->status);
 
