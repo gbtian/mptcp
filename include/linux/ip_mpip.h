@@ -31,7 +31,8 @@
 
 #define MPIP_CM_LEN 25
 #define MPIP_CM_NODE_ID_LEN 2
-#define MPIP_TCP_BUF_LEN 5
+#define MPIP_TCP_BUF_LEN 10
+
 
 #define MPIP_DELAY_PRIORITY 0
 #define MPIP_QUEUING_DELAY_PRIORITY 1
@@ -181,8 +182,8 @@ struct tcp_skb_buf
 {
 	__u32				seq;
 	struct sk_buff *	skb;
-	unsigned long 		fbjiffies;
-	struct list_head 	list;
+//	unsigned long 		fbjiffies;
+//	struct list_head 	list;
 };
 
 struct sort_path
@@ -204,7 +205,8 @@ struct socket_session_table
 	unsigned char		dst_node_id[MPIP_CM_NODE_ID_LEN]; /* remote node id*/
 	unsigned char   	session_id; /* sender's session id*/
 
-	struct list_head 	tcp_buf;
+//	struct list_head 	tcp_buf;
+	struct tcp_skb_buf  tcp_buf[MPIP_TCP_BUF_LEN];
 	__u32				next_seq;
 	int 				buf_count;
 	unsigned int 		protocol;

@@ -1262,6 +1262,7 @@ void add_sender_session(unsigned char *src_node_id, unsigned char *dst_node_id,
 {
 	struct socket_session_table *item = NULL;
 
+	int i;
 //	if (!is_lan_addr(saddr) || !is_lan_addr(daddr))
 //	{
 //		return 0;
@@ -1284,7 +1285,13 @@ void add_sender_session(unsigned char *src_node_id, unsigned char *dst_node_id,
 	memcpy(item->src_node_id, src_node_id, MPIP_CM_NODE_ID_LEN);
 	memcpy(item->dst_node_id, dst_node_id, MPIP_CM_NODE_ID_LEN);
 
-	INIT_LIST_HEAD(&(item->tcp_buf));
+//	INIT_LIST_HEAD(&(item->tcp_buf));
+	for (i = 0; i < MPIP_TCP_BUF_LEN; ++i)
+	{
+		item->tcp_buf[i].seq = 0;
+		item->tcp_buf[i].skb = NULL;
+	}
+
 	item->next_seq = 0;
 	item->buf_count = 0;
 	item->protocol = protocol;
@@ -1342,7 +1349,7 @@ struct socket_session_table *get_receiver_session(unsigned char *src_node_id, un
 {
 	struct socket_session_table *item = NULL;
 	int sid;
-
+	int i;
 
 	if (!src_node_id || !dst_node_id || (session_id <= 0))
 		return 0;
@@ -1375,7 +1382,12 @@ struct socket_session_table *get_receiver_session(unsigned char *src_node_id, un
 	memcpy(item->src_node_id, src_node_id, MPIP_CM_NODE_ID_LEN);
 	memcpy(item->dst_node_id, dst_node_id, MPIP_CM_NODE_ID_LEN);
 
-	INIT_LIST_HEAD(&(item->tcp_buf));
+//	INIT_LIST_HEAD(&(item->tcp_buf));
+	for (i = 0; i < MPIP_TCP_BUF_LEN; ++i)
+	{
+		item->tcp_buf[i].seq = 0;
+		item->tcp_buf[i].skb = NULL;
+	}
 	item->next_seq = 0;
 	item->buf_count = 0;
 	item->protocol = protocol;
@@ -1533,7 +1545,9 @@ int add_to_tcp_skb_buf(struct sk_buff *skb, unsigned char session_id)
 	struct tcp_skb_buf *tcp_buf = NULL;
 	struct tcp_skb_buf *tmp_buf = NULL;
 
-	__u32 tmpseq = 0;
+	__u32 tmp_seq = 0;
+	__u32 max_seq = 0;
+	int i;
 	//rcu_read_lock();
 
 	//printk("%d, %s, %s, %d\n", session_id, __FILE__, __FUNCTION__, __LINE__);
@@ -1572,23 +1586,30 @@ int add_to_tcp_skb_buf(struct sk_buff *skb, unsigned char session_id)
 recursive:
 				if (socket_session->buf_count > 0)
 				{
-					list_for_each_entry_safe(tcp_buf, tmp_buf, &(socket_session->tcp_buf), list)
+					for (i = 0; i < MPIP_TCP_BUF_LEN; ++i)
 					{
-						if (tcp_buf->seq == socket_session->next_seq)
+						if ((socket_session->tcp_buf[i].seq != 0) &&
+							(socket_session->tcp_buf[i].seq == socket_session->next_seq))
 						{
-							socket_session->next_seq = tcp_buf->skb->len - ip_hdr(tcp_buf->skb)->ihl * 4 -
-													   tcp_hdr(tcp_buf->skb)->doff * 4 + tcp_buf->seq;
+							socket_session->next_seq = socket_session->tcp_buf[i].skb->len
+													- ip_hdr(socket_session->tcp_buf[i].skb)->ihl * 4
+													- tcp_hdr(socket_session->tcp_buf[i].skb)->doff * 4
+													+ socket_session->tcp_buf[i].seq;
+
 							printk("push: %d, %u, %u, %s, %d\n", socket_session->buf_count,
-									tcp_buf->seq, socket_session->next_seq, __FILE__, __LINE__);
+									socket_session->tcp_buf[i].seq,
+									socket_session->next_seq,
+									__FILE__, __LINE__);
 
-							dst_input(tcp_buf->skb);
+							dst_input(socket_session->tcp_buf[i].skb);
 
-							list_del(&(tcp_buf->list));
-							kfree(tcp_buf);
+							socket_session->tcp_buf[i].seq = 0;
+							socket_session->tcp_buf[i].skb = NULL;
 
 							socket_session->buf_count -= 1;
 
 							goto recursive;
+
 						}
 					}
 				}
@@ -1597,46 +1618,63 @@ recursive:
 			}
 
 			int count = socket_session->buf_count;
-			if (count > sysctl_mpip_tcp_buf_count)
+			if (count == MPIP_TCP_BUF_LEN)
 			{
-				list_for_each_entry_safe(tcp_buf, tmp_buf, &(socket_session->tcp_buf), list)
+				for (i = 0; i < MPIP_TCP_BUF_LEN; ++i)
 				{
 					printk("force push: %d, %u, %u, %s, %d\n", socket_session->buf_count,
-							tcp_buf->seq, socket_session->next_seq, __FILE__, __LINE__);
+							socket_session->tcp_buf[i].seq,
+							socket_session->next_seq,
+							__FILE__, __LINE__);
 
-					socket_session->next_seq = tcp_buf->skb->len - ip_hdr(tcp_buf->skb)->ihl * 4 -
-				   	  							tcp_hdr(tcp_buf->skb)->doff * 4 + tcp_buf->seq;
-					dst_input(tcp_buf->skb);
+					tmp_seq = socket_session->tcp_buf[i].skb->len
+							- ip_hdr(socket_session->tcp_buf[i].skb)->ihl * 4
+							- tcp_hdr(socket_session->tcp_buf[i].skb)->doff * 4
+							+ socket_session->tcp_buf[i].seq;
 
-					list_del(&(tcp_buf->list));
-					kfree(tcp_buf);
+					if (tmp_seq > max_seq)
+					{
+						max_seq = tmp_seq;
+					}
 
+					dst_input(socket_session->tcp_buf[i].skb);
+
+					socket_session->tcp_buf[i].seq = 0;
+					socket_session->tcp_buf[i].skb = NULL;
 					socket_session->buf_count -= 1;
 				}
 
-				socket_session->next_seq = skb->len - ip_hdr(skb)->ihl * 4 - tcph->doff * 4 + ntohl(tcph->seq);
+				tmp_seq = skb->len - ip_hdr(skb)->ihl * 4 - tcph->doff * 4 + ntohl(tcph->seq);
+				if (tmp_seq > max_seq)
+				{
+					max_seq = tmp_seq;
+				}
 
 				dst_input(skb);
+
+				socket_session->next_seq = max_seq;
+
 				goto success;
 			}
 			else
 			{
-				item = kzalloc(sizeof(struct tcp_skb_buf),	GFP_ATOMIC);
-				if (!item)
-					goto fail;
+				for (i = 0; i < MPIP_TCP_BUF_LEN; ++i)
+				{
+					if (socket_session->tcp_buf[i].seq == 0)
+					{
+						socket_session->tcp_buf[i].seq = ntohl(tcph->seq);
+						socket_session->tcp_buf[i].skb = skb;
+						socket_session->buf_count += 1;
 
-				item->seq = ntohl(tcph->seq);
-				item->skb = skb;
-				item->fbjiffies = jiffies;
-				INIT_LIST_HEAD(&(item->list));
-				list_add(&(item->list), &(socket_session->tcp_buf));
-				socket_session->buf_count += 1;
+						printk("out of order: %d, %u, %u, %s, %d\n",
+								socket_session->buf_count,
+								ntohl(tcph->seq), socket_session->next_seq,
+								__FILE__, __LINE__);
 
-				printk("out of order: %d, %u, %u, %s, %d\n", socket_session->buf_count,
-						ntohl(tcph->seq), socket_session->next_seq,
-						__FILE__, __LINE__);
+						goto success;
+					}
+				}
 
-				goto success;
 			}
 		}
 	}
@@ -2558,12 +2596,6 @@ void reset_mpip(void)
 		{
 			list_del(&(path_bw->list));
 			kfree(path_bw);
-		}
-
-		list_for_each_entry_safe(tcp_buf, tmp_buf, &(socket_session->tcp_buf), list)
-		{
-			list_del(&(tcp_buf->list));
-			kfree(tcp_buf);
 		}
 
 		list_del(&(socket_session->list));
