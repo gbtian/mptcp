@@ -2117,6 +2117,14 @@ void add_mpip_log(unsigned char session_id)
 		list_add(&(item->list), &(path_info->mpip_log));
 		path_info->logcount += 1;
 
+		printk("%d,%d,%lu,%d,%d,%d,%d,%lu\n", session_id, path_info->path_id,
+												jiffies,
+												path_info->delay,
+												path_info->min_delay,
+												path_info->delay - path_info->min_delay,
+												path_info->queuing_delay,
+												path_info->tp);
+
 //		printk("%s, %d\n", __FILE__, __LINE__);
 	}
 
