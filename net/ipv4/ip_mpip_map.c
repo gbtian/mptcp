@@ -2094,6 +2094,9 @@ void add_mpip_log(unsigned char session_id)
 {
 	struct path_info_table *path_info;
 
+	static unsigned char s_s_id = 0;
+	static unsigned char s_p_id = 0;
+
 	if (session_id <= 0)
 		return;
 
@@ -2117,14 +2120,21 @@ void add_mpip_log(unsigned char session_id)
 		list_add(&(item->list), &(path_info->mpip_log));
 		path_info->logcount += 1;
 
-		printk("%d,%d,%lu,%d,%d,%d,%d,%lu\n", session_id, path_info->path_id,
+		if (s_s_id == 0)
+		{
+			s_s_id = session_id;
+			s_p_id = path_info->path_id;
+		}
+		if ((session_id == s_s_id) && (path_info->path_id == s_p_id))
+		{
+			printk("%d,%d,%lu,%d,%d,%d,%d,%lu\n", session_id, path_info->path_id,
 												jiffies,
 												path_info->delay,
 												path_info->min_delay,
 												path_info->delay - path_info->min_delay,
 												path_info->queuing_delay,
 												path_info->tp);
-
+		}
 //		printk("%s, %d\n", __FILE__, __LINE__);
 	}
 
