@@ -1568,8 +1568,8 @@ int add_to_tcp_skb_buf(struct sk_buff *skb, unsigned char session_id)
 			if ((ntohl(tcph->seq) < socket_session->next_seq) &&
 				(socket_session->next_seq) - ntohl(tcph->seq) < 0xFFFFFFF)
 			{
-				printk("late: %d %u, %u, %s, %d\n", socket_session->buf_count,
-						ntohl(tcph->seq), socket_session->next_seq, __FILE__, __LINE__);
+//				printk("late: %d %u, %u, %s, %d\n", socket_session->buf_count,
+//						ntohl(tcph->seq), socket_session->next_seq, __FILE__, __LINE__);
 				dst_input(skb);
 				goto success;
 			}
@@ -1596,10 +1596,10 @@ recursive:
 													- tcp_hdr(socket_session->tcp_buf[i].skb)->doff * 4
 													+ socket_session->tcp_buf[i].seq;
 
-							printk("push: %d, %u, %u, %s, %d\n", socket_session->buf_count,
-									socket_session->tcp_buf[i].seq,
-									socket_session->next_seq,
-									__FILE__, __LINE__);
+//							printk("push: %d, %u, %u, %s, %d\n", socket_session->buf_count,
+//									socket_session->tcp_buf[i].seq,
+//									socket_session->next_seq,
+//									__FILE__, __LINE__);
 
 							dst_input(socket_session->tcp_buf[i].skb);
 
@@ -1622,10 +1622,10 @@ recursive:
 			{
 				for (i = 0; i < MPIP_TCP_BUF_LEN; ++i)
 				{
-					printk("force push: %d, %u, %u, %s, %d\n", socket_session->buf_count,
-							socket_session->tcp_buf[i].seq,
-							socket_session->next_seq,
-							__FILE__, __LINE__);
+//					printk("force push: %d, %u, %u, %s, %d\n", socket_session->buf_count,
+//							socket_session->tcp_buf[i].seq,
+//							socket_session->next_seq,
+//							__FILE__, __LINE__);
 
 					tmp_seq = socket_session->tcp_buf[i].skb->len
 							- ip_hdr(socket_session->tcp_buf[i].skb)->ihl * 4
@@ -1666,10 +1666,10 @@ recursive:
 						socket_session->tcp_buf[i].skb = skb;
 						socket_session->buf_count += 1;
 
-						printk("out of order: %d, %u, %u, %s, %d\n",
-								socket_session->buf_count,
-								ntohl(tcph->seq), socket_session->next_seq,
-								__FILE__, __LINE__);
+//						printk("out of order: %d, %u, %u, %s, %d\n",
+//								socket_session->buf_count,
+//								ntohl(tcph->seq), socket_session->next_seq,
+//								__FILE__, __LINE__);
 
 						goto success;
 					}
