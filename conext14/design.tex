@@ -253,7 +253,8 @@ All heartbeat packets have a special flags value $MPIP_HB_FLAGS$ in the CM block
 
 Every time one node needs to send out packets, it chooses the most suitable path from Table~\ref{tb.pi}. Depends on the requirement of throughput and responsiveness, we have different considerations of the standard to choose the target path.
 
-\subsubsection{Throughput-based Path Selection}
+\subsubsection{Delay-based Path Selection}
+\label{sec:delay}
 In the current Internet, there are many high delay-bandwidth product connections. These connections generally have high delay and high bandwidth. For applications that want to achieve high throughput, we propose following mechanism to achieve the requirement.
 
 
@@ -316,7 +317,7 @@ In Algorithm~\ref{alg.bw}, $N$ is the number of paths that belongs to one specif
 Algorithm~\ref{alg.bw} is executed periodically, the length of of period is defined as a configurable system variable $T$. So here, we have two configurable parameters which are the granularity $S$ and the period $T$. There is a trade-off here. Larger $S$ and shorter $T$ can generate higher fluctuation but faster convergence while smaller $S$ and longer $T$ can result in slow convergence and lower fluctuation. In our system, according to the path weight range ($1~1000$), we set $S$ to $10$ and $T$ to $10$ milliseconds. In our evaluation, this configuration can converge fast with low fluctuation.
 
 \subsubsection{Customized Path Selection Framework}
-
+\label{sec:resp}
 In practice, maybe high throughput can represent most user requirements, but in some special use cases, responsiveness can be of the first priority. 
 
 A typical example is Skype calls. When we make a Skype call, beside audio calls, we can also have video calls by enabling the camera. For Skype, audio packets and video packets are transmitted independently. In most scenarios, with responsive audio quality, real-time video streaming can be a bonus. But large delay in audio streaming can be a nightmare for a Skype call. In this case, obviously, audio packets and video packets have different priorities. During our study of Skype packets, although video packets can also be small, audio packets generally have substantially shorter length comparing to video packet. This provides a chance to define specific rules for Skype audio packets.
@@ -335,15 +336,18 @@ In our prototype, we define a dedicate MPIP routing table as shown in Table~\ref
  IP   		&   Port      & Protocol      & Start  & End    & Routing       \\
  Address    &  Number     &               & Length & Length & Priority       \\
 \hline
-$*$&$23$&$TCP$&$0$&$200$&$0$   \\
+$*$&$23$&$TCP$&$0$&$200$&$RP_RESPONSE$   \\
 \hline
-$192.168.1.2$&$80$&$TCP$&$200$&$*$&$1$   \\
+$192.168.1.2$&$80$&$TCP$&$200$&$*$&$RP_THROUGHPUT$   \\
 \hline
-$192.168.1.3$&$5221$&$UDP$&$100$&$200$&$0$  \\
+$192.168.1.3$&$5221$&$UDP$&$100$&$200$&$RP_RESPONSE$  \\
 \hline
 \end{tabular}
 \end{table}
 
+When sending a packet, the system checks the destination IP address, port number, protocol and length of the target packet to get relative routing priority from Table~\ref{tb.route}. Different routing priority has different path selection policy. In our prototype, only two priorities are supported. $RP_THROUGHPUT$ means throughput is the first priority, the delay-based path selection algorithm in Section~\ref{sec:delay} will be used. When $RP_RESPONSE$ is assigned, it means responsiveness is the first priority; In this scenario, the path that has the lowest delay will be chosen to send out the packet.
+
+The same as regular routing table, the content of the MPIP routing table is configurable by users. In MPTCP, because all congestion control algorithms inherit from traditional TCP, it can't make the best of multipath. In MPIP, because we maintain the path in a customized pattern, it is more feasible to have application specific routing decision. As we mentioned above, we only provide a basic framework for customized routing in MPIP. It only has limited functionalities. It can only specify the application by port number. For some applications, like P2P software, they have arbitrary port numbers, we can't locate the specific application in this case. There can also be other scenarios that our prototype doesn't work. But based on this framework, a more powerful and smarter routing decision mechanism can be completed.
 
 %In Equation~\ref{eq.bw}, we update the path weight by progressive increasing to make the trend of path weight smooth. The increment consists of two parts. In the first part, we calculate the weight with the total network delay. For applications that prefer low delay to high throughput, assigning high priority to this part will be of much benefit. In the second part, we calculate the weight with queuing delay. This is beneficial for high bandwidth-delay product links according to \cite{mptcp}. By assigning high priority for this part, we can achieve high throughput. 
 %
