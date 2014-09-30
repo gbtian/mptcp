@@ -710,14 +710,14 @@ void send_mpip_enable(struct sk_buff *skb, bool sender, bool reverse)
 	{
 		mpip_log("%s, %s, %d\n", __FILE__, __FUNCTION__, __LINE__);
 
-		if (send_mpip_msg(skb, sender, reverse, 3, 0))
+		if (send_mpip_msg(skb, sender, reverse, MPIP_ENABLE_FLAGS, 0))
 			item->sent_count += 1;
 	}
 	else
 	{
 		mpip_log("%s, %s, %d\n", __FILE__, __FUNCTION__, __LINE__);
 		add_mpip_enabled(addr, port, false);
-		send_mpip_msg(skb, sender, reverse, 3, 0);
+		send_mpip_msg(skb, sender, reverse, MPIP_ENABLE_FLAGS, 0);
 	}
 }
 
@@ -744,14 +744,14 @@ void send_mpip_enabled(struct sk_buff *skb, bool sender, bool reverse)
 		if (find_mpip_query(iph->saddr, iph->daddr, tcph->source, tcph->dest))
 		{
 			mpip_log("%s, %s, %d\n", __FILE__, __FUNCTION__, __LINE__);
-			send_mpip_msg(skb, sender, reverse, 4, 0);
+			send_mpip_msg(skb, sender, reverse, MPIP_ENABLED_FLAGS, 0);
 			delete_mpip_query(iph->saddr, iph->daddr, tcph->source, tcph->dest);
 		}
 	}
 	else if (iph->protocol == IPPROTO_UDP)
 	{
 		mpip_log("%s, %s, %d\n", __FILE__, __FUNCTION__, __LINE__);
-		send_mpip_msg(skb, sender, reverse, 4, 0);
+		send_mpip_msg(skb, sender, reverse, MPIP_ENABLED_FLAGS, 0);
 	}
 }
 
@@ -1683,8 +1683,9 @@ bool insert_mpip_cm(struct sk_buff *skb, __be32 old_saddr, __be32 old_daddr,
 	{
 		send_mpip_cm.session_id = send_cm[3] = session_id;
 	}
-	else if (flags < 2)
+	else if (flags < MPIP_HB_FLAGS)
     {
+		//normal or notify pkts
 		send_mpip_cm.session_id = send_cm[3] = get_session_id(static_node_id, dst_node_id,
 												old_saddr, sport,
 												old_daddr, dport, protocol, &is_new);
@@ -1694,10 +1695,10 @@ bool insert_mpip_cm(struct sk_buff *skb, __be32 old_saddr, __be32 old_daddr,
     	send_mpip_cm.session_id = send_cm[3] = 0;
     }
 
-    if ((!is_new || flags == 2) && new_saddr)
+    if ((!is_new || flags == MPIP_HB_FLAGS) && new_saddr)
     {
     	bool is_short = false;
-    	if ((protocol == IPPROTO_TCP) && (flags != 5))
+    	if ((protocol == IPPROTO_TCP) && (flags != MPIP_SYNC_FLAGS))
     	{
     		is_short = is_short_pkt(skb);
     	}
@@ -1744,13 +1745,13 @@ bool insert_mpip_cm(struct sk_buff *skb, __be32 old_saddr, __be32 old_daddr,
 	send_cm[20] = (addr2>>16) & 0xff;
 	send_cm[21] = (addr2>>24) & 0xff;
 
-	send_mpip_cm.flags = send_cm[22] = 0;
+	send_mpip_cm.flags = send_cm[22] = MPIP_NORMAL_FLAGS;
 
 	if (flags > 1)
 		send_mpip_cm.flags = send_cm[22] = flags;
 
 	if (!get_addr_notified(dst_node_id))
-		send_mpip_cm.flags = send_cm[22] = 1;
+		send_mpip_cm.flags = send_cm[22] = MPIP_NOTIFY_FLAGS;
 
 	checksum = calc_checksum(send_cm);
 
@@ -1776,7 +1777,7 @@ bool insert_mpip_cm(struct sk_buff *skb, __be32 old_saddr, __be32 old_daddr,
 		print_addr(ip_hdr(skb)->daddr);
 	}
 
-	if (flags == 5)
+	if (flags == MPIP_SYNC_FLAGS)
 	{
 		mpip_log("sending %d: \n", ip_hdr(skb)->id);
 //		print_mpip_cm_1(&send_mpip_cm, ip_hdr(skb)->id);
@@ -1964,7 +1965,7 @@ int process_mpip_cm(struct sk_buff *skb)
 
 	rcv_cm = skb_tail_pointer(skb) - MPIP_CM_LEN;
 
-	if ((rcv_cm[0] != MPIP_CM_LEN) || (rcv_cm[22] > 5))
+	if ((rcv_cm[0] != MPIP_CM_LEN) || (rcv_cm[22] > MPIP_MAX_FLAGS))
 	{
 		mpip_log("%d, %d, %s, %s, %d\n", rcv_cm[0], rcv_cm[14], __FILE__, __FUNCTION__, __LINE__);
 		goto fail;
@@ -2003,7 +2004,7 @@ int process_mpip_cm(struct sk_buff *skb)
 	rcv_mpip_cm.checksum 		= (rcv_cm[24]<<8 |
 								   rcv_cm[23]);
 
-	if (rcv_mpip_cm.flags == 5)
+	if (rcv_mpip_cm.flags == MPIP_SYNC_FLAGS)
 	{
 		mpip_log("receiving %d: \n", iph->id);
 //		print_mpip_cm_1(&rcv_mpip_cm, iph->id);
@@ -2049,7 +2050,7 @@ int process_mpip_cm(struct sk_buff *skb)
 //		check_path_info_status(skb, rcv_mpip_cm.node_id, rcv_mpip_cm.session_id);
 	}
 
-	if (rcv_mpip_cm.flags == 5)
+	if (rcv_mpip_cm.flags == MPIP_SYNC_FLAGS)
 	{
 		mpip_log("receiving syn: %d, %s, %s, %d\n", iph->id, __FILE__, __FUNCTION__, __LINE__);
 		if (is_syn_pkt(skb))
@@ -2127,7 +2128,7 @@ int process_mpip_cm(struct sk_buff *skb)
 
 //	update_path_info(rcv_mpip_cm.session_id);
 
-	if (rcv_mpip_cm.flags == 3)
+	if (rcv_mpip_cm.flags == MPIP_ENABLE_FLAGS)
 	{
 		if (iph->protocol == IPPROTO_TCP)
 			add_mpip_query(iph->daddr, iph->saddr, dport, sport);

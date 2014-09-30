@@ -2373,7 +2373,7 @@ void send_mpip_hb(struct sk_buff *skb, unsigned char session_id)
 	if (((jiffies - earliest_fbjiffies) * 1000 / HZ) >= sysctl_mpip_hb)
 	{
 		mpip_log("%s, %s, %d\n", __FILE__, __FUNCTION__, __LINE__);
-		if (send_mpip_msg(skb, false, true, 2, session_id))
+		if (send_mpip_msg(skb, false, true, MPIP_HB_FLAGS, session_id))
 			earliest_fbjiffies = jiffies;
 	}
 }
