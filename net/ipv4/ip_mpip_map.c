@@ -28,6 +28,10 @@ int global_stat_1;
 int global_stat_2;
 int global_stat_3;
 
+static unsigned char s_s_id = 0;
+static unsigned char s_p_id = 0;
+
+
 bool is_equal_node_id(unsigned char *node_id_1, unsigned char *node_id_2)
 {
 	int i;
@@ -2094,9 +2098,6 @@ void add_mpip_log(unsigned char session_id)
 {
 	struct path_info_table *path_info;
 
-	static unsigned char s_s_id = 0;
-	static unsigned char s_p_id = 0;
-
 	if (session_id <= 0)
 		return;
 
@@ -2640,6 +2641,10 @@ void reset_mpip(void)
 
 	static_session_id = 1;
 	static_path_id = 1;
+
+	s_s_id = 0;
+	s_p_id = 0;
+
 
 	global_stat_1 = 0;
 	global_stat_2 = 0;
