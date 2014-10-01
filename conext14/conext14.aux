@@ -26,9 +26,9 @@
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {3.4.2}UDP wrapper}{\thepage }}
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.5}Path Management}{\thepage }}
 \newlabel{sec:path}{{3.5}{\thepage }}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.6}Feedback Loop}{\thepage }}
 \@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces Node ID vs IP address and Port\relax }}{\thepage }}
 \newlabel{tb.wi}{{4}{\thepage }}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.6}Feedback Loop}{\thepage }}
 \@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces Path Feedback information\relax }}{\thepage }}
 \newlabel{tb.ps}{{5}{\thepage }}
 \@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Path information\relax }}{\thepage }}
@@ -36,20 +36,22 @@
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.7}Periodical Heartbeat}{\thepage }}
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.8}Path Selection}{\thepage }}
 \newlabel{sec:selection}{{3.8}{\thepage }}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.8.1}Throughput-based Path Selection}{\thepage }}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.8.1}Delay-based Path Selection}{\thepage }}
+\newlabel{sec:delay}{{3.8.1}{\thepage }}
 \newlabel{eq.choose}{{1}{\thepage }}
 \@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Network delay trend as throughput increases\relax }}{\thepage }}
 \newlabel{fig.delay}{{3}{\thepage }}
 \@writefile{loa}{\contentsline {algorithm}{\numberline {1}{\ignorespaces Path Weight Incremental Adjustment.\relax }}{\thepage }}
 \newlabel{alg.bw}{{1}{\thepage }}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {3.8.2}Customized Path Selection Framework}{\thepage }}
-\@writefile{lot}{\contentsline {table}{\numberline {6}{\ignorespaces MPIP routing table\relax }}{\thepage }}
-\newlabel{tb.route}{{6}{\thepage }}
+\newlabel{sec:resp}{{3.8.2}{\thepage }}
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.9}Session Management}{\thepage }}
 \newlabel{sec:session}{{3.9}{\thepage }}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.9.1}Addition/Removal of Sessions}{\thepage }}
+\@writefile{lot}{\contentsline {table}{\numberline {6}{\ignorespaces MPIP routing table\relax }}{\thepage }}
+\newlabel{tb.route}{{6}{\thepage }}
 \@writefile{lot}{\contentsline {table}{\numberline {7}{\ignorespaces Session Information\relax }}{\thepage }}
 \newlabel{tb.ss}{{7}{\thepage }}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.9.1}Addition/Removal of Sessions}{\thepage }}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {3.9.2}Workflow of Sending/Receiving Packets}{\thepage }}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {3.9.3}Dealing with out of order TCP traffic}{\thepage }}
 \citation{simon01}
@@ -64,6 +66,17 @@
 \newlabel{sec:tcp}{{4.1}{\thepage }}
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Skype voice call improvement}{\thepage }}
 \newlabel{sec:skype}{{4.2}{\thepage }}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}Smooth connection switch}{\thepage }}
+\newlabel{sec:switch}{{4.3}{\thepage }}
+\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces Skype Audio Streaming Routing Adaptation\relax }}{\thepage }}
+\newlabel{fig.skype}{{8}{\thepage }}
+\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces Connection Smooth Switch\relax }}{\thepage }}
+\newlabel{fig.switch}{{9}{\thepage }}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.4}Combination of MPIP and MPTCP}{\thepage }}
+\newlabel{sec:mpip_mptcp}{{4.4}{\thepage }}
+\bibstyle{./bib/IEEEtran}
+\bibdata{./bib/IEEEfull}
+\bibcite{mptcp}{1}
 \newlabel{fig.tcp_usetcp_nonat}{{5(a)}{\thepage }}
 \newlabel{sub@fig.tcp_usetcp_nonat}{{(a)}{\thepage }}
 \newlabel{fig.tcp_useudp_nonat}{{5(b)}{\thepage }}
@@ -86,10 +99,13 @@
 \@writefile{lof}{\contentsline {subfigure}{\numberline{(a)}{\ignorespaces {TCP throughput with psudo TCP connection}}}{\thepage }}
 \@writefile{lof}{\contentsline {subfigure}{\numberline{(b)}{\ignorespaces {TCP throughput with UDP Wrapper}}}{\thepage }}
 \@writefile{lof}{\contentsline {subfigure}{\numberline{(c)}{\ignorespaces {UDP throughput}}}{\thepage }}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}Smooth connection switch}{\thepage }}
-\newlabel{sec:switch}{{4.3}{\thepage }}
-\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces Skype Audio Streaming Routing Adaptation\relax }}{\thepage }}
-\newlabel{fig.skype}{{8}{\thepage }}
+\@writefile{lot}{\contentsline {table}{\numberline {8}{\ignorespaces MPIP, MPTCP, MPIP and MPTCP\relax }}{\thepage }}
+\newlabel{tb.stat}{{8}{\thepage }}
+\@writefile{toc}{\contentsline {section}{\numberline {5}Conclusions and Future Work}{\thepage }}
+\newlabel{sec:conclusion}{{5}{\thepage }}
+\@writefile{toc}{\contentsline {section}{\numberline {6}References}{\thepage }}
+\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces Performance of MPIP, MPTCP and Combination\relax }}{\thepage }}
+\newlabel{fig.mpip_mptcp}{{10}{\thepage }}
 \newlabel{fig.tcp_usetcp_net}{{7(a)}{\thepage }}
 \newlabel{sub@fig.tcp_usetcp_net}{{(a)}{\thepage }}
 \newlabel{fig.tcp_useudp_net}{{7(b)}{\thepage }}
@@ -101,17 +117,3 @@
 \@writefile{lof}{\contentsline {subfigure}{\numberline{(a)}{\ignorespaces {TCP throughput with psudo TCP connection}}}{\thepage }}
 \@writefile{lof}{\contentsline {subfigure}{\numberline{(b)}{\ignorespaces {TCP throughput with UDP Wrapper}}}{\thepage }}
 \@writefile{lof}{\contentsline {subfigure}{\numberline{(c)}{\ignorespaces {UDP throughput}}}{\thepage }}
-\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces Connection Smooth Switch\relax }}{\thepage }}
-\newlabel{fig.switch}{{9}{\thepage }}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.4}Combination of MPIP and MPTCP}{\thepage }}
-\newlabel{sec:mpip_mptcp}{{4.4}{\thepage }}
-\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces Performance of MPIP, MPTCP and Combination\relax }}{\thepage }}
-\newlabel{fig.mpip_mptcp}{{10}{\thepage }}
-\@writefile{lot}{\contentsline {table}{\numberline {8}{\ignorespaces MPIP, MPTCP, MPIP and MPTCP\relax }}{\thepage }}
-\newlabel{tb.stat}{{8}{\thepage }}
-\bibstyle{./bib/IEEEtran}
-\bibdata{./bib/IEEEfull}
-\bibcite{mptcp}{1}
-\@writefile{toc}{\contentsline {section}{\numberline {5}Conclusions and Future Work}{\thepage }}
-\newlabel{sec:conclusion}{{5}{\thepage }}
-\@writefile{toc}{\contentsline {section}{\numberline {6}References}{\thepage }}
