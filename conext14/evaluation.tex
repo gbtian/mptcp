@@ -1,115 +1,99 @@
 %!TEX root =conext14.tex
 \section{Performance Evaluation}
 \label{sec:evaluation}
-To evaluate the performance of our proposed system, we implemented our multipath IP in Ubuntu under Linux kernel $3.12.1$. Two desktops are installed with the MPIP enabled Ubuntu system. At each desktop, two NICs working at $25$Mbits/sec are installed which means that there are totally $4$ paths and the throughput upper bound is $50$Mbits/sec between the two nodes. We modify an open source software \bf{Simple Traffic Monitor}\cite{simon01} to record the real time traffic that goes through each NIC.
+
+To evaluate the performance of our proposed system, we implemented our multipath IP in Ubuntu under Linux kernel $3.12.1$ and install the prototype on two desktops. Both desktops are connected directly to one router without any middlebox. At each desktop, two NICs working with $100Mbps$ capacity are installed which means that there are totally $4$ paths and the throughput upper bound is $200MBps$ between the two nodes. Also, to evaluate our prototype under multiple scenarios, for some experiments, we limit the capacity of one NIC card on the client to $30Mbps$ with built-in netem feature in Ubuntu. Also, we replace one NIC card on the client with a wireless NIC to evaluate our system for wireless environment.
+
+Besides the controlled lab experiments, we also evaluate MPIP on the Internet. We connect the client to a customized node in Emulab. According to our test, the capacity between our client in the lab and the server in Emulab is about $5Mbps$, so we limit the bandwidth of both NICs on the client to be $2Mbps$. Because there is only one NIC that connects to Internet on the Emulab card, there are only $2$ paths in this case.
+
+In all experiments, we try to keep the configuration of each node unchanged after installation. We don't any special configuration to the default TCP congestion control algorithm, neither we do any optimization to TCP parameters to squeeze out all possible throughput. Beside enabling MPIP feature at he kernel source tree, to make MPIP feasible, we need to configure IP routing rules to route incoming packets to a proper NIC as in MPTCP.
+
+Except specific experiments that can only be applied to MPIP like UDP experiment and customization MPIP routing, we try to do side-by-side comparison with MPTCP for TCP connections. We will figure out how these two features work independently and together as stated in Section~\ref{sec:together};
+
+For all throughput related experiments, we used iperf3 to transmit packets from the client to the server.
+
+%We modify an open source software \bf{Simple Traffic Monitor}\cite{simon01} to record the real time traffic that goes through each NIC.
 
 %For mobile devices, we implement this feature in Google Nexus $4$ with Android $4.01$.
 
 \subsection{TCP/UDP throughput enhancement}
 \label{sec:tcp}
 
-In this section, we try to verify that our system can achieve high throughput in both TCP and UDP scenarios. As a typical implementation of multipath, MPTCP creates the highest TCP throughput record between two nodes in \cite{record}. In that demonstration, they used $6$ $1$Gbps NIC interfaces at each node, and connect them directly without only middle boxes, and they limited the number of paths to $6$ by setting up IP TABLES in Ubuntu. Also, they did bunch of TCP parameter optimization to squeeze out all possible throughout. They achieved a breathtaking $51$Gbps throughput in that demonstration. 
+In this section, we try to verify that our system can achieve high throughput in both TCP and UDP scenarios. 
 
-We don't have the same configuration of the record-breaking plat of MPTCP, but we use the same typical configuration for all scenarios to do side-by-side configuration. We try to verify that our implementation can achieve the same throughput improvement as MPTCP for TCP traffic, and also our system can have the same enhancement for UDP traffic. 
+In Figure~\ref{fig.nonat},
 
-In our experiment setup, we have two PCs while each PC has two NIC cards, every NIC card works at 100Mbps. With these four NIC cards, we have different configurations to verify our system. For each configuration, we do side-by-side comparision among regular connection, MPTCP(For TCP), and MPIP connection. We use iperf to transmit traffic for five minutes, and we customized iperf to record real-time throughput of each second.
-
-In Figure~\ref{fig.nonat}, we connect the two machine to the same router which means there are no NAT devices on all the paths.
-
-\begin{figure*}[htb]
+\begin{figure}[htb]
 \centering{
-\subfigure[TCP throughput with psudo TCP connection\label{fig.tcp_usetcp_nonat}]{\includegraphics[width=0.33\linewidth]{fig/tcp_usetcp_nonat.eps}}
-\subfigure[TCP throughput with UDP Wrapper\label{fig.tcp_useudp_nonat}]{\includegraphics[width=0.33\linewidth]{fig/tcp_useudp_nonat.eps}}
-\subfigure[UDP throughput\label{fig.udp_nonat}]{\includegraphics[width=0.33\linewidth]{fig/udp_nonat.eps}}
+\subfigure[TCP throughput with psudo TCP connection\label{fig.tcp_usetcp_nonat}]{\includegraphics[width=0.49\linewidth]{fig/tcp_usetcp_nonat.eps}}
+\subfigure[TCP throughput with UDP Wrapper\label{fig.tcp_useudp_nonat}]{\includegraphics[width=0.49\linewidth]{fig/tcp_useudp_nonat.eps}}
 }
-\caption{Side-by-side comparison without NAT}
+\caption{Side-by-side comparison between different MPIP TCP implementations }
 \label{fig.nonat}
-\end{figure*}
-
-Also, we set up a NAT network with two routers as shown in Figure~\ref{fig.nat}. Because our router only has 100Mbps capacity while each NIC has 100Mbps, this means that our router can't fit all capacity of the NIC cards. To avoid this problem, we limit the bandwidth of our NIC cards to be 5Mbps with WonderShaper. Then the total capacity of our connection is 10Mbps. Figure~\ref{fig.nat} shows the result for this configuration.
-
-\begin{figure*}[htb]
-\centering{
-\subfigure[TCP throughput with psudo TCP connection\label{fig.tcp_usetcp_nat}]{\includegraphics[width=0.33\linewidth]{fig/tcp_usetcp_nat.eps}}
-\subfigure[TCP throughput with UDP Wrapper\label{fig.tcp_useudp_nat}]{\includegraphics[width=0.33\linewidth]{fig/tcp_useudp_nat.eps}}
-\subfigure[UDP throughput\label{fig.udp_nat}]{\includegraphics[width=0.33\linewidth]{fig/udp_nat.eps}}
-}
-\caption{Side-by-side comparison with a simple NAT}
-\label{fig.nat}
-\end{figure*}
+\end{figure}
 
 
-In Figure~\ref{fig.net}, we set up our server in Emulab to verify our system in Internet. Because the server in Emulab only has one public IP address which means our connection only has two paths. We do evaluation for both TCP and UDP. We can see that there is not throughput increase at all because the bottleneck is on the path of the connection. To improve throughput, we need another path that can avoid the bottleneck, like a $4$G path. Instead of increasing throughput, according to our evaluation, our MPIP implementation can perform as good as regular connection. And in TCP scenario, we reduce throughput fluctuations which happens a lot in regular TCP and MPTCP by using MPIP.
+MPIP TCP uses fake TCP connection for all experiments below.
 
 \begin{figure*}[htb]
 \centering{
-\subfigure[TCP throughput with psudo TCP connection\label{fig.tcp_usetcp_net}]{\includegraphics[width=0.33\linewidth]{fig/tcp_usetcp_net.eps}}
-\subfigure[TCP throughput with UDP Wrapper\label{fig.tcp_useudp_net}]{\includegraphics[width=0.33\linewidth]{fig/tcp_useudp_net.eps}}
-\subfigure[UDP throughput\label{fig.udp_net}]{\includegraphics[width=0.33\linewidth]{fig/udp_net.eps}}
+\subfigure[Throughput among MPIP, MPTCP and Together for no limit\label{fig.no_limitc}]{\includegraphics[width=0.24\linewidth]{fig/no_limit.eps}}
+\subfigure[Delay among different paths for no limit\label{fig.delay_comp_no_limit}]{\includegraphics[width=0.24\linewidth]{fig/delay_comp_no_limit.eps}}
+\subfigure[Queuing Delay among different paths for no limit\label{fig.queuing_delay_comp_no_limit}]{\includegraphics[width=0.24\linewidth]{fig/queuing_delay_comp_no_limit.eps}}
+\subfigure[Throughput among different paths for no limit\label{fig.tp_comp_no_limit}]{\includegraphics[width=0.24\linewidth]{fig/tp_comp_no_limit.eps}}
 }
-\caption{Side-by-side comparison in Internet}
-\label{fig.net}
+\caption{Side-by-side comparison for no limit}
+\label{fig.no_limit}
 \end{figure*}
+
+
+\begin{figure*}[htb]
+\centering{
+\subfigure[Throughput among MPIP, MPTCP and Together for limit\label{fig.limitc}]{\includegraphics[width=0.24\linewidth]{fig/limit.eps}}
+\subfigure[Delay among different paths for limit\label{fig.delay_comp_limit}]{\includegraphics[width=0.24\linewidth]{fig/delay_comp_limit.eps}}
+\subfigure[Queuing Delay among different paths for limit\label{fig.queuing_delay_comp_limit}]{\includegraphics[width=0.24\linewidth]{fig/queuing_delay_comp_limit.eps}}
+\subfigure[Throughput among different paths for limit\label{fig.tp_comp_limit}]{\includegraphics[width=0.24\linewidth]{fig/tp_comp_limit.eps}}
+}
+\caption{Side-by-side comparison for limit}
+\label{fig.limit}
+\end{figure*}
+
+
+\begin{figure*}[htb]
+\centering{
+\subfigure[Throughput among MPIP, MPTCP and Together for wireless\label{fig.wirelessc}]{\includegraphics[width=0.24\linewidth]{fig/wireless.eps}}
+\subfigure[Delay among different paths for wireless\label{fig.delay_comp_wireless}]{\includegraphics[width=0.24\linewidth]{fig/delay_comp_wireless.eps}}
+\subfigure[Queuing Delay among different paths for wireless\label{fig.queuing_delay_comp_wireless}]{\includegraphics[width=0.24\linewidth]{fig/queuing_delay_comp_wireless.eps}}
+\subfigure[Throughput among different paths for wireless\label{fig.tp_comp_wireless}]{\includegraphics[width=0.24\linewidth]{fig/tp_comp_wireless.eps}}
+}
+\caption{Side-by-side comparison for wireless }
+\label{fig.wireless}
+\end{figure*}
+
+
+\begin{figure*}[htb]
+\centering{
+\subfigure[out-of-order process\label{fig.outoforder}]{\includegraphics[width=0.33\linewidth]{fig/reorder.eps}}
+\subfigure[Skype Audio Streaming Routing Adaptation\label{fig.skype}]{\includegraphics[width=0.33\linewidth]{fig/skype.eps}}
+\subfigure[Connection Smooth Switch\label{fig.switch}]{\includegraphics[width=0.33\linewidth]{fig/switch.eps}}
+}
+\end{figure*}
+
+
+\subsection{Out-of-order evaluation for TCP}
+\label{sec:reoder}
+
+To evaluation the effect of out-of-order process in our prototype, we design following experiment. We replace one NIC with wireless NIC, then there will still be $4$ paths. For all the paths, we assign the same path weight which means that every path is assigned the same amount of packets. In this scenario, $50\%$ percent of packets will be sent throughput the wireless NIC. The difference between propagation delay of the wireless path and wired path is large enough to generate a substantial number of out-of-order packets. By enabling and disabling out-of-order functionality, we get Figure~\ref{fig.outoforder}.
 
 
 \subsection{Skype voice call improvement}
 \label{sec:skype}
 
+In Section~\ref{sec:resp}, we mentioned that 
 In Figure~\ref{fig.skype}, we prove that our packet-size based routing decision works perfectly for audio application like Skype. In our experiment, we change the delay of NIC cards using the netem package in Ubuntu. On one side of the Skype call, we have two NIC cards as stated above. We ran the experiment for $360$ seconds with $3$ sections. In the first $120$ seconds, there is no manually added delay on each NIC card, we add additional $120ms$ delay to the first NIC card in the following $120$ seconds, finally for the last $120$ seconds, we add $120ms$ delay to the second NIC card. We did our Skype audio experiment without video content while most packets on the connection are audio packets except some control packets.The size of Audio packets is relative small, generally under $200$KB. In this case, according to Equation~\ref{eq.bw} to Equation~\ref{eq.c}, the routing decision will mostly depend on the delay value instead of queuing delay. Figure~\ref{fig.skype} shows the packets routing adaptation as the delay value changes. By this adaptation, we can make sure that the audio streaming will always choose the path that has lower delay to keep the best user experience even other paths have the same throughput.
-
-\begin{figure}
-\centering
-\includegraphics[width=1\linewidth]{fig/skype.eps}
-\caption{Skype Audio Streaming Routing Adaptation}
-\label{fig.skype}
-\end{figure}
 
 
 \subsection{Smooth connection switch}
 \label{sec:switch}
 
 In Figure~\ref{fig.switch}, we verify that smooth switch between different NIC cards works perfectly over our MPIP implementation by doing an IPERF TCP experiment. We do a side-by-side comparison between MPIP and MPTCP. We also divide the experiment into $3$ sections with $120$ seconds for each section. On the client side of the connection, there are two NIC cards. In the first $120$ seconds, both NIC cards work synchronously, then we disable one of them for $120$ seconds, and during the last $120$ seconds, we enable back the NIC card. The result shows that our MPIP system can follow this on/off process perfectly with stable throughput. For MPTCP, as shown in previous experiments, MPTCP has higher fluctuation than MPIP even MPTCP can achieve higher throughput than MPIP. This happens because in MPTCP, there are more than one TCP connections ($4$ in this experiment), and each connection has its own congestion window. Although congestion control in MPTCP is coupled among different connections, fluctuation have more chances to happen with $4$ relatively independent congestion windows. But in MPIP, one one TCP connection is constructed for each session which means that there is only one congestion windows. In this case, the throughput is more consistent than that of MPTCP.
-
-\begin{figure}
-\centering
-\includegraphics[width=1\linewidth]{fig/switch.eps}
-\caption{Connection Smooth Switch}
-\label{fig.switch}
-\end{figure}
-
-
-\subsection{Combination of MPIP and MPTCP}
-\label{sec:mpip_mptcp}
-
-MPTCP is implemented at Transportation Layer while MPIP is implemented at Network Layer. Both implementations try to be totally independent with other layers. Under this precondition, it is possible to combine MPTCP and MPIP together to see how the system performs. Based on the implementation of MPTCP V$0.88$, we merged our MPIP implementation to the source of MPTCP, and enable both MPTCP and MPIP.
-
-In Figure~\ref{fig.mpip_mptcp}, we did an experiment of $20$ minutes to see how MPTCP, MPIP and combination of MPTCP and MPIP perform under the same network condition. As we can see, MPTCP can achieve much higher throughput than MPIP, but it doesn't stay there for long. The throughput fluctuates a lot through the whole experiment. On the other hand, when MPIP is applied, both MPIP alone and the combination of MPIP and MPTCP, consistent throughput can be achieved. Actually, MPIP alone has the best smoothness, but the combination also has huge improvement of consistency. The variance of each case can exactly reflect the difference. Table~\ref{tb.stat} shows the overall statistic result.
-
-\begin{figure}
-\centering
-\includegraphics[width=1\linewidth]{fig/mpip_mptcp.eps}
-\caption{Performance of MPIP, MPTCP and Combination}
-\label{fig.mpip_mptcp}
-\end{figure}
-
-\begin{table}[htbp]
-\caption{\label{tb.stat}MPIP, MPTCP, MPIP and MPTCP}
-\centering
-\begin{tabular}{|c|c|c|c|}
-\hline
- & MPIP & MPTCP & MPIP and MPTCP\\
-\hline
-Variance (${10}^{12}$) & 2.65 & 417.08 & 14.46 \\
-\hline
-Average &&&\\
-Throughput(Mbps) & 156.3 & 150.6 & 137.4  \\
-\hline
-\end{tabular}
-\end{table}
-
-%
-%\subsection{Datacenter use case}
-%\label{sec:datacenter}
-%
-%\subsection{Seamless handover with dynamic networks}
-%\label{sec:handover}
