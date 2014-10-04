@@ -31,7 +31,7 @@
 
 #define MPIP_CM_LEN 25
 #define MPIP_CM_NODE_ID_LEN 2
-#define MPIP_TCP_BUF_LEN 10
+#define MPIP_TCP_BUF_MAX_LEN 50
 
 #define MPIP_NORMAL_FLAGS 0
 #define MPIP_NOTIFY_FLAGS 1
@@ -213,9 +213,10 @@ struct socket_session_table
 	unsigned char   	session_id; /* sender's session id*/
 
 //	struct list_head 	tcp_buf;
-	struct tcp_skb_buf  tcp_buf[MPIP_TCP_BUF_LEN];
+	struct tcp_skb_buf  tcp_buf[MPIP_TCP_BUF_MAX_LEN];
 	__u32				next_seq;
 	int 				buf_count;
+	int 				max_buf_count;
 	unsigned int 		protocol;
 
 	/* socket information seen at the receiver side*/
