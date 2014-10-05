@@ -1298,7 +1298,7 @@ void add_sender_session(unsigned char *src_node_id, unsigned char *dst_node_id,
 
 	item->next_seq = 0;
 	item->buf_count = 0;
-	item->max_buf_count = 10;
+	item->max_buf_count = 5;
 	item->protocol = protocol;
 	item->saddr = saddr;
 	item->sport = sport;
@@ -1395,7 +1395,7 @@ struct socket_session_table *get_receiver_session(unsigned char *src_node_id, un
 	}
 	item->next_seq = 0;
 	item->buf_count = 0;
-	item->max_buf_count = 10;
+	item->max_buf_count = 5;
 	item->protocol = protocol;
 	item->saddr = saddr;
 	item->sport = sport;
@@ -1587,8 +1587,8 @@ int add_to_tcp_skb_buf(struct sk_buff *skb, unsigned char session_id)
 				socket_session->next_seq = skb->len - ip_hdr(skb)->ihl * 4 - tcph->doff * 4 + ntohl(tcph->seq);
 				dst_input(skb);
 
-				bool come = false;
-				int come_buf_count = socket_session->buf_count;
+//				bool come = false;
+//				int come_buf_count = socket_session->buf_count;
 recursive:
 				if (socket_session->buf_count > 0)
 				{
@@ -1616,7 +1616,7 @@ recursive:
 
 							socket_session->buf_count -= 1;
 
-							come = true;
+//							come = true;
 
 							goto recursive;
 
@@ -1624,24 +1624,24 @@ recursive:
 					}
 				}
 
-				if (come)
-				{
-					socket_session->max_buf_count = (9 * socket_session->max_buf_count + come_buf_count) / 10;
-					if (socket_session->max_buf_count > MPIP_TCP_BUF_MAX_LEN)
-						socket_session->max_buf_count = MPIP_TCP_BUF_MAX_LEN;
-
-					if (socket_session->max_buf_count < MPIP_TCP_BUF_MIN_LEN)
-						socket_session->max_buf_count = MPIP_TCP_BUF_MIN_LEN;
-
-					mpip_log("change max_buf_count: %d, %d, %s, %d\n", socket_session->max_buf_count,
-							come_buf_count,
-							__FILE__, __LINE__);
-				}
+//				if (come)
+//				{
+//					socket_session->max_buf_count = (9 * socket_session->max_buf_count + come_buf_count) / 10;
+//					if (socket_session->max_buf_count > MPIP_TCP_BUF_MAX_LEN)
+//						socket_session->max_buf_count = MPIP_TCP_BUF_MAX_LEN;
+//
+//					if (socket_session->max_buf_count < MPIP_TCP_BUF_MIN_LEN)
+//						socket_session->max_buf_count = MPIP_TCP_BUF_MIN_LEN;
+//
+//					mpip_log("change max_buf_count: %d, %d, %s, %d\n", socket_session->max_buf_count,
+//							come_buf_count,
+//							__FILE__, __LINE__);
+//				}
 				goto success;
 			}
 
 			int count = socket_session->buf_count;
-			if (count >= socket_session->max_buf_count)
+			if (count == MPIP_TCP_BUF_MAX_LEN)
 			{
 				for (i = 0; i < MPIP_TCP_BUF_MAX_LEN; ++i)
 				{
