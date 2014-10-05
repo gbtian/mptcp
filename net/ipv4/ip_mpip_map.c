@@ -1630,6 +1630,9 @@ recursive:
 					if (socket_session->max_buf_count > MPIP_TCP_BUF_MAX_LEN)
 						socket_session->max_buf_count = MPIP_TCP_BUF_MAX_LEN;
 
+					if (socket_session->max_buf_count < MPIP_TCP_BUF_MIN_LEN)
+						socket_session->max_buf_count = MPIP_TCP_BUF_MIN_LEN;
+
 					printk("change max_buf_count: %d, %s, %d\n", socket_session->max_buf_count,
 							__FILE__, __LINE__);
 				}
@@ -1688,7 +1691,7 @@ recursive:
 						socket_session->tcp_buf[i].skb = skb;
 						socket_session->buf_count += 1;
 
-						mpip_log("out of order: %d, %u, %u, %s, %d\n",
+						printk("out of order: %d, %u, %u, %s, %d\n",
 								socket_session->buf_count,
 								ntohl(tcph->seq), socket_session->next_seq,
 								__FILE__, __LINE__);

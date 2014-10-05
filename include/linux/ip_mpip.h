@@ -31,6 +31,7 @@
 
 #define MPIP_CM_LEN 25
 #define MPIP_CM_NODE_ID_LEN 2
+#define MPIP_TCP_BUF_MIN_LEN 5
 #define MPIP_TCP_BUF_MAX_LEN 50
 
 #define MPIP_NORMAL_FLAGS 0
