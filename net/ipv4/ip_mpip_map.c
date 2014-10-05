@@ -2782,6 +2782,7 @@ asmlinkage long sys_mpip(void)
 //
 //		printk("%lu  ", socket_session->tphighest);
 
+		printk("%d  ", socket_session->max_buf_count);
 		printk("%d\n", socket_session->protocol);
 
 //		list_for_each_entry(path_bw, &(socket_session->path_bw_list), list)
