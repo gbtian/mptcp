@@ -1572,7 +1572,7 @@ int add_to_tcp_skb_buf(struct sk_buff *skb, unsigned char session_id)
 			if ((ntohl(tcph->seq) < socket_session->next_seq) &&
 				(socket_session->next_seq) - ntohl(tcph->seq) < 0xFFFFFFF)
 			{
-				mpip_log("late: %d %u, %u, %s, %d\n", socket_session->buf_count,
+				printk("late: %d %u, %u, %s, %d\n", socket_session->buf_count,
 						ntohl(tcph->seq), socket_session->next_seq, __FILE__, __LINE__);
 				dst_input(skb);
 				goto success;
@@ -1582,7 +1582,7 @@ int add_to_tcp_skb_buf(struct sk_buff *skb, unsigned char session_id)
 				(ntohl(tcph->seq) == socket_session->next_seq) ||
 				(ntohl(tcph->seq) == socket_session->next_seq + 1)) //for three-way handshake
 			{
-				mpip_log("send: %d, %u, %u, %s, %d\n", socket_session->buf_count,
+				printk("send: %d, %u, %u, %s, %d\n", socket_session->buf_count,
 						ntohl(tcph->seq), socket_session->next_seq, __FILE__, __LINE__);
 				socket_session->next_seq = skb->len - ip_hdr(skb)->ihl * 4 - tcph->doff * 4 + ntohl(tcph->seq);
 				dst_input(skb);
@@ -1604,7 +1604,7 @@ recursive:
 													- tcp_hdr(socket_session->tcp_buf[i].skb)->doff * 4
 													+ socket_session->tcp_buf[i].seq;
 
-							mpip_log("push: %d, %u, %u, %s, %d\n", socket_session->buf_count,
+							printk("push: %d, %u, %u, %s, %d\n", socket_session->buf_count,
 									socket_session->tcp_buf[i].seq,
 									socket_session->next_seq,
 									__FILE__, __LINE__);
@@ -1629,22 +1629,25 @@ recursive:
 					socket_session->max_buf_count = (9 * socket_session->max_buf_count + come_buf_count) / 10;
 					if (socket_session->max_buf_count > MPIP_TCP_BUF_MAX_LEN)
 						socket_session->max_buf_count = MPIP_TCP_BUF_MAX_LEN;
+
+					printk("change max_buf_count: %d, %s, %d\n", socket_session->max_buf_count,
+							__FILE__, __LINE__);
 				}
 				goto success;
 			}
 
 			int count = socket_session->buf_count;
-			if (count == socket_session->max_buf_count)
+			if (count >= socket_session->max_buf_count)
 			{
 				for (i = 0; i < MPIP_TCP_BUF_MAX_LEN; ++i)
 				{
-					mpip_log("force push: %d, %u, %u, %s, %d\n", socket_session->buf_count,
+					if (socket_session->tcp_buf[i].seq == 0)
+						continue;
+
+					printk("force push: %d, %u, %u, %s, %d\n", socket_session->buf_count,
 							socket_session->tcp_buf[i].seq,
 							socket_session->next_seq,
 							__FILE__, __LINE__);
-
-					if (socket_session->tcp_buf[i].seq == 0)
-						continue;
 
 					tmp_seq = socket_session->tcp_buf[i].skb->len
 							- ip_hdr(socket_session->tcp_buf[i].skb)->ihl * 4
