@@ -1703,7 +1703,7 @@ bool insert_mpip_cm(struct sk_buff *skb, __be32 old_saddr, __be32 old_daddr,
     		is_short = is_short_pkt(skb);
     	}
 
-    	is_short = false;
+//    	is_short = false;
 
     	path_id = get_path_id(dst_node_id, new_saddr, new_daddr, &new_sport, &new_dport,
     							old_saddr, old_daddr, sport, dport,
