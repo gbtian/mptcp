@@ -1633,7 +1633,7 @@ recursive:
 					if (socket_session->max_buf_count < MPIP_TCP_BUF_MIN_LEN)
 						socket_session->max_buf_count = MPIP_TCP_BUF_MIN_LEN;
 
-					printk("change max_buf_count: %d, %d, %s, %d\n", socket_session->max_buf_count,
+					mpip_log("change max_buf_count: %d, %d, %s, %d\n", socket_session->max_buf_count,
 							come_buf_count,
 							__FILE__, __LINE__);
 				}
