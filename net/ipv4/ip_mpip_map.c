@@ -603,8 +603,8 @@ int update_path_delay(unsigned char path_id, __s32 delay)
 			}
 			else
 			{
-				path_info->delay = (4 * path_info->delay + delay) / 5;
-				//path_info->delay = delay;
+//				path_info->delay = (4 * path_info->delay + delay) / 5;
+				path_info->delay = delay;
 			}
 
 			if (path_info->min_delay > delay || path_info->min_delay == -1)
@@ -1106,8 +1106,8 @@ int update_path_info(unsigned char session_id)
 //			tmp = max_queuing_delay - path_info->ave_queuing_delay;
 //		}
 
-		int tmp = max_queuing_delay - path_info->queuing_delay;
-
+//		int tmp = max_queuing_delay - path_info->queuing_delay;
+		int tmp = max_delay - path_info->delay;
 		path_info->tmp = tmp;
 
 		totaltmp += tmp;
