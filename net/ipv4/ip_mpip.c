@@ -36,7 +36,7 @@ int sysctl_mpip_bw_time __read_mostly = 100;
 int sysctl_mpip_exp_time __read_mostly = 1200000;
 int sysctl_mpip_bw_step __read_mostly = 10;
 int sysctl_mpip_path_diff __read_mostly = 50;
-int sysctl_mpip_bw_3 __read_mostly = 30;
+int sysctl_mpip_qd __read_mostly = 0;
 int sysctl_mpip_bw_4 __read_mostly = 4;
 int sysctl_mpip_hb __read_mostly = 1000;
 int sysctl_mpip_use_tcp __read_mostly = 1;
@@ -105,6 +105,13 @@ static struct ctl_table mpip_table[] =
  	{
  	 		.procname = "mpip_path_diff",
  	 		.data = &sysctl_mpip_path_diff,
+ 	 		.maxlen = sizeof(int),
+ 	 		.mode = 0644,
+ 	 		.proc_handler = &proc_dointvec
+ 	},
+ 	{
+ 	 		.procname = "mpip_qd",
+ 	 		.data = &sysctl_mpip_qd,
  	 		.maxlen = sizeof(int),
  	 		.mode = 0644,
  	 		.proc_handler = &proc_dointvec

@@ -56,6 +56,7 @@ extern int sysctl_mpip_bw_time;
 extern int sysctl_mpip_exp_time;
 extern int sysctl_mpip_bw_step;
 extern int sysctl_mpip_path_diff;
+extern int sysctl_mpip_qd;
 extern int sysctl_mpip_hb;
 extern int sysctl_mpip_use_tcp;
 extern int sysctl_mpip_tcp_buf_count;

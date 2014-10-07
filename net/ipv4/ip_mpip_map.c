@@ -1106,8 +1106,11 @@ int update_path_info(unsigned char session_id)
 //			tmp = max_queuing_delay - path_info->ave_queuing_delay;
 //		}
 
-//		int tmp = max_queuing_delay - path_info->queuing_delay;
-		int tmp = max_delay - path_info->delay;
+		int tmp = max_queuing_delay - path_info->queuing_delay;
+
+		if (sysctl_mpip_qd == 0)
+			tmp = max_delay - path_info->delay;
+
 		path_info->tmp = tmp;
 
 		totaltmp += tmp;
