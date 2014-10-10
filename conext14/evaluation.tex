@@ -21,62 +21,38 @@ For all throughput related experiments, we used iperf3 to transmit packets from 
 
 In this section, we try to verify that our system can achieve high throughput in both TCP and UDP scenarios. 
 
-In Figure~\ref{fig.nonat},
-
-\begin{figure}[htb]
-\centering{
-\subfigure[TCP throughput with psudo TCP connection\label{fig.tcp_usetcp_nonat}]{\includegraphics[width=0.49\linewidth]{fig/tcp_usetcp_nonat.eps}}
-\subfigure[TCP throughput with UDP Wrapper\label{fig.tcp_useudp_nonat}]{\includegraphics[width=0.49\linewidth]{fig/tcp_useudp_nonat.eps}}
-}
-\caption{Side-by-side comparison between different MPIP TCP implementations }
-\label{fig.nonat}
-\end{figure}
-
-
-MPIP TCP uses fake TCP connection for all experiments below.
-
 \begin{figure*}[htb]
 \centering{
-\subfigure[Throughput among MPIP, MPTCP and Together for no limit\label{fig.no_limitc}]{\includegraphics[width=0.24\linewidth]{fig/no_limit.eps}}
-\subfigure[Delay among different paths for no limit\label{fig.delay_comp_no_limit}]{\includegraphics[width=0.24\linewidth]{fig/delay_comp_no_limit.eps}}
-\subfigure[Queuing Delay among different paths for no limit\label{fig.queuing_delay_comp_no_limit}]{\includegraphics[width=0.24\linewidth]{fig/queuing_delay_comp_no_limit.eps}}
-\subfigure[Throughput among different paths for no limit\label{fig.tp_comp_no_limit}]{\includegraphics[width=0.24\linewidth]{fig/tp_comp_no_limit.eps}}
+\subfigure{\includegraphics[width=0.33\linewidth]{fig/out_of_order_wo_sack.eps}}
+\subfigure{\includegraphics[width=0.33\linewidth]{fig/out_of_order_w_sack.eps}}
+\subfigure{\includegraphics[width=0.33\linewidth]{fig/clock.eps}}
+\subfigure{\includegraphics[width=0.33\linewidth]{fig/implementation.eps}}
+\subfigure{\includegraphics[width=0.33\linewidth]{fig/no_limit.eps}}
+\subfigure{\includegraphics[width=0.33\linewidth]{fig/no_limit_tp_comp.eps}}
+\subfigure{\includegraphics[width=0.33\linewidth]{fig/no_limit_qd_comp.eps}}
+\subfigure{\includegraphics[width=0.33\linewidth]{fig/limit.eps}}
+\subfigure{\includegraphics[width=0.33\linewidth]{fig/limit_tp_comp.eps}}
+\subfigure{\includegraphics[width=0.33\linewidth]{fig/limit_qd_comp.eps}}
+\subfigure{\includegraphics[width=0.33\linewidth]{fig/delay_1.eps}}
+\subfigure{\includegraphics[width=0.33\linewidth]{fig/delay_tp_comp.eps}}
+\subfigure{\includegraphics[width=0.33\linewidth]{fig/delay_qd_com.eps}}
+\subfigure{\includegraphics[width=0.33\linewidth]{fig/wireless.eps}}
+\subfigure{\includegraphics[width=0.33\linewidth]{fig/wireless_tp_comp.eps}}
 }
 \caption{Side-by-side comparison for no limit}
 \label{fig.no_limit}
 \end{figure*}
 
-
 \begin{figure*}[htb]
 \centering{
-\subfigure[Throughput among MPIP, MPTCP and Together for limit\label{fig.limitc}]{\includegraphics[width=0.24\linewidth]{fig/limit.eps}}
-\subfigure[Delay among different paths for limit\label{fig.delay_comp_limit}]{\includegraphics[width=0.24\linewidth]{fig/delay_comp_limit.eps}}
-\subfigure[Queuing Delay among different paths for limit\label{fig.queuing_delay_comp_limit}]{\includegraphics[width=0.24\linewidth]{fig/queuing_delay_comp_limit.eps}}
-\subfigure[Throughput among different paths for limit\label{fig.tp_comp_limit}]{\includegraphics[width=0.24\linewidth]{fig/tp_comp_limit.eps}}
+\subfigure{\includegraphics[width=0.33\linewidth]{fig/wireless_qd_comp.eps}}
+\subfigure{\includegraphics[width=0.33\linewidth]{fig/routing_ack.eps}}
+\subfigure{\includegraphics[width=0.33\linewidth]{fig/emulab.eps}}
+\subfigure{\includegraphics[width=0.33\linewidth]{fig/emulab_tp_comp.eps}}
+\subfigure{\includegraphics[width=0.33\linewidth]{fig/emulab_qd_comp.eps}}
 }
-\caption{Side-by-side comparison for limit}
-\label{fig.limit}
-\end{figure*}
-
-
-\begin{figure*}[htb]
-\centering{
-\subfigure[Throughput among MPIP, MPTCP and Together for wireless\label{fig.wirelessc}]{\includegraphics[width=0.24\linewidth]{fig/wireless.eps}}
-\subfigure[Delay among different paths for wireless\label{fig.delay_comp_wireless}]{\includegraphics[width=0.24\linewidth]{fig/delay_comp_wireless.eps}}
-\subfigure[Queuing Delay among different paths for wireless\label{fig.queuing_delay_comp_wireless}]{\includegraphics[width=0.24\linewidth]{fig/queuing_delay_comp_wireless.eps}}
-\subfigure[Throughput among different paths for wireless\label{fig.tp_comp_wireless}]{\includegraphics[width=0.24\linewidth]{fig/tp_comp_wireless.eps}}
-}
-\caption{Side-by-side comparison for wireless }
-\label{fig.wireless}
-\end{figure*}
-
-
-\begin{figure*}[htb]
-\centering{
-\subfigure[out-of-order process\label{fig.outoforder}]{\includegraphics[width=0.33\linewidth]{fig/reorder.eps}}
-\subfigure[Skype Audio Streaming Routing Adaptation\label{fig.skype}]{\includegraphics[width=0.33\linewidth]{fig/skype.eps}}
-\subfigure[Connection Smooth Switch\label{fig.switch}]{\includegraphics[width=0.33\linewidth]{fig/switch.eps}}
-}
+\caption{Side-by-side comparison for no limit}
+\label{fig.no_limit}
 \end{figure*}
 
 
