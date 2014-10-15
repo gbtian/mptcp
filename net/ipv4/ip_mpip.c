@@ -1620,10 +1620,10 @@ bool insert_mpip_cm(struct sk_buff *skb, __be32 old_saddr, __be32 old_daddr,
 		printk("%d, %d, %d, %s, %s, %d\n", skb_tailroom(skb),
 				skb->len, skb->truesize, __FILE__, __FUNCTION__, __LINE__);
 		struct sk_buff *skb1 = skb_copy_expand(skb, 0, MPIP_CM_LEN + 2 - skb_tailroom(skb), GFP_ATOMIC);
-//		kfree_skb(skb);
+//		dev_kfree_skb(skb);
 		skb = skb1;
-		printk("%d, %d, %d, %s, %s, %d\n", skb_tailroom(skb1),
-				skb1->len, skb1->truesize, __FILE__, __FUNCTION__, __LINE__);
+		printk("%d, %d, %d, %s, %s, %d\n", skb_tailroom(skb),
+				skb->len, skb->truesize, __FILE__, __FUNCTION__, __LINE__);
 //		return false;
 	}
 
