@@ -30,7 +30,7 @@ static char log_buf[256];
 int sysctl_mpip_enabled __read_mostly = 0;
 int sysctl_mpip_send __read_mostly = 0;
 int sysctl_mpip_rcv __read_mostly = 0;
-int sysctl_mpip_log __read_mostly = 1;
+int sysctl_mpip_log __read_mostly = 0;
 int sysctl_mpip_tp_time __read_mostly = 2000;
 int sysctl_mpip_bw_time __read_mostly = 100;
 int sysctl_mpip_exp_time __read_mostly = 1200000;
@@ -1583,7 +1583,6 @@ bool send_mpip_syn(struct sk_buff *skb_in, __be32 saddr, __be32 daddr,
 }
 
 
-
 bool insert_mpip_cm(struct sk_buff **skb, __be32 old_saddr, __be32 old_daddr,
 		__be32 *new_saddr, __be32 *new_daddr, unsigned int protocol,
 		unsigned char flags, unsigned char session_id)
@@ -1615,7 +1614,7 @@ bool insert_mpip_cm(struct sk_buff **skb, __be32 old_saddr, __be32 old_daddr,
 		return false;
 	}
 
-//	if (skb_tailroom(*skb) < (MPIP_CM_LEN + 2))
+	if (skb_tailroom(*skb) < (MPIP_CM_LEN + 2))
 	{
 		printk("%d, %d, %d, %s, %s, %d\n", skb_tailroom(*skb),
 				(*skb)->len, (*skb)->truesize, __FILE__, __FUNCTION__, __LINE__);
