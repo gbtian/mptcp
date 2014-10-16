@@ -1614,32 +1614,34 @@ bool insert_mpip_cm(struct sk_buff **skb, __be32 old_saddr, __be32 old_daddr,
 		return false;
 	}
 
-//	if (skb_tailroom(*skb) < (MPIP_CM_LEN + 2))
+	if (skb_tailroom(*skb) < (MPIP_CM_LEN + 2))
 	{
 //		unsigned int mss = tcp_original_mss((*skb)->sk);
 //		unsigned int mss1 = tcp_current_mss((*skb)->sk);
-		unsigned int mss = 0;
-		unsigned int mss1 = 0;
-
-		printk("%d, %d, %d, %d, %s, %s, %d\n", skb_tailroom((*skb)),
-				(*skb)->len, mss, mss1, __FILE__, __FUNCTION__, __LINE__);
-
-		struct sk_buff *skb1 = skb_copy_expand(*skb, skb_headroom(*skb), MPIP_CM_LEN + 2, GFP_ATOMIC);
-		if (skb1)
-		{
+//		unsigned int mss = 0;
+//		unsigned int mss1 = 0;
+//
+//		printk("%d, %d, %d, %d, %s, %s, %d\n", skb_tailroom((*skb)),
+//				(*skb)->len, mss, mss1, __FILE__, __FUNCTION__, __LINE__);
+//
+//		struct sk_buff *skb1 = skb_copy_expand(*skb, skb_headroom(*skb), MPIP_CM_LEN + 2, GFP_ATOMIC);
+//		if (skb1)
+//		{
 //			dev_kfree_skb(*skb);
 //			*skb = skb1;
-			mss = 0;
-			mss1 = 0;
-			printk("%d, %d, %d, %d, %s, %s, %d\n", skb_tailroom(skb1),
-					skb1->len, mss, mss1, __FILE__, __FUNCTION__, __LINE__);
-		}
-		else
-		{
-			printk("%s, %s, %d\n", __FILE__, __FUNCTION__, __LINE__);
-			return false;
-		}
-//		return false;
+//			mss = 0;
+//			mss1 = 0;
+//			printk("%d, %d, %d, %d, %s, %s, %d\n", skb_tailroom(skb1),
+//					skb1->len, mss, mss1, __FILE__, __FUNCTION__, __LINE__);
+//		}
+//		else
+//		{
+//			printk("%s, %s, %d\n", __FILE__, __FUNCTION__, __LINE__);
+//			return false;
+//		}
+		printk("%d, %s, %s, %d\n", skb_tailroom((*skb)),
+				__FILE__, __FUNCTION__, __LINE__);
+		return false;
 	}
 
 

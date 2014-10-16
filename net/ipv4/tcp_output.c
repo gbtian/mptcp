@@ -1434,9 +1434,12 @@ unsigned int tcp_current_mss(struct sock *sk)
 
 	printk("%d, %s, %s, %d\n", mss_now, __FILE__, __FUNCTION__, __LINE__);
 
-	if (sysctl_mpip_enabled &&
-			is_mpip_enabled(inet_sk(sk)->inet_daddr, inet_sk(sk)->inet_dport))
+//	if (sysctl_mpip_enabled &&
+//		is_mpip_enabled(inet_sk(sk)->inet_daddr, inet_sk(sk)->inet_dport))
+	if (sysctl_mpip_enabled)
 	{
+//		print_addr_1(inet_sk(sk)->inet_daddr);
+//		printk("%d: %s, %s, %d\n",  inet_sk(sk)->inet_dport, __FILE__, __FUNCTION__, __LINE__);
 		mss_now -= ((MPIP_CM_LEN + 2 + 3) & ~3);
 	}
 
