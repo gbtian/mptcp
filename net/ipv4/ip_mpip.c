@@ -1615,24 +1615,24 @@ bool insert_mpip_cm(struct sk_buff **skb, __be32 old_saddr, __be32 old_daddr,
 		return false;
 	}
 
-	if (skb_tailroom(*skb) < (MPIP_CM_LEN + 2))
+//	if (skb_tailroom(*skb) < (MPIP_CM_LEN + 2))
 	{
-//		printk("%d, %d, %d, %s, %s, %d\n", skb_tailroom((*skb)),
-//				(*skb)->len, (*skb)->truesize, __FILE__, __FUNCTION__, __LINE__);
-//		struct sk_buff *skb1 = skb_copy_expand((*skb), skb_headroom(*skb), MPIP_CM_LEN + 2, GFP_ATOMIC);
-//		if (skb1)
-//		{
-//			//dev_kfree_skb(skb);
-//			*skb = skb1;
-//		}
-//		else
-//		{
-//			printk("%s, %s, %d\n", __FILE__, __FUNCTION__, __LINE__);
-//		}
+		printk("%d, %d, %d, %s, %s, %d\n", skb_tailroom(*skb),
+				(*skb)->len, (*skb)->truesize, __FILE__, __FUNCTION__, __LINE__);
+		struct sk_buff *skb1 = skb_copy_expand(*skb, skb_headroom(*skb), MPIP_CM_LEN + 2, GFP_ATOMIC);
+		if (skb1)
+		{
+			//dev_kfree_skb(skb);
+			*skb = skb1;
+		}
+		else
+		{
+			printk("%s, %s, %d\n", __FILE__, __FUNCTION__, __LINE__);
+		}
 
 		printk("%d, %d, %d, %s, %s, %d\n", skb_tailroom(*skb),
 				(*skb)->len, (*skb)->truesize, __FILE__, __FUNCTION__, __LINE__);
-		return false;
+//		return false;
 	}
 
 
@@ -1784,24 +1784,24 @@ bool insert_mpip_cm(struct sk_buff **skb, __be32 old_saddr, __be32 old_daddr,
 
 	if (new_saddr && ((*new_saddr) > 0))
 	{
-		mpip_log("sending: %d, %d, %d, %d, %s, %s, %d\n", ip_hdr((*skb))->id,
-				ip_hdr(skb)->protocol, sport, dport, __FILE__, __FUNCTION__,
+		mpip_log("sending: %d, %d, %d, %d, %s, %s, %d\n", ip_hdr(*skb)->id,
+				ip_hdr(*skb)->protocol, sport, dport, __FILE__, __FUNCTION__,
 				__LINE__);
 		print_addr(*new_saddr);
 		print_addr(*new_daddr);
 	}
 	else
 	{
-		mpip_log("sending: %d, %d, %d, %d, %s, %s, %d\n", ip_hdr((*skb))->id,
-				ip_hdr((*skb))->protocol, sport, dport, __FILE__, __FUNCTION__,
+		mpip_log("sending: %d, %d, %d, %d, %s, %s, %d\n", ip_hdr(*skb)->id,
+				ip_hdr(*skb)->protocol, sport, dport, __FILE__, __FUNCTION__,
 				__LINE__);
-		print_addr(ip_hdr((*skb))->saddr);
-		print_addr(ip_hdr((*skb))->daddr);
+		print_addr(ip_hdr(*skb)->saddr);
+		print_addr(ip_hdr(*skb)->daddr);
 	}
 
 	if (flags == MPIP_SYNC_FLAGS)
 	{
-		mpip_log("sending %d: \n", ip_hdr((*skb))->id);
+		mpip_log("sending %d: \n", ip_hdr(*skb)->id);
 //		print_mpip_cm_1(&send_mpip_cm, ip_hdr(skb)->id);
 	}
 
@@ -1827,7 +1827,7 @@ bool insert_mpip_cm(struct sk_buff **skb, __be32 old_saddr, __be32 old_daddr,
 
 		if (sysctl_mpip_use_tcp || !inited || origin)
 		{
-			tcph = tcp_hdr((*skb)); //this fixed the problem
+			tcph = tcp_hdr(*skb); //this fixed the problem
 			if (!tcph)
 			{
 				printk("%s, %s, %d\n", __FILE__, __FUNCTION__, __LINE__);
@@ -1836,7 +1836,7 @@ bool insert_mpip_cm(struct sk_buff **skb, __be32 old_saddr, __be32 old_daddr,
 
 			if (new_dport != 0)
 			{
-				mpip_log("Sending change port: %d, %d, %d, %s, %s, %d\n", ip_hdr((*skb))->id,
+				mpip_log("Sending change port: %d, %d, %d, %s, %s, %d\n", ip_hdr(*skb)->id,
 								 new_sport, new_dport, __FILE__, __FUNCTION__, __LINE__);
 				tcph->source = new_sport;
 				tcph->dest = new_dport;
@@ -1859,18 +1859,18 @@ bool insert_mpip_cm(struct sk_buff **skb, __be32 old_saddr, __be32 old_daddr,
 				return false;
 			}
 
-			unsigned char *myiph = skb_network_header((*skb));
+			unsigned char *myiph = skb_network_header(*skb);
 			memcpy(tmp, myiph, sizeof(struct iphdr));
 			memcpy(myiph - 8, tmp, sizeof(struct iphdr));
 			kfree(tmp);
 
-			skb_push((*skb), 8);
-			skb_reset_network_header((*skb));
-			skb_set_transport_header((*skb), sizeof(struct iphdr));
+			skb_push(*skb, 8);
+			skb_reset_network_header(*skb);
+			skb_set_transport_header(*skb, sizeof(struct iphdr));
 
-			struct iphdr *iph = ip_hdr((*skb));
+			struct iphdr *iph = ip_hdr(*skb);
 			iph->protocol = IPPROTO_UDP;
-			udph = udp_hdr((*skb)); //this fixed the problem
+			udph = udp_hdr(*skb); //this fixed the problem
 			if (!udph)
 			{
 				printk("%s, %s, %d\n", __FILE__, __FUNCTION__, __LINE__);
@@ -1891,14 +1891,14 @@ bool insert_mpip_cm(struct sk_buff **skb, __be32 old_saddr, __be32 old_daddr,
 					csum_partial((char *)udph, (*skb)->len, 0));
 			(*skb)->ip_summed = CHECKSUM_UNNECESSARY;
 
-			mpip_log("sending: %d, %d, %d, %d, %d, %s, %s, %d\n", ip_hdr((*skb))->id, ntohs(udph->len),
-							ip_hdr((*skb))->protocol, sport, dport, __FILE__, __FUNCTION__,
+			mpip_log("sending: %d, %d, %d, %d, %d, %s, %s, %d\n", ip_hdr(*skb)->id, ntohs(udph->len),
+							ip_hdr(*skb)->protocol, sport, dport, __FILE__, __FUNCTION__,
 							__LINE__);
 		}
 	}
 	else if(protocol == IPPROTO_UDP)
 	{
-		udph = udp_hdr((*skb)); //this fixed the problem
+		udph = udp_hdr(*skb); //this fixed the problem
 		if (!udph)
 		{
 			printk("%s, %s, %d\n", __FILE__, __FUNCTION__, __LINE__);
@@ -1910,7 +1910,7 @@ bool insert_mpip_cm(struct sk_buff **skb, __be32 old_saddr, __be32 old_daddr,
 			udph->dest = new_dport;
 		}
 
-		mpip_log("UDP: %d, %d, %s, %s, %d\n", ntohs(udph->len), ip_hdr((*skb))->protocol,
+		mpip_log("UDP: %d, %d, %s, %s, %d\n", ntohs(udph->len), ip_hdr(*skb)->protocol,
 					__FILE__, __FUNCTION__,	__LINE__);
 
 		udph->len = htons(ntohs(udph->len) + MPIP_CM_LEN + 1);
@@ -1920,7 +1920,7 @@ bool insert_mpip_cm(struct sk_buff **skb, __be32 old_saddr, __be32 old_daddr,
 									   csum_partial((char *)udph, (*skb)->len, 0));
 		(*skb)->ip_summed = CHECKSUM_UNNECESSARY;
 
-		mpip_log("UDP: %d, %d, %s, %s, %d\n", ntohs(udph->len), ip_hdr((*skb))->protocol,
+		mpip_log("UDP: %d, %d, %s, %s, %d\n", ntohs(udph->len), ip_hdr(*skb)->protocol,
 					__FILE__, __FUNCTION__,	__LINE__);
 	}
 
