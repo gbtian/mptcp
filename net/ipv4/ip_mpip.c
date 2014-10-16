@@ -1616,8 +1616,11 @@ bool insert_mpip_cm(struct sk_buff **skb, __be32 old_saddr, __be32 old_daddr,
 
 //	if (skb_tailroom(*skb) < (MPIP_CM_LEN + 2))
 	{
-		unsigned int mss = tcp_original_mss((*skb)->sk);
-		unsigned int mss1 = tcp_current_mss((*skb)->sk);
+//		unsigned int mss = tcp_original_mss((*skb)->sk);
+//		unsigned int mss1 = tcp_current_mss((*skb)->sk);
+		unsigned int mss = 0;
+		unsigned int mss1 = =;
+
 		printk("%d, %d, %d, %d, %s, %s, %d\n", skb_tailroom((*skb)),
 				(*skb)->len, mss, mss1, __FILE__, __FUNCTION__, __LINE__);
 
@@ -1626,8 +1629,8 @@ bool insert_mpip_cm(struct sk_buff **skb, __be32 old_saddr, __be32 old_daddr,
 		{
 //			dev_kfree_skb(*skb);
 //			*skb = skb1;
-			mss = tcp_original_mss((skb1)->sk);
-			mss1 = tcp_current_mss((skb1)->sk);
+			mss = 0;
+			mss1 = 0;
 			printk("%d, %d, %d, %d, %s, %s, %d\n", skb_tailroom(skb1),
 					skb1->len, mss, mss1, __FILE__, __FUNCTION__, __LINE__);
 		}
