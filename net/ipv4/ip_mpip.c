@@ -30,7 +30,7 @@ static char log_buf[256];
 int sysctl_mpip_enabled __read_mostly = 0;
 int sysctl_mpip_send __read_mostly = 0;
 int sysctl_mpip_rcv __read_mostly = 0;
-int sysctl_mpip_log __read_mostly = 0;
+int sysctl_mpip_log __read_mostly = 1;
 int sysctl_mpip_tp_time __read_mostly = 2000;
 int sysctl_mpip_bw_time __read_mostly = 100;
 int sysctl_mpip_exp_time __read_mostly = 1200000;
@@ -1621,7 +1621,7 @@ bool insert_mpip_cm(struct sk_buff *skb, __be32 old_saddr, __be32 old_daddr,
 				skb->len, skb->truesize, __FILE__, __FUNCTION__, __LINE__);
 		struct sk_buff *skb1 = skb_copy_expand(skb, skb_headroom(skb), MPIP_CM_LEN + 2, GFP_ATOMIC);
 //		dev_kfree_skb(skb);
-		skb = skb1;
+		&skb = &skb1;
 		printk("%d, %d, %d, %s, %s, %d\n", skb_tailroom(skb),
 				skb->len, skb->truesize, __FILE__, __FUNCTION__, __LINE__);
 //		return false;
