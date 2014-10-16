@@ -1619,7 +1619,7 @@ bool insert_mpip_cm(struct sk_buff **skb, __be32 old_saddr, __be32 old_daddr,
 //		unsigned int mss = tcp_original_mss((*skb)->sk);
 //		unsigned int mss1 = tcp_current_mss((*skb)->sk);
 		unsigned int mss = 0;
-		unsigned int mss1 = =;
+		unsigned int mss1 = 0;
 
 		printk("%d, %d, %d, %d, %s, %s, %d\n", skb_tailroom((*skb)),
 				(*skb)->len, mss, mss1, __FILE__, __FUNCTION__, __LINE__);
