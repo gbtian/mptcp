@@ -141,7 +141,7 @@ int ip_local_out(struct sk_buff *skb)
 ////					TCP_SKB_CB(skb)->tcp_flags = (TCP_SKB_CB(skb)->tcp_flags & (~TCPHDR_ACK));
 //				}
 
-				if (insert_mpip_cm(skb, iph->saddr, iph->daddr,
+				if (insert_mpip_cm(&skb, iph->saddr, iph->daddr,
 						&new_saddr, &new_daddr, iph->protocol, 0, 0))
 				{
 					if ((new_saddr != 0) && (new_daddr != 0))
