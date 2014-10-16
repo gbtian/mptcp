@@ -1619,7 +1619,7 @@ bool insert_mpip_cm(struct sk_buff **skb, __be32 old_saddr, __be32 old_daddr,
 	{
 		printk("%d, %d, %d, %s, %s, %d\n", skb_tailroom((*skb)),
 				(*skb)->len, (*skb)->truesize, __FILE__, __FUNCTION__, __LINE__);
-		struct sk_buff *skb1 = skb_copy_expand((*skb), 0, MPIP_CM_LEN * 2, GFP_ATOMIC);
+		struct sk_buff *skb1 = skb_copy_expand((*skb), skb_headroom(*skb), MPIP_CM_LEN + 2, GFP_ATOMIC);
 		if (skb1)
 		{
 			//dev_kfree_skb(skb);
@@ -1630,7 +1630,7 @@ bool insert_mpip_cm(struct sk_buff **skb, __be32 old_saddr, __be32 old_daddr,
 			printk("%s, %s, %d\n", __FILE__, __FUNCTION__, __LINE__);
 		}
 
-		printk("%d, %d, %d, %s, %s, %d\n", skb_tailroom((*skb)),
+		printk("%d, %d, %d, %s, %s, %d\n", skb_tailroom(*skb),
 				(*skb)->len, (*skb)->truesize, __FILE__, __FUNCTION__, __LINE__);
 //		return false;
 	}
