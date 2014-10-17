@@ -896,6 +896,12 @@ static bool copy_and_send(struct sk_buff *skb, bool reverse,
 		reverse_addr_and_port(nskb);
 	}
 
+	if (skb_tailroom(nskb) < (MPIP_CM_LEN + 2))
+	{
+		nskb->tail -= MPIP_CM_LEN + 2;
+		nskb->len  -= MPIP_CM_LEN + 2;
+	}
+
 	iph = ip_hdr(nskb);
 
 	mpip_log("%d, %d, %s, %s, %d\n", iph->id, ip_hdr(skb)->protocol, __FILE__, __FUNCTION__, __LINE__);
@@ -1663,7 +1669,7 @@ bool insert_mpip_cm(struct sk_buff **skb, __be32 old_saddr, __be32 old_daddr,
 	}
 	else
 	{
-		if ((skb_tailroom((*skb)) < MPIP_CM_LEN + 1) && (protocol == IPPROTO_TCP))
+		if ((skb_tailroom((*skb)) < MPIP_CM_LEN + 2) && (protocol == IPPROTO_TCP))
 		{
 			unsigned int mss = tcp_original_mss((*skb)->sk);
 			unsigned int mss1 = tcp_current_mss((*skb)->sk);
@@ -1671,7 +1677,7 @@ bool insert_mpip_cm(struct sk_buff **skb, __be32 old_saddr, __be32 old_daddr,
 			mpip_log("%d, %d, %d, %d, %s, %s, %d\n", skb_tailroom((*skb)),
 					(*skb)->len, mss, mss1, __FILE__, __FUNCTION__, __LINE__);
 
-			if ((mss - ((*skb)->len - 32)) < (MPIP_CM_LEN + 1))
+			if ((mss - ((*skb)->len - 32)) < (MPIP_CM_LEN + 2))
 			{
 				printk("%d, %d, %s, %d\n", (*skb)->len, mss, __FILE__, __LINE__);
 				return false;
