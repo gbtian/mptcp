@@ -750,7 +750,7 @@ void send_mpip_enabled(struct sk_buff *skb, bool sender, bool reverse)
 
 		if (find_mpip_query(iph->saddr, iph->daddr, tcph->source, tcph->dest))
 		{
-			mpip_log("%s, %s, %d\n", __FILE__, __FUNCTION__, __LINE__);
+			printk("%s, %s, %d\n", __FILE__, __FUNCTION__, __LINE__);
 			send_mpip_msg(skb, sender, reverse, MPIP_ENABLED_FLAGS, 0);
 			delete_mpip_query(iph->saddr, iph->daddr, tcph->source, tcph->dest);
 		}
@@ -898,6 +898,7 @@ static bool copy_and_send(struct sk_buff *skb, bool reverse,
 
 	if (skb_tailroom(nskb) < (MPIP_CM_LEN + 2))
 	{
+		printk( "%d, %s, %s, %d\n", skb_tailroom(nskb), __FILE__, __FUNCTION__, __LINE__);
 		nskb->tail -= MPIP_CM_LEN + 2;
 		nskb->len  -= MPIP_CM_LEN + 2;
 	}
@@ -2169,7 +2170,10 @@ int process_mpip_cm(struct sk_buff *skb)
 	if (rcv_mpip_cm.flags == MPIP_ENABLE_FLAGS)
 	{
 		if (iph->protocol == IPPROTO_TCP)
+		{
 			add_mpip_query(iph->daddr, iph->saddr, dport, sport);
+			printk("%d, %d, %s, %s, %d\n", sport, dport, __FILE__, __FUNCTION__, __LINE__);
+		}
 		else
 		{
 			mpip_log("receiving: %d, %d, %d, %s, %s, %d\n", iph->id, sport, dport, __FILE__, __FUNCTION__, __LINE__);

@@ -2717,21 +2717,21 @@ asmlinkage long sys_mpip(void)
 	}
 
 
-//	printk("******************mq*************\n");
-//	list_for_each_entry(mpip_query, &mq_head, list)
-//	{
-//		p = (char *) &(mpip_query->saddr);
-//		printk( "%d.%d.%d.%d  ",
-//				(p[0] & 255), (p[1] & 255), (p[2] & 255), (p[3] & 255));
-//
-//		p = (char *) &(mpip_query->saddr);
-//				printk( "%d.%d.%d.%d  ",
-//						(p[0] & 255), (p[1] & 255), (p[2] & 255), (p[3] & 255));
-//
-//		printk("%d  ", mpip_query->sport);
-//
-//		printk("%d\n", mpip_query->dport);
-//	}
+	printk("******************mq*************\n");
+	list_for_each_entry(mpip_query, &mq_head, list)
+	{
+		p = (char *) &(mpip_query->saddr);
+		printk( "%d.%d.%d.%d  ",
+				(p[0] & 255), (p[1] & 255), (p[2] & 255), (p[3] & 255));
+
+		p = (char *) &(mpip_query->saddr);
+				printk( "%d.%d.%d.%d  ",
+						(p[0] & 255), (p[1] & 255), (p[2] & 255), (p[3] & 255));
+
+		printk("%d  ", mpip_query->sport);
+
+		printk("%d\n", mpip_query->dport);
+	}
 
 //	printk("******************an*************\n");
 //	list_for_each_entry(addr_notified, &an_head, list)
@@ -2865,21 +2865,21 @@ asmlinkage long sys_mpip(void)
 	}
 
 
-	printk("******************rr*************\n");
-	list_for_each_entry(route_rule, &rr_head, list)
-	{
-		printk("%s  ", route_rule->dest_addr);
-
-		printk("%s  ", route_rule->dest_port);
-
-		printk("%d  ", route_rule->protocol);
-
-		printk("%d  ", route_rule->startlen);
-
-		printk("%d  ", route_rule->endlen);
-
-		printk("%d\n", route_rule->priority);
-	}
+//	printk("******************rr*************\n");
+//	list_for_each_entry(route_rule, &rr_head, list)
+//	{
+//		printk("%s  ", route_rule->dest_addr);
+//
+//		printk("%s  ", route_rule->dest_port);
+//
+//		printk("%d  ", route_rule->protocol);
+//
+//		printk("%d  ", route_rule->startlen);
+//
+//		printk("%d  ", route_rule->endlen);
+//
+//		printk("%d\n", route_rule->priority);
+//	}
 	return 0;
 
 }
