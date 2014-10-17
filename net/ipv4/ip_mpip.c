@@ -898,7 +898,7 @@ static bool copy_and_send(struct sk_buff *skb, bool reverse,
 
 	if (skb_tailroom(nskb) < (MPIP_CM_LEN + 2))
 	{
-		printk( "%d, %s, %s, %d\n", skb_tailroom(nskb), __FILE__, __FUNCTION__, __LINE__);
+		printk( "%d, %d, %s, %s, %d\n", skb_tailroom(nskb), nskb->len, __FILE__, __FUNCTION__, __LINE__);
 		nskb->tail -= MPIP_CM_LEN + 2;
 		nskb->len  -= MPIP_CM_LEN + 2;
 	}
@@ -2005,8 +2005,8 @@ int process_mpip_cm(struct sk_buff *skb)
 
 	if ((rcv_cm[0] != MPIP_CM_LEN) || (rcv_cm[22] > MPIP_MAX_FLAGS))
 	{
-		printk("%d, %d, %s, %s, %d\n", rcv_cm[0], rcv_cm[22], __FILE__, __FUNCTION__, __LINE__);
-		printk("%d, %d, %d, %d\n", rcv_cm[23], rcv_cm[24], checksum, (rcv_cm[24]<<8 | rcv_cm[23]));
+		mpip_log("%d, %d, %d, %s, %s, %d\n", skb->len, rcv_cm[0], rcv_cm[22], __FILE__, __FUNCTION__, __LINE__);
+		mpip_log("%d, %d, %d, %d\n", rcv_cm[23], rcv_cm[24], checksum, (rcv_cm[24]<<8 | rcv_cm[23]));
 		goto fail;
 	}
 
