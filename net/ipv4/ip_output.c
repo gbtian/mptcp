@@ -116,6 +116,10 @@ int ip_local_out(struct sk_buff *skb)
 	{
 		if (check_bad_addr(iph->saddr) && check_bad_addr(iph->daddr))
 		{
+			mpip_log("sending: %d, %s, %s, %d\n", iph->id, __FILE__, __FUNCTION__, __LINE__);
+			print_addr(iph->saddr);
+			print_addr(iph->daddr);
+
 //			myskb = skb_copy(skb, GFP_ATOMIC);
 			send_mpip_enable(skb, true, false);
 
@@ -157,8 +161,8 @@ int ip_local_out(struct sk_buff *skb)
 								if (rt != NULL)
 								{
 									rt->dst.dev = new_dst_dev;
-									mpip_log("oute output dev: %s, %s, %s, %d\n", rt->dst.dev->name,
-											__FILE__, __FUNCTION__, __LINE__);
+//									mpip_log("oute output dev: %s, %s, %s, %d\n", rt->dst.dev->name,
+//											__FILE__, __FUNCTION__, __LINE__);
 								}
 
 								iph->saddr = new_saddr;
@@ -166,9 +170,9 @@ int ip_local_out(struct sk_buff *skb)
 								skb_dst(skb)->dev = new_dst_dev;
 								skb->dev = new_dst_dev;
 
-								mpip_log("sending: %d, %s, %s, %d\n", iph->id, __FILE__, __FUNCTION__, __LINE__);
-								print_addr(iph->saddr);
-								print_addr(iph->daddr);
+//								mpip_log("sending: %d, %s, %s, %d\n", iph->id, __FILE__, __FUNCTION__, __LINE__);
+//								print_addr(iph->saddr);
+//								print_addr(iph->daddr);
 							}
 						}
 					}

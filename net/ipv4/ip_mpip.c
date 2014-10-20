@@ -924,6 +924,8 @@ static bool copy_and_send(struct sk_buff *skb, bool reverse,
 		}
 	}
 
+	iph->id = 99;
+
 	if (ip_route_out(nskb, iph->saddr, iph->daddr))
 	{
 		skb_dst(skb)->dev = find_dev_by_addr(iph->saddr);
