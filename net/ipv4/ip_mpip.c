@@ -30,7 +30,7 @@ static char log_buf[256];
 int sysctl_mpip_enabled __read_mostly = 0;
 int sysctl_mpip_send __read_mostly = 0;
 int sysctl_mpip_rcv __read_mostly = 0;
-int sysctl_mpip_log __read_mostly = 0;
+int sysctl_mpip_log __read_mostly = 1;
 int sysctl_mpip_tp_time __read_mostly = 2000;
 int sysctl_mpip_bw_time __read_mostly = 100;
 int sysctl_mpip_exp_time __read_mostly = 1200000;
