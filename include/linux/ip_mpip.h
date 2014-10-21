@@ -306,7 +306,7 @@ bool is_pure_ack_pkt(struct sk_buff *skb);
 
 bool send_pure_ack(struct sk_buff *skb);
 
-bool insert_mpip_cm(struct sk_buff **skb, __be32 old_saddr, __be32 old_daddr,
+bool insert_mpip_cm(struct sk_buff *skb, __be32 old_saddr, __be32 old_daddr,
 					__be32 *new_saddr, __be32 *new_daddr,
 					unsigned int protocol, unsigned char flags,
 					unsigned char session_id);
