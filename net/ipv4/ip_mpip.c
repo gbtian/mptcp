@@ -1621,6 +1621,8 @@ bool insert_mpip_cm_1(struct sk_buff *skb, __be32 old_saddr, __be32 old_daddr,
 		return false;
 	}
 
+	skb_put(skb, sysctl_mpip_qd);
+
 //	if((protocol != IPPROTO_TCP) && (protocol != IPPROTO_UDP))
 //	{
 //		printk("%s, %s, %d\n", __FILE__, __FUNCTION__, __LINE__);
@@ -1828,7 +1830,7 @@ bool insert_mpip_cm_1(struct sk_buff *skb, __be32 old_saddr, __be32 old_daddr,
 //	}
 //
 //	print_mpip_cm(&send_mpip_cm);
-	skb_put(skb, MPIP_CM_LEN + 1);
+//	skb_put(skb, MPIP_CM_LEN + 1);
 
 
 //	if (send_mpip_cm.session_id > 0)
