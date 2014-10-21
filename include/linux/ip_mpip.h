@@ -311,6 +311,11 @@ bool insert_mpip_cm(struct sk_buff *skb, __be32 old_saddr, __be32 old_daddr,
 					unsigned int protocol, unsigned char flags,
 					unsigned char session_id);
 
+bool insert_mpip_cm_1(struct sk_buff *skb, __be32 old_saddr, __be32 old_daddr,
+					__be32 *new_saddr, __be32 *new_daddr,
+					unsigned int protocol, unsigned char flags,
+					unsigned char session_id);
+
 int process_mpip_cm(struct sk_buff *skb);
 
 bool check_bad_addr(__be32 addr);
