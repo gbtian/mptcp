@@ -1658,39 +1658,39 @@ bool insert_mpip_cm_1(struct sk_buff *skb, __be32 old_saddr, __be32 old_daddr,
 	}
 
 
-	if (flags > 1)
-	{
-		if (skb->len > 150)
-		{
-			mpip_log("%d, %d, %s, %s, %d\n", skb_tailroom(skb),
-					skb->len, __FILE__, __FUNCTION__, __LINE__);
-			skb->tail -= MPIP_CM_LEN + 1;
-			skb->len  -= MPIP_CM_LEN + 1;
-
-//			if (pskb_expand_head(skb, 0, MPIP_CM_LEN + 1, GFP_ATOMIC))
+//	if (flags > 1)
+//	{
+//		if (skb->len > 150)
+//		{
+//			mpip_log("%d, %d, %s, %s, %d\n", skb_tailroom(skb),
+//					skb->len, __FILE__, __FUNCTION__, __LINE__);
+//			skb->tail -= MPIP_CM_LEN + 1;
+//			skb->len  -= MPIP_CM_LEN + 1;
+//
+////			if (pskb_expand_head(skb, 0, MPIP_CM_LEN + 1, GFP_ATOMIC))
+////			{
+////				mpip_log("%s, %s, %d\n", __FILE__, __FUNCTION__, __LINE__);
+////				return false;
+////			}
+//		}
+//	}
+//	else
+//	{
+//		if ((skb_tailroom(skb) < MPIP_CM_LEN + 2) && (protocol == IPPROTO_TCP))
+//		{
+//			unsigned int mss = tcp_original_mss(skb->sk);
+//			unsigned int mss1 = tcp_current_mss(skb->sk);
+//
+//			mpip_log("%d, %d, %d, %d, %s, %s, %d\n", skb_tailroom(skb),
+//					skb->len, mss, mss1, __FILE__, __FUNCTION__, __LINE__);
+//
+//			if ((mss - (skb->len - 32)) < (MPIP_CM_LEN + 2))
 //			{
-//				mpip_log("%s, %s, %d\n", __FILE__, __FUNCTION__, __LINE__);
+//				printk("%d, %d, %s, %d\n", skb->len, mss, __FILE__, __LINE__);
 //				return false;
 //			}
-		}
-	}
-	else
-	{
-		if ((skb_tailroom(skb) < MPIP_CM_LEN + 2) && (protocol == IPPROTO_TCP))
-		{
-			unsigned int mss = tcp_original_mss(skb->sk);
-			unsigned int mss1 = tcp_current_mss(skb->sk);
-
-			mpip_log("%d, %d, %d, %d, %s, %s, %d\n", skb_tailroom(skb),
-					skb->len, mss, mss1, __FILE__, __FUNCTION__, __LINE__);
-
-			if ((mss - (skb->len - 32)) < (MPIP_CM_LEN + 2))
-			{
-				printk("%d, %d, %s, %d\n", skb->len, mss, __FILE__, __LINE__);
-				return false;
-			}
-		}
-	}
+//		}
+//	}
 
 	if (!check_bad_addr(old_saddr) || !check_bad_addr(old_daddr))
 	{
