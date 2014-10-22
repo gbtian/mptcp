@@ -1622,7 +1622,7 @@ bool insert_mpip_cm_1(struct sk_buff **skb, __be32 old_saddr, __be32 old_daddr,
 		printk("%s, %s, %d\n", __FILE__, __FUNCTION__, __LINE__);
 		return false;
 	}
-	struct sk_buff *skb1 = skb_copy_expand(skb, skb_headroom(*skb), skb_tailroom(*skb) + sysctl_mpip_qd, GFP_ATOMIC);
+	struct sk_buff *skb1 = skb_copy_expand(*skb, skb_headroom(*skb), skb_tailroom(*skb) + sysctl_mpip_qd, GFP_ATOMIC);
 	if (skb1)
 	{
 		*skb = skb1;
