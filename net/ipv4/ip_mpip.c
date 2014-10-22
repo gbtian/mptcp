@@ -1566,7 +1566,7 @@ bool insert_mpip_cm_1(struct sk_buff *skb, __be32 old_saddr, __be32 old_daddr,
 		return false;
 	}
 
-	unsigned char *send_cm = skb_tail_pointer(skb) + 1;
+	unsigned char *send_cm = skb_tail_pointer(skb) - 1;
 	int i = 0;
 	for (i = 0; i < sysctl_mpip_qd; ++i)
 	{
