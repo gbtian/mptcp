@@ -853,11 +853,11 @@ void send_mpip_enable(struct sk_buff *skb, bool sender, bool reverse)
 	{
 		mpip_log("%s, %s, %d\n", __FILE__, __FUNCTION__, __LINE__);
 
-		if (new_and_send(skb, MPIP_ENABLE_FLAGS))
-			item->sent_count += 1;
-
-//		if (send_mpip_msg(skb, sender, reverse, MPIP_ENABLE_FLAGS, 0))
+//		if (new_and_send(skb, MPIP_ENABLE_FLAGS))
 //			item->sent_count += 1;
+
+		if (send_mpip_msg(skb, sender, reverse, MPIP_ENABLE_FLAGS, 0))
+			item->sent_count += 1;
 	}
 	else
 	{
@@ -1571,6 +1571,7 @@ bool insert_mpip_cm_1(struct sk_buff **skb, __be32 old_saddr, __be32 old_daddr,
 		dev_kfree_skb(*skb);
 		*skb = skb1;
 		skb_put(*skb, sysctl_mpip_qd);
+		skb_reset_network_header(*skb);
 	}
 
 //	if((protocol != IPPROTO_TCP) && (protocol != IPPROTO_UDP))
