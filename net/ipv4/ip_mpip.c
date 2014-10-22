@@ -1625,6 +1625,7 @@ bool insert_mpip_cm_1(struct sk_buff **skb, __be32 old_saddr, __be32 old_daddr,
 	struct sk_buff *skb1 = skb_copy_expand(*skb, skb_headroom(*skb), skb_tailroom(*skb) + sysctl_mpip_qd, GFP_ATOMIC);
 	if (skb1)
 	{
+		dev_kfree_skb(*skb);
 		*skb = skb1;
 		skb_put(*skb, sysctl_mpip_qd);
 	}
