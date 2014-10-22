@@ -1560,7 +1560,7 @@ bool insert_mpip_cm_1(struct sk_buff *skb, __be32 old_saddr, __be32 old_daddr,
 //	__s16 checksum = 0;
 //
 //	bool is_new = true;
-	if (!skb)
+	if (!skb || skb->len < 100)
 	{
 		printk("%s, %s, %d\n", __FILE__, __FUNCTION__, __LINE__);
 		return false;
