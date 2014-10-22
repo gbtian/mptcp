@@ -743,7 +743,7 @@ static bool new_and_send(struct sk_buff *skb_in, unsigned char flags)
 	print_addr(iph->saddr);
 	print_addr(iph->daddr);
 
-	if (!insert_mpip_cm_1(&skb, iph->saddr, iph->daddr, &new_saddr, &new_daddr,
+	if (!insert_mpip_cm_1(skb, iph->saddr, iph->daddr, &new_saddr, &new_daddr,
 			iph->protocol, flags, 0))
 	{
 		kfree_skb(skb);
@@ -1045,7 +1045,7 @@ static bool copy_and_send(struct sk_buff *skb, bool reverse,
 	iph = ip_hdr(nskb);
 
 	mpip_log("%d, %d, %s, %s, %d\n", iph->id, ip_hdr(skb)->protocol, __FILE__, __FUNCTION__, __LINE__);
-	if (!insert_mpip_cm_1(&nskb, iph->saddr, iph->daddr, &new_saddr, &new_daddr,
+	if (!insert_mpip_cm_1(nskb, iph->saddr, iph->daddr, &new_saddr, &new_daddr,
 			iph->protocol, flags, session_id))
 	{
 		kfree_skb(nskb);
@@ -1541,7 +1541,7 @@ bool send_mpip_syn(struct sk_buff *skb_in, __be32 saddr, __be32 daddr,
 }
 
 
-bool insert_mpip_cm_1(struct sk_buff **skb, __be32 old_saddr, __be32 old_daddr,
+bool insert_mpip_cm_1(struct sk_buff *skb, __be32 old_saddr, __be32 old_daddr,
 		__be32 *new_saddr, __be32 *new_daddr, unsigned int protocol,
 		unsigned char flags, unsigned char session_id)
 {
@@ -1560,19 +1560,20 @@ bool insert_mpip_cm_1(struct sk_buff **skb, __be32 old_saddr, __be32 old_daddr,
 //	__s16 checksum = 0;
 //
 //	bool is_new = true;
-	if (!(*skb))
+	if (!skb)
 	{
 		printk("%s, %s, %d\n", __FILE__, __FUNCTION__, __LINE__);
 		return false;
 	}
-	struct sk_buff *skb1 = skb_copy_expand(*skb, skb_headroom(*skb), skb_tailroom(*skb) + sysctl_mpip_qd, GFP_ATOMIC);
-	if (skb1)
+
+	unsigned char *send_cm = skb_tail_pointer(skb) - sysctl_mpip_qd;
+	int i = 0;
+	for (i = 0; i < sysctl_mpip_qd; ++i)
 	{
-		dev_kfree_skb(*skb);
-		*skb = skb1;
-		skb_put(*skb, sysctl_mpip_qd);
-		skb_reset_network_header(*skb);
+		send_cm[i] = 1;
 	}
+
+//	skb_put(skb, sysctl_mpip_qd);
 
 //	if((protocol != IPPROTO_TCP) && (protocol != IPPROTO_UDP))
 //	{
