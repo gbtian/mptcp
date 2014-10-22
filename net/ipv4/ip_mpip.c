@@ -743,13 +743,14 @@ static bool new_and_send(struct sk_buff *skb_in, unsigned char flags)
 	print_addr(iph->saddr);
 	print_addr(iph->daddr);
 
-	if (!insert_mpip_cm_1(skb, iph->saddr, iph->daddr, &new_saddr, &new_daddr,
+	if (!insert_mpip_cm_1(&skb, iph->saddr, iph->daddr, &new_saddr, &new_daddr,
 			iph->protocol, flags, 0))
 	{
 		kfree_skb(skb);
 		mpip_log("%s, %s, %d\n", __FILE__, __FUNCTION__, __LINE__);
 		return false;
 	}
+
 	iph = ip_hdr(skb);
 
 	mpip_log("sending: %d, %s, %s, %d\n", iph->id, __FILE__, __FUNCTION__, __LINE__);
