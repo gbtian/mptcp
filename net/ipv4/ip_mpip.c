@@ -1579,7 +1579,8 @@ bool insert_mpip_cm_1(struct sk_buff *skb, __be32 old_saddr, __be32 old_daddr,
 	}
 	if (sysctl_mpip_qd == 3)
 	{
-		skb_push(skb, 10);
+		skb->tail -= 10;
+		skb->len  -= 10;
 	}
 
 
