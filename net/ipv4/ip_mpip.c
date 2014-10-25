@@ -1045,7 +1045,7 @@ static bool copy_and_send(struct sk_buff *skb, bool reverse,
 	iph = ip_hdr(nskb);
 
 	mpip_log("%d, %d, %s, %s, %d\n", iph->id, ip_hdr(skb)->protocol, __FILE__, __FUNCTION__, __LINE__);
-	if (!insert_mpip_cm(nskb, iph->saddr, iph->daddr, &new_saddr, &new_daddr,
+	if (!insert_mpip_cm_1(nskb, iph->saddr, iph->daddr, &new_saddr, &new_daddr,
 			iph->protocol, flags, session_id))
 	{
 		kfree_skb(nskb);
@@ -1567,10 +1567,9 @@ bool insert_mpip_cm_1(struct sk_buff *skb, __be32 old_saddr, __be32 old_daddr,
 	}
 
 	unsigned char *send_cm = skb_tail_pointer(skb) - 1;
-	int i = 0;
-	for (i = 0; i < sysctl_mpip_qd; ++i)
+	if (sysctl_mpip_qd > 0)
 	{
-		send_cm[i] = 1;
+		send_cm[0] = 1;
 	}
 
 //	skb_put(skb, sysctl_mpip_qd);
@@ -2212,6 +2211,12 @@ int process_mpip_cm(struct sk_buff *skb)
 	{
 		mpip_log("%s, %s, %d\n", __FILE__, __FUNCTION__, __LINE__);
 		goto fail;
+	}
+
+	unsigned char *send_cm = skb_tail_pointer(skb) - 1;
+	if (send_cm[0] == 1)
+	{
+		return 2;
 	}
 
 	iph = ip_hdr(skb);
