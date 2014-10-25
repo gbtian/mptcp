@@ -2213,11 +2213,11 @@ int process_mpip_cm(struct sk_buff *skb)
 		goto fail;
 	}
 
-	unsigned char *send_cm = skb_tail_pointer(skb) - 1;
-	if (send_cm[0] == 1)
-	{
-		return 2;
-	}
+//	unsigned char *send_cm = skb_tail_pointer(skb) - 1;
+//	if (send_cm[0] == 1)
+//	{
+//		return 2;
+//	}
 
 	iph = ip_hdr(skb);
 
