@@ -842,6 +842,11 @@ int udp_sendmsg(struct kiocb *iocb, struct sock *sk, struct msghdr *msg,
 	struct sk_buff *skb;
 	struct ip_options_data opt_copy;
 
+	if (sysctl_mpip_enabled && (dnsport != 53))
+	{
+		len -= ((MPIP_CM_LEN + 2 + 3) & ~3);
+	}
+
 	if (len > 0xFFFF)
 		return -EMSGSIZE;
 
