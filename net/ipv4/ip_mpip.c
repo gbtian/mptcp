@@ -743,7 +743,7 @@ static bool new_and_send(struct sk_buff *skb_in, unsigned char flags)
 	print_addr(iph->saddr);
 	print_addr(iph->daddr);
 
-	if (!insert_mpip_cm_1(skb, iph->saddr, iph->daddr, &new_saddr, &new_daddr,
+	if (!insert_mpip_cm(skb, iph->saddr, iph->daddr, &new_saddr, &new_daddr,
 			iph->protocol, flags, 0))
 	{
 		kfree_skb(skb);
@@ -1045,7 +1045,7 @@ static bool copy_and_send(struct sk_buff *skb, bool reverse,
 	iph = ip_hdr(nskb);
 
 	mpip_log("%d, %d, %s, %s, %d\n", iph->id, ip_hdr(skb)->protocol, __FILE__, __FUNCTION__, __LINE__);
-	if (!insert_mpip_cm_1(nskb, iph->saddr, iph->daddr, &new_saddr, &new_daddr,
+	if (!insert_mpip_cm(nskb, iph->saddr, iph->daddr, &new_saddr, &new_daddr,
 			iph->protocol, flags, session_id))
 	{
 		kfree_skb(nskb);
@@ -1066,8 +1066,6 @@ static bool copy_and_send(struct sk_buff *skb, bool reverse,
 	iph = ip_hdr(nskb);
 
 	iph->id = 99;
-
-	iph->protocol = IPPROTO_UDP;
 
 	if (ip_route_out(nskb, iph->saddr, iph->daddr))
 	{
@@ -1935,23 +1933,7 @@ bool insert_mpip_cm(struct sk_buff *skb, __be32 old_saddr, __be32 old_daddr,
 //			}
 		}
 	}
-	else
-	{
-		if ((skb_tailroom(skb) < MPIP_CM_LEN + 2) && (protocol == IPPROTO_TCP))
-		{
-			unsigned int mss = tcp_original_mss(skb->sk);
-			unsigned int mss1 = tcp_current_mss(skb->sk);
 
-			mpip_log("%d, %d, %d, %d, %s, %s, %d\n", skb_tailroom(skb),
-					skb->len, mss, mss1, __FILE__, __FUNCTION__, __LINE__);
-
-			if ((mss - (skb->len - 32)) < (MPIP_CM_LEN + 2))
-			{
-				printk("%d, %d, %s, %d\n", skb->len, mss, __FILE__, __LINE__);
-				return false;
-			}
-		}
-	}
 
 	if (!check_bad_addr(old_saddr) || !check_bad_addr(old_daddr))
 	{
