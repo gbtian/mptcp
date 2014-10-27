@@ -1578,7 +1578,7 @@ bool insert_mpip_cm_1(struct sk_buff *skb, __be32 old_saddr, __be32 old_daddr,
 	if (sysctl_mpip_qd == 2)
 	{
 		skb_put(skb, 10);
-		if (protocol == PROTOCOL_UDP)
+		if (protocol == IPPROTO_UDP)
 		{
 			struct udphdr *udph = udp_hdr(skb);
 			udph->len = htons(ntohs(udph->len) + 10);
