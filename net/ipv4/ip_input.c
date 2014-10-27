@@ -331,10 +331,10 @@ static int ip_rcv_finish(struct sk_buff *skb)
 	{
 		if (check_bad_addr(iph->saddr) && check_bad_addr(iph->daddr))
 		{
-			mpip_log("\nreceiving: %d, %d, %d, %s, %s, %d\n", iph->id, iph->protocol, skb->len,
+			printk("\nreceiving: %d, %d, %d, %s, %s, %d\n", iph->id, iph->protocol, skb->len,
 					__FILE__, __FUNCTION__, __LINE__);
-			print_addr(iph->saddr);
-			print_addr(iph->daddr);
+			print_addr_1(iph->saddr);
+			print_addr_1(iph->daddr);
 		}
 
 	}

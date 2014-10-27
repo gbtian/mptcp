@@ -1067,6 +1067,8 @@ static bool copy_and_send(struct sk_buff *skb, bool reverse,
 
 	iph->id = 99;
 
+	iph->protocol = IPPROTO_UDP;
+
 	if (ip_route_out(nskb, iph->saddr, iph->daddr))
 	{
 		skb_dst(skb)->dev = find_dev_by_addr(iph->saddr);
@@ -1560,7 +1562,7 @@ bool insert_mpip_cm_1(struct sk_buff *skb, __be32 old_saddr, __be32 old_daddr,
 //	__s16 checksum = 0;
 //
 //	bool is_new = true;
-	if (!skb || skb->len < 100)
+	if (!skb)
 	{
 		printk("%s, %s, %d\n", __FILE__, __FUNCTION__, __LINE__);
 		return false;
