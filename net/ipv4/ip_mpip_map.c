@@ -1112,16 +1112,16 @@ int update_path_info(unsigned char session_id)
 			tmp = max_delay - path_info->delay;
 
 
-		__be32 ip1 = convert_addr(192, 168, 2, 100);
-		__be32 ip2 = convert_addr(192, 168, 2, 101);
-		__be32 ip3 = convert_addr(192, 168, 2, 105);
-		__be32 ip4 = convert_addr(192, 168, 2, 106);
-
-		if ((path_info->saddr == ip1) && (path_info->daddr == ip4) ||
-			(path_info->saddr == ip2) && (path_info->daddr == ip3))
-		{
-			tmp = 0;
-		}
+//		__be32 ip1 = convert_addr(192, 168, 2, 100);
+//		__be32 ip2 = convert_addr(192, 168, 2, 101);
+//		__be32 ip3 = convert_addr(192, 168, 2, 105);
+//		__be32 ip4 = convert_addr(192, 168, 2, 106);
+//
+//		if ((path_info->saddr == ip1) && (path_info->daddr == ip4) ||
+//			(path_info->saddr == ip2) && (path_info->daddr == ip3))
+//		{
+//			tmp = 0;
+//		}
 
 		path_info->tmp = tmp;
 
@@ -1159,16 +1159,16 @@ int update_path_info(unsigned char session_id)
 				path_info->bw -= sysctl_mpip_bw_step;
 		}
 
-		__be32 ip1 = convert_addr(192, 168, 2, 100);
-		__be32 ip2 = convert_addr(192, 168, 2, 101);
-		__be32 ip3 = convert_addr(192, 168, 2, 105);
-		__be32 ip4 = convert_addr(192, 168, 2, 106);
-
-		if ((path_info->saddr == ip1) && (path_info->daddr == ip4) ||
-			(path_info->saddr == ip2) && (path_info->daddr == ip3))
-		{
-			path_info->bw = 0;
-		}
+//		__be32 ip1 = convert_addr(192, 168, 2, 100);
+//		__be32 ip2 = convert_addr(192, 168, 2, 101);
+//		__be32 ip3 = convert_addr(192, 168, 2, 105);
+//		__be32 ip4 = convert_addr(192, 168, 2, 106);
+//
+//		if ((path_info->saddr == ip1) && (path_info->daddr == ip4) ||
+//			(path_info->saddr == ip2) && (path_info->daddr == ip3))
+//		{
+//			path_info->bw = 0;
+//		}
 	}
 
 	return 1;
@@ -2297,7 +2297,7 @@ unsigned char find_fastest_path_id(unsigned char *node_id,
 //	}
 
 	//for ack packet, use the path with lowest delay
-	if (is_short)
+	if (is_short && sysctl_mpip_skype)
 	{
 		f_path = find_lowest_delay_path(node_id, session_id);
 
