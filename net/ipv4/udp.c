@@ -829,6 +829,15 @@ int udp_sendmsg(struct kiocb *iocb, struct sock *sk, struct msghdr *msg,
 	struct udp_sock *up = udp_sk(sk);
 	struct flowi4 fl4_stack;
 	struct flowi4 *fl4;
+
+	__be16 dnsport = htons((unsigned short int) inet->inet_dport);
+//	printk("%d, %s, %s, %d\n", len, __FILE__, __FUNCTION__, __LINE__);
+	if (sysctl_mpip_enabled && (dnsport != 53) && is_mpip_enabled(inet->inet_daddr, inet->inet_dport))
+	{
+		len -= ((MPIP_CM_LEN * 2 + 3) & ~3);
+	}
+//	printk("%d, %s, %s, %d\n", len, __FILE__, __FUNCTION__, __LINE__);
+
 	int ulen = len;
 	struct ipcm_cookie ipc;
 	struct rtable *rt = NULL;
@@ -842,13 +851,6 @@ int udp_sendmsg(struct kiocb *iocb, struct sock *sk, struct msghdr *msg,
 	int (*getfrag)(void *, char *, int, int, int, struct sk_buff *);
 	struct sk_buff *skb;
 	struct ip_options_data opt_copy;
-
-	__be16 dnsport = htons((unsigned short int) inet->inet_dport);
-
-	if (sysctl_mpip_enabled && sysctl_mpip_send && (dnsport != 53) && is_mpip_enabled(inet->inet_daddr, inet->inet_dport))
-	{
-		len -= ((MPIP_CM_LEN * 2 + 3) & ~3);
-	}
 
 	if (len > 0xFFFF)
 		return -EMSGSIZE;
