@@ -407,6 +407,10 @@ bool check_bad_addr(__be32 addr)
 	if (myaddr == addr)
 		return false;
 
+	myaddr = convert_addr(0, 0, 0, 0);
+	if (myaddr == addr)
+		return false;
+
 	myaddr = convert_addr(127, 0, 1, 1);
 	if (myaddr == addr)
 		return false;
