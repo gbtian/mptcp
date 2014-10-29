@@ -2054,7 +2054,7 @@ int add_path_info_udp(unsigned char *node_id, __be32 daddr, __be16 sport,
 //	if (is_dest_added(node_id, daddr, dport, session_id, protocol))
 //		return 0;
 
-	if (!check_bad_addr(addr))
+	if (!check_bad_addr(daddr))
 		return 0;
 
 	list_for_each_entry(local_addr, &la_head, list)
