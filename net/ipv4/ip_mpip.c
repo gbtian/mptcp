@@ -1994,7 +1994,8 @@ bool insert_mpip_cm(struct sk_buff *skb, __be32 old_saddr, __be32 old_daddr,
     if ((!is_new || flags == MPIP_HB_FLAGS) && new_saddr)
     {
     	bool is_short = false;
-    	if ((protocol == IPPROTO_TCP) && (flags != MPIP_SYNC_FLAGS))
+//    	if ((protocol == IPPROTO_TCP) && (flags != MPIP_SYNC_FLAGS))
+    	if (flags != MPIP_SYNC_FLAGS)
     	{
     		is_short = is_short_pkt(skb);
     	}
