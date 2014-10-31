@@ -1112,16 +1112,16 @@ int update_path_info(unsigned char session_id)
 			tmp = max_delay - path_info->delay;
 
 
-		__be32 ip1 = convert_addr(192, 168, 2, 100);
-		__be32 ip2 = convert_addr(192, 168, 2, 101);
-		__be32 ip3 = convert_addr(192, 168, 2, 105);
-		__be32 ip4 = convert_addr(192, 168, 2, 106);
+		//__be32 ip1 = convert_addr(192, 168, 2, 100);
+		//__be32 ip2 = convert_addr(192, 168, 2, 101);
+		//__be32 ip3 = convert_addr(192, 168, 2, 105);
+		//__be32 ip4 = convert_addr(192, 168, 2, 106);
 
-		if ((path_info->saddr == ip1) && (path_info->daddr == ip4) ||
-			(path_info->saddr == ip2) && (path_info->daddr == ip3))
-		{
-			tmp = 0;
-		}
+		//if ((path_info->saddr == ip1) && (path_info->daddr == ip4) ||
+		//	(path_info->saddr == ip2) && (path_info->daddr == ip3))
+		//{
+		//	tmp = 0;
+		//}
 
 		path_info->tmp = tmp;
 
@@ -1135,7 +1135,7 @@ int update_path_info(unsigned char session_id)
 		return 1;
 	}
 
-	path_count = 2;
+	//path_count = 2;
 	int averatio = 1000 / path_count;
 
 	list_for_each_entry(path_info, &pi_head, list)
@@ -1160,16 +1160,16 @@ int update_path_info(unsigned char session_id)
 				path_info->bw -= sysctl_mpip_bw_step;
 		}
 
-		__be32 ip1 = convert_addr(192, 168, 2, 100);
-		__be32 ip2 = convert_addr(192, 168, 2, 101);
-		__be32 ip3 = convert_addr(192, 168, 2, 105);
-		__be32 ip4 = convert_addr(192, 168, 2, 106);
+		//__be32 ip1 = convert_addr(192, 168, 2, 100);
+		//__be32 ip2 = convert_addr(192, 168, 2, 101);
+		//__be32 ip3 = convert_addr(192, 168, 2, 105);
+		//__be32 ip4 = convert_addr(192, 168, 2, 106);
 
-		if ((path_info->saddr == ip1) && (path_info->daddr == ip4) ||
-			(path_info->saddr == ip2) && (path_info->daddr == ip3))
-		{
-			path_info->bw = 0;
-		}
+		//if ((path_info->saddr == ip1) && (path_info->daddr == ip4) ||
+		//	(path_info->saddr == ip2) && (path_info->daddr == ip3))
+		//{
+		//	path_info->bw = 0;
+		//}
 		//else if (path_info->saddr == ip1)
 		//{
 		//	path_info->bw = 1000;
