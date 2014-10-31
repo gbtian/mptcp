@@ -1135,6 +1135,7 @@ int update_path_info(unsigned char session_id)
 		return 1;
 	}
 
+	path_count = 2;
 	int averatio = 1000 / path_count;
 
 	list_for_each_entry(path_info, &pi_head, list)
