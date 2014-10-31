@@ -1169,14 +1169,14 @@ int update_path_info(unsigned char session_id)
 		{
 			path_info->bw = 0;
 		}
-		else if (path_info->saddr == ip1)
-		{
-			path_info->bw = 1000;
-		}
-		else if (path_info->saddr == ip2)
-		{
-			path_info->bw = 500;
-		}
+		//else if (path_info->saddr == ip1)
+		//{
+		//	path_info->bw = 1000;
+		//}
+		//else if (path_info->saddr == ip2)
+		//{
+		//	path_info->bw = 500;
+		//}
 	}
 
 	return 1;
