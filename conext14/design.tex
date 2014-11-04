@@ -1,15 +1,10 @@
 %!TEX root =conext14.tex
-\section{Design of MPIP}
+\section{the Design}
 \label{sec:design}
-Based on Linux kernel $3.12$, we implement our prototype in Ubuntu. Most work resides in the IP layer with some compatibility modification in other modules. Also, the addition of multipath IP feature is transparent to users, a.k.a, all user's applications won't be modified.
+Based on Linux kernel $3.12$, the implementation is mainly at the network layer and targets to IP protocol. To make the implementation transparent to users and other layers, we try to keep all kernel modifications inside network layer. Later in the paper we will merge MPTCP and MPIP together, this good modularization makes the two features work together seamlessly. To keep the simplicity of IP protocol, we keep the connectionless feature of IP protocol while maintaining some feedback information of different paths. As will be shown later, we achieve this goal by simply by keeping track of several tables. This can make sure that we don't add excessive overhead to the system.
 
-The framework of MPIP is shown in Figure~\ref{fig.arch}. 
-\begin{figure}
-\centering
-\includegraphics[width=0.8\linewidth]{fig/arch.eps}
-\caption{Overall design of MPIP}
-\label{fig.arch}
-\end{figure}
+As a fundamental problem, NAT devices are commonly used in the current Internet. For a single connection, multiple NAT devices can exist on the path. With the existence of NAT devices, many IP addresses are exposed to the Internet as a combination of IP address and port number. So in the following sections, when referring the address of a node, we will use the combination of IP address and port number.
+
 
 %\subsection{MPIP Working Modes}
 %As we can see, assume there are $M$ and $N$ networking interfaces on each end, there will be $M*N$ available paths totally between the two nodes. Among all the available paths, we can have different modes to make use of them. Generally, there are two modes of MPIP.
@@ -22,16 +17,13 @@ The framework of MPIP is shown in Figure~\ref{fig.arch}.
 %
 %In both parallel mode and backup mode, there is a main interface which is used to notate the connection. In parallel mode, one main interface is chosen when the application starts the connection. In backup mode, the working interface is the main interface. In both modes, when the main interface isn't available at any time, other interfaces will take over seamless and act as the main interface without being known by upper layers because this main interface is maintained at the transport layer. With this mechanism, all connection won't be re-established after interface switching.
 
-\subsection{NAT consideration}
-For each connection, probably there can be multiple NAT devices on the path. In this scenario, we can't only use the exposed IP address as the identification one node, instead, the combination of IP address and port number is unique for each node. So in the following sections, when referring the address of a node, we will use the combination of IP address and port number.
-
-
 \subsection{IP Layer Control Communication}
-As stated before, most implementation is done at IP layer. In the IP layer, everything is like UDP, there is no feedback information at IP layer. The kernel just sends out the packets through a proper path, then all the other things will be dealt with by upper layer. Like in TCP, reliable transmission is guaranteed by its own control protocol.
+IP protocol is a connectionless protocol. In TCP protocol, the ACK packet is mainly used as the feedback information from the receiver. Then the sender is able to know the real time status of the transmission. But IP protocol doesn't have this built-in feedback loop. To maintain multiple paths at IP layer, we need to add control communication functionality like the ACK packet in TCP at IP layer, then two ends of one connectionless connection can talk to each other. 
+Instead of constructing new control packets between connection ends, we use piggyback technology to implement the feedback message in IP layer. This can avoid excessive control packets and reduce overhead of the MPIP.
 
-To support additional multipath feature at IP layer, we need to introduce feedback message at IP layer to enable the peers to talk with each other. Not like in TCP, which has specific control packets like ACK packets to support the protocol, we use piggyback technology to implement the feedback message in IP layer. This can avoid excessive control packets and reduce overhead of the MPIP.
-
-For each MPIP enabled packet that goes out of the system, we add an additional data block at the end of user data. As shown in Figure~\ref{fig.cm}.
+For each MPIP enabled packet that goes out of the system, we add an additional control message(CM) data block at the end of user data. 
+%The size of the CM block is $25$ bytes which is the communication overhead of MPIP, this is trivial comparing to the benefit brought by MPIP. 
+Sometimes the size of the packet will exceeds MTU after attaching the data block, in this case, we reduce the amount of user data to fit the CM block. 
 
 %\begin{figure}
 %\centering
@@ -39,6 +31,9 @@ For each MPIP enabled packet that goes out of the system, we add an additional d
 %\caption{CM data block}
 %\label{fig.cm}
 %\end{figure}
+
+
+The content in the control message is shown in Table~\ref{tb.cm}.
 
 \begin{table}
 \caption{\label{tb.cm}Control Message Structure}
@@ -60,21 +55,20 @@ Control Message \\
 \end{tabular}
 \end{table}
 
-The content in the control message is shown in Table~\ref{tb.cm}.
-
-\emph{Node ID} is the globally unique identification of one node. Because IP address can change at different times, we use the MAC address of one of NICs at the local node. When the system starts, we initiate node ID's value with one of the node's NIC card's MAC address and keep it unchanged until the system exits. Every time the node sends out a packet, it fills the field of \emph{node ID} with the previously extracted value into the control message.
+\emph{Node ID} is the globally unique identification of one node. The combination of IP address and port number is not a qualified candidate because during connection switching, IP address can change on the specific NIC. To have a static and consistent node ID, we choose the MAC address of one of NICs to be the unique ID of a node. 
+The value of node ID is initiated when the system starts and keep it unchanging until the system exits. Every time the node sends out a packet, it fills the field of \emph{node ID} with the previously extracted value into the control message.
 
 \emph{Local Address List} carries all local IP addresses. This list will be used to construct new MPIP paths.
 
-\emph{CM Flags} notates the functionality of the packet. With different value of \emph{CM Flags}, different action will be taken when the packet has been received. 
+\emph{CM Flags} notates the functionality of the packet. With different value of \emph{CM Flags}, different action will be taken when the packet is received. 
 
-\emph{Checksum} is used to verify the validation of the CM data block. This value is assigned by simply adding up the value of all other field in the CM data block. This will be recalculated when received to judge whether a CM data block is attached in this packet.
+\emph{Checksum} is used to verify the validation of the CM data block. This value is assigned by simply adding up the value of all other field in the CM data block. This will be recalculated when received to judge whether a CM data block is attached in this packet. The packet will be treated as a normal packet instead of a MPIP-enabled packet if the checksum verification doesn't get through.
 
 Other fields of the CM block will be explained in following sections.
 
 \subsection{MPIP availability handshake}
 
-As a new feature in Linux, MPIP needs to be backward compatible. For one specific connection, before enabling MPIP functionality, the two sides need to synchronize with each other to make sure both have MPIP feature enabled. Locally, every node maintains Table~\ref{tb.me} to identify the availability of MPIP at its opposite nodes. Before the initial synchronization finishes, all communication on the connection is normal traffic without MPIP enabled.
+As a new feature in Linux, MPIP needs to be backward compatible. For one specific connection, before enabling MPIP functionality at both end, the two sides need to synchronize with each other to make sure both are MPIP enabled. Locally, every node maintains Table~\ref{tb.me} to identify the availability of MPIP at its opposite nodes. Before the handshake finishes, all communication on the connection is normal traffic without MPIP enabled.
 
 \begin{table}[htbp]
 \caption{\label{tb.me}MPIP availability}
@@ -92,57 +86,25 @@ ${IP}_{2}$ & ${P}_{2}$ & False & $5$ \\
 
 
 When a node sends out a packet, it checks locally whether the target node is MPIP enabled in Table~\ref{tb.me}. If not, it 
-copies the current packet. Besides sending out the original packet, the system inserts the CM block into the copied packet with \emph{CM Flags} of $Flags\_Enable$. This value is used for MPIP query. When this packet is received by a MPIP enabled node, the receiver adds the sender's IP address and port number into Table~\ref{tb.me}, then sends back the confirmation to the sender with \emph{CM Flags} of $Flags\_Enabled$.
-
-For any protocol rather than TCP, we populate a new packet, fill all header fields with the correct information, and insert the CM block at the end, then send back to the sender right away. But for TCP, we add the confirmation request into a waiting list, and piggyback the confirmation when next TCP message is sent out to that specific node. There are two reasons to do this different process. 
+copies the current packet. Besides sending out the original packet, the system inserts the CM block into the copied packet with \emph{CM Flags} of $Flags\_Enable$. This value is used for MPIP query. When this packet is received by a MPIP enabled node, the receiver adds the sender's IP address and port number into Table~\ref{tb.me} with value of $True$, then sends back the confirmation to the sender with \emph{CM Flags} of $Flags\_Enabled$ at a proper time. For TCP and non-TCP connection, we send out the confirmation packet at different times. For any protocol rather than TCP, we populate a new packet, fill all header fields with the correct information, and insert the CM block at the end, then send back to the sender right away. But for TCP, we add the confirmation request into a waiting list, and piggyback the confirmation when next TCP message is sent out to that specific node. There are two reasons to have this different process. 
 
 \begin{enumerate}
-\item For protocols rather than TCP, like UDP, because they don't have built-in feedback loop, which means that all traffic can be of only one direction. In this situation, we can't wait until there are packets available to send back 
+\item For protocols rather than TCP, like UDP, because they don't have built-in feedback loop, which means that all traffic can be one direction. In this scenario, we can't wait until there are packets available to piggyback the confirmation.
 
-\item For the protocol of TCP, we don't simply populate a new TCP packet and send back because the sequence numbers of each direction are different. Through our experiments, some NAT devices will refuse to transfer this packet if the sequence number messes up for the same TCP connection. We can manage to maintain the right sequence numbers to fill them into the confirmation packet, but by considering the whole design of our system, we choose to add the request into a waiting list, when there is TCP packet available to send back, we make a copy of the packet and insert the CM block with \emph{CM Flags} of $Flags\_Enabled$. In this case, there will be two consecutive TCP packets that go through the path with the same sequence number. The NAT devices will simply consider that they are retransmission instead of dropping them.
+\item For TCP protocol, we don't simply populate a new TCP packet and send back because the sequence numbers of each direction are way different. Through our experiments, some NAT devices will refuse to transfer this packet if the sequence number messes up for the same TCP connection. We can manage to maintain the right sequence numbers to fill them into the confirmation packet, but by considering the whole design of our system, we choose to add the request into a waiting list. When there are TCP packets on this connection available to send back, we make a copy of the packet and insert the CM block with \emph{CM Flags} of $Flags\_Enabled$. In this case, there will be two consecutive TCP packets that go through the path with the same sequence number. The NAT devices will simply consider them as retransmissions instead of dropping them.
 \end{enumerate}
 
-For both the MPIP query packet and MPIP confirmation packet, we populate new packets based on the original packets by making copies. All manually copied packets won't be passed to the upper layers because they are generated at the network layer and stop there too, they don't mean anything to upper layers. The network layer drops all MPIP packets with \emph{CM Flags} of $Flags\_Enable$ and $Flags\_Enabled$ after processing them.
+For both the MPIP query packet and MPIP confirmation packet, we populate new packets based on the original packets by making copies. All copied packets won't be passed to higher layers because they are generated at the network layer and stop there too, they don't mean anything to higher layers. The network layer drops all MPIP packets with \emph{CM Flags} of $Flags\_Enable$ and $Flags\_Enabled$ after processing them.
 
-With the handshake flow above, the smallest number of query packet that will be sent for the whole process is only one. But sometimes because of packet loss or synchronization issues, there can be multiple query packet sent out at both ends. This is not a problem because the design of the system allows receiving more than one query packet and confirmation packet. For nodes that don't support MPIP, we can't send out query messages forever. In Table~\ref{tb.me}, the column \emph{Query Count} maintains how many query messages have been sent out to relative IP addresses. If the number is larger than a threshold value, it assumes that IP address doesn't support MPIP. Considering that packet loss is rare event in Internet nowadays, we set this value to $5$ in our system, this is more than enough to make sure a MPIP enabled node can receive and reply this message with successful transmission. In a connection will only one-way traffic, if the receiver is MPIP enabled while the sender isn't, then no query packet will be sent out at all.
+With the handshake flow above, the smallest number of query packet that will be sent for the whole process is only one. But sometimes because of packet loss or synchronization issues, there can be multiple query packet sent out at both ends. This is not a problem because the design of the system allows receiving more than one query packet and confirmation packet. But on the other hand, for nodes that don't support MPIP, we can't send out query messages forever. In Table~\ref{tb.me}, the column \emph{Query Count} maintains the number of query messages that have been sent out to relative IP addresses. If the number is larger than a threshold value, it assumes that IP address doesn't support MPIP. Considering that packet loss is rare event in Internet nowadays, we set this value to $5$ in our system, this is more than enough to make sure a MPIP enabled node can receive and reply this message with successful transmissions. In a connection with only one-way traffic, if the receiver is MPIP enabled while the sender isn't, then no query packet will be sent out at all.
 
-Generally, for MPIP enabled nodes, they can have more than one IP address. In this situation, multiple synchronization messages will be transmitted for the same node.
+Generally, for MPIP enabled nodes, they may have more than one IP address. In this situation, multiple synchronization messages will be transmitted for the same node.
 
-\begin{figure}
-\centering
-\includegraphics[width=0.8\linewidth]{fig/me.eps}
-\caption{MPIP availability synchronization}
-\label{fig.me}
-\end{figure}
-
-\subsection{Multipath TCP Transmission}
-Through our experiments and previous studies\cite{mptcp}, NAT devices have a lot of interference to end-to-end connections, especially for TCP packets. The most straightforward limitation for TCP packets is that many NAT devices will drop TCP packets that don't have a connection related to them. This means that if we transmit TCP traffic on a path rather than the original one, the NAT devices on the path will probably drop these packets before they arrive at the destination. There is no such problem in Multipath TCP\cite{mptcp} because MPTCP has a totally independent TCP connection on each path which will pass this category of NAT devices successfully. In our MPIP implementation, we provide two options to solve this problem.
-
-\subsubsection{Fake TCP connection}
-In NAT devices that drop TCP packets without relative connection information, we cheat them by constructing fake TCP connections on relative paths. The construction of TCP contains three-way handshakes. Instead of constructing real TCP connections, we implement a simple three-way handshake at network layer which is similar as TCP handshake, but it only happens at network layer. 
-
-As shown in Table~\ref{tb.cm}, the field \emph{Local Address List} carries all local IP addresses. When the client receives the IP address list of the server, it extracts its own IP address list, then sends out a SYN packet through each possible path to the server except the original one which is the one that was used to initiate the connection. When the server receives this SYN packet, it replies with a SYN-ACK packet through the same path. After the client sends out the final ACK packet to the server, the three-way handshake for our fake TCP connection is completed successfully, then this path will be used to transmit MPIP TCP packet without being dropped. The whole process only happens at network layer, all packets for the three-way handshake have \emph{CM Flags} value of $5$, they will be dropped after being processed at network layer. By having fake TCP connections, we can make use of multiple feature for TCP traffic without the overhead of managing multiple TCP connections as in MPTCP.
-
-If some addresses of the server in the address list are not public address, then the SYN packet will never arrive to that address, in this case, this interface will not be used at all.
-
-\subsubsection{UDP wrapper}
-The other option we provide for multipath TCP traffic is UDP wrapper. Because there is no connection information in an UDP packet, most NAT devices don't have limitation on regular UDP traffic. We can make use of this feature to wrap our TCP packet with a UDP packet to pass the NAT devices and unwrap it when received.
-
-As shown in Figure~\ref{fig.udpwrapper}, at the sender side, every time the network layer gets a TCP packet from transport layer, the system chooses a path to send the packet out as shown in Section~\ref{sec:path}. If the chosen path isn't the original path, we wrap the user data and TCP header into an UDP packet.
-
-Also, if some addresses of the server in the IP address list are not public address, the packet may go to some other node with the private IP address, in this case, the \emph{node id} value verification will fail, then this packet will be dropped by that node. At the sender side, the path will expire soon because of no feedback for that path and this path will be deleted. 
-
-%\begin{figure}
-%\centering
-%\includegraphics[width=0.8\linewidth]{fig/cm.eps}
-%\caption{UDP wrapper for TCP packet}
-%\label{fig.udpwrapper}
-%\end{figure}
 
 \subsection{Path Management}
 \label{sec:path}
 
-As shown in Figure~\ref{fig.arch}, given $M$ and $N$ interfaces at each end, there are totally $M*N$ possible paths on the connection. On each end of one connection, the same number of paths with the opposite direction will be maintained. In our system, we maintain all available paths through Table~\ref{tb.pi}.
+Given $M$ and $N$ interfaces at each end of one connection, there are totally $M*N$ possible paths on the connection. In our system, we maintain all available paths through Table~\ref{tb.pi}.
 
 \begin{table*}
 \small
@@ -166,15 +128,13 @@ $ID$&${PID}_{22}$&${SID}_{2}$&${SIP}_{1}$&${SP}_{2}$&${DIP}_{1}$&${DP}_{2}$&${D_
 
 Node ID is used to identify the sender globally. In all packets sent out from this node, the same value will be filled into the field of \emph{node ID}.
 
-Path ID is used to identify one path. It is maintained at each end, we set it as locally unique Arab numbers starting from $1$. This value is generated only when adding new paths into Table~\ref{tb.pi}. 
+Path ID is used to identify one path. It is a locally unique Arab numbers starting from $1$. This value is generated only when adding new paths into Table~\ref{tb.pi}. 
 
-Because of NAT mapping, the same node can have different IP address and port number that will be seen on the other side at different time or even for different application. That's why the column \emph{Session ID} needs to be added into Table~\ref{tb.pi}. When sending out one packet, the final path will only be chosen from the ones that have the correct session id. The detail of session is explained in Section~\ref{sec:session}. Here we just consider a session is the synonym of one connection.
+Because of NAT mapping, the same node can have different IP address and port number that will be seen on the other side at different time or even for different application. That's why column \emph{Session ID} needs to be added into Table~\ref{tb.pi}. When sending out one packet, the final path will only be chosen from the ones that have the correct session id. The detail of session is explained in Section~\ref{sec:session}. Here we just consider a session is the synonym of one connection. As the names show, source IP, source port, destination IP and destination port show the address information of the path. The IP addresses here are the addresses that are seen by the node that maintain the instance of Table~\ref{tb.pi}. This value might be different from local IP addresses because of NAT mapping.
 
-As the names show, source IP, source port, destination IP and destination port show the address information of the path. Because of the existence of NAT devices, IP address is not enough to identify the address information. Also, the IP addresses can be different on the two nodes even if they represent the same physical path because NAT devices change IP addresses. For the same pair of nodes, one instance of Table~\ref{tb.pi} is maintained at each side, the IP addresses here are the addresses that are seen by the node that maintain the instance of Table~\ref{tb.pi}.
+One instance of Table~\ref{tb.pi} is maintained at each side. Initially, Table~\ref{tb.pi} is empty. Every time one new combination of IP address and port number is flagged as MPIP enabled in Table~\ref{tb.me}, it adds new paths to the table with every available local IP address as the source IP address, and the value of Node ID is extracted from Table~\ref{tb.wi} which is maintained to conveniently map node ID with IP address and port number. 
 
-Initially, Table~\ref{tb.pi} is empty. Every time one new combination of IP address and port number is flagged as MPIP enabled in Table~\ref{tb.me}, it adds new paths to the table with every available local IP address, and the value of Node ID is extracted from Table~\ref{tb.wi} which is maintained to conveniently map node ID with IP address and port number. 
-
-Structure of Table~\ref{tb.wi} is very simple, it contains all working IP addresses and port number of one specific node ID. When paths in Table~\ref{tb.pi} are obsolete and need to be removed, relative entries in Table~\ref{tb.wi} will also be removed.
+Table~\ref{tb.wi} contains all working IP addresses and port number of one specific node ID. When paths in Table~\ref{tb.pi} are obsolete and need to be removed, relative entries in Table~\ref{tb.wi} will also be removed.
 
 \begin{table}[htbp]
 \caption{\label{tb.wi}Node ID vs IP address and Port}
@@ -197,9 +157,10 @@ ${ID}_{2}$&${IP}_{22}$&${P}_{22}$ \\
 
 \subsection{Feedback Loop}
 
-Unlike multipath TCP, which has built-in congestion control algorithms, in the Network layer, to be able to detect the capability of each path, we need some kind of feedback information like in TCP. But we don't need the same complicated congestion control algorithms. Instead, we just roughly estimate capability of each path to make a choice.
+We try to maintain the metrics of paths in Table~\ref{tb.pi}. Packet loss and delay are the most important two characters of one path. Given that packet loss in current Internet has become rare events, we only focus on delay of one path. Furthermore, when choosing a proper path to send out packets, the way back is not considered, so the delay here only means one-way delay. With the addition of CM block to existing packet, we implement IP layer's feedback loop with one-way delay as the feedback variable. 
 
-In Table~\ref{tb.pi}, all fields referring to network delay will be filled or calculated by feedback information. In Table~\ref{tb.cm}, the fields \emph{Path ID} and \emph{Packet Timestamp} are used to measure network delay. When a node A sends out a packet, it chooses a path from Table~\ref{tb.pi}, fill the field \emph{Path ID} in control message with the chosen path ID, also, get the current time with system's jiffies value and fill the filed \emph{Packet Timestamp} in control message. After the receiver node B receives this packet, it updates records in Table~\ref{tb.ps}. The receiver extracts node ID path ID and timestamp from the control message. The node ID and path ID are directly used to identify records in Table~\ref{tb.ps}, for the timestamp $T_1$, the receiver calculate the timestamp $T_2$ with its local jiffies value and uses $T_2-T_1$ as the one way delay from node A to node B. Node B checks whether the path that identified by the node ID and path ID already exists in Table~\ref{tb.ps}, if yes, it updates the path's delay with $T_2-T_1$, otherwise, it adds a new record into Table~\ref{tb.ps}.
+
+In Table~\ref{tb.pi}, all fields referring to network delay will be filled or calculated by feedback one-way delay. Here we need to go back to Table~\ref{tb.cm}. In Table~\ref{tb.cm}, the fields \emph{Path ID} and \emph{Packet Timestamp} are used to measure network delay. When node $A$ sends out a packet, it chooses a path from Table~\ref{tb.pi}, fill the field \emph{Path ID} with the chosen path ID, and fill the filed \emph{Packet Timestamp} with local system time $T_1$ in the CM block. After node $B$ receives this packet, it updates records in Table~\ref{tb.ps}. Node $B$ extracts node ID, path ID and timestamp from the CM block. The node ID and path ID are directly used to identify records in Table~\ref{tb.ps}, and node $B$ uses $T_2-T_1$ as the one way delay from node $A$ to node $B$ where $T_2$ is the local system time of node $B$ when receiving the packet. Node $B$ checks whether the path that identified by the node ID and path ID already exists in Table~\ref{tb.ps}, if yes, it updates the path's delay with $T_2-T_1$, otherwise, it adds a new record into Table~\ref{tb.ps}.
 
 \begin{table}[htbp]
 \caption{\label{tb.ps}Path Feedback information}
@@ -209,44 +170,32 @@ In Table~\ref{tb.pi}, all fields referring to network delay will be filled or ca
  Node   & Path    & Path      & Feedback           \\
   ID    &  ID     & Delay     & Time               \\
 \hline
-${ID}_{11}$&${PID}_{11}$&${D}_{11}$&${J}_{11}$   \\
+${ID}_{11}$&${PID}_{11}$&${D}_{11}$&${T}_{11}$   \\
 \hline
-${ID}_{12}$&${PID}_{12}$&${D}_{12}$&${J}_{12}$   \\
+${ID}_{12}$&${PID}_{12}$&${D}_{12}$&${T}_{12}$   \\
 \hline
-${ID}_{21}$&${PID}_{21}$&${D}_{21}$&${J}_{21}$   \\
+${ID}_{21}$&${PID}_{21}$&${D}_{21}$&${T}_{21}$   \\
 \hline
-${ID}_{22}$&${PID}_{22}$&${D}_{22}$&${J}_{22}$   \\
+${ID}_{22}$&${PID}_{22}$&${D}_{22}$&${T}_{22}$   \\
 \hline
 \end{tabular}
 \end{table}
 
-In practice, the value of path delay calculated here isn't the real delay value because of time difference between node A and node B, even, it can be negative. But as we will see later, time difference between A and B doesn't have any influence on our algorithm.
+In practice, the value of path delay calculated here isn't the real delay value because of time difference between node $A$ and node $B$, it can even be negative. But as we will see later, time difference between $A$ and $B$ doesn't have any influence on our algorithm.
 
-When node B needs to send packet back to node A, it chooses the record with the earliest feedback time in Table~\ref{tb.ps}, it fills the field \emph{Feedback Path ID} and \emph{Path Delay} of the control message with relative value in Table~\ref{tb.ps}, and updates the column \emph{Feedback Time} with system's current jiffies value. When node A receives this packet, it extracts the path ID and path delay value in the control message, and fills the path delay value into the column \emph{Real-Time Network Delay} in Table~\ref{tb.pi}. To avoid outliers, the value of path delay is calculated by moving average algorithm. At meantime, the column \emph{Feedback Time} is updated with the current local jiffies value.
+When node $B$ needs to send packet back to node $A$, it chooses the record with the earliest feedback time in Table~\ref{tb.ps}, it fills the field \emph{Feedback Path ID} and \emph{Path Delay} in the CM block with relative value in Table~\ref{tb.ps}, and updates the column \emph{Feedback Time} with local system time. When node $A$ receives this feedback packet, it extracts the path ID and path delay value, and fills the path delay value into the column \emph{Real-Time Network Delay} in Table~\ref{tb.pi}. To avoid outliers, the value of path delay is calculated by moving average algorithm. At meantime, the column \emph{Feedback Time} is updated with current system time. If one path hasn't received feedback information from the receiver for some threshold value of time, it means this path is literally dead, then the system considers the path to be obsolete and remove the path from Table~\ref{tb.pi}.
 
-In practice, IP addresses of devices can be removed or added dynamically. Especially for mobile device, it can connect to different access points(WiFi hotspot/Cellular Tower) at different time, during this stage, its IP address can be changed, removed or added dynamically. Under this situation, the system supports addition and removal of paths from Table~\ref{tb.pi}.
-
-There are two scenarios that new paths will be added into Table~\ref{tb.pi}. The first scenario is when new packets are received, new paths will be added as narrated above. The second scenario is when new IP addresses are assigned to the device, the system will check Table~\ref{tb.pi} to added new path entries for all destination IP addresses. Every time the system sends out packets, it checks the value of the column \emph{Feedback Time} in Table~\ref{tb.pi}, if the the latest update time for the path has exceeds a threshold value, then the system considers the path to be obsolete and remove the path from Table~\ref{tb.pi}. Also, if there are changes of IP addresses locally, like up/down of NICs and change of IP address, there will also be addition and removal of paths.
-
-If there is any changes of local IP addresses, when sending out packets, the value of \emph{CM Flags} in CM block will be $1$ to notify the other node to make changes to relative tables.
-
-In Table~\ref{tb.pi}, except the column \emph{Real-Time Network Delay}, other three delay related columns are calculated through this column.
-
-\begin{enumerate}
-\item \textbf{Minimum Network Delay $D_{min}$}. Every time one node receives update of network delay, it update this column with the minimum of its current value and the new real-time network delay.
-\item \textbf{Real-Time Queuing Delay $Q$}. According to Figure~\ref{fig.delay}, the value of queuing delay is calculated as $Q=D-D_{min}$ which is the difference between real-time network delay and minimum network delay.
-\item \textbf{Maximum Queuing Delay $Q_{max}$}. Maximum queuing delay is updated once the real-time queuing delay $Q$ is larger than $Q_{max}$. When packet loss happens, this value notates the curve section after point $L$ in Figure~\ref{fig.delay}.
-\end{enumerate}
+In practice, IP addresses of devices can be removed or added dynamically. Especially for mobile device, it can connect to different access points(WiFi hotspot/Cellular Tower) at different time, during this stage, its IP address can be changed, removed or added dynamically. Under this situation, the system supports dynamic addition and removal of paths from Table~\ref{tb.pi} because of IP address changes. When IP address change happens, the value of \emph{CM Flags} is set to be $Flags\_IP\_Change$ in the CM block. After receiving packets of this flag, the receiver knows that IP address change happened on the sender, it will remove all entries of this connection in all tables, then add the combination of IP address and port number contained in the received packet into all the tables as if that combination is MPIP enabled.
+Also, the sender does the same reset for this connection. After all these resets, there is only one path left for this connection, all the other paths will be added into the system through the normal process. By doing this path reconstruction, we achieve smooth switching during IP address changes. The higher layers won't know the whole process at all because there is always an active path transmitting data for the application.
 
 
 \subsection{Periodical Heartbeat}
 
-For protocols like TCP, during the whole lifetime of the connection, both sides are sending packets to each other at a high frequency, then at both sides, column \emph{Feedback Time} of Table~\ref{tb.pi} can be updated way before the path becomes obsolete. But there are protocols that don't have this built-in feedback mechanism, like UDP. In some UDP applications, all traffic is one way, there aren't any acknowledgements, which means that the sender can't get feedback information through piggybacked control messages. Under this situation, the sender won't be able to properly add new entries into Table~\ref{tb.pi}, then multipath feature can't be applied at all. 
+For protocols like TCP, during the whole lifetime of the connection, both sides are sending packets to each other at a high frequency, then at both sides, column \emph{Feedback Time} of Table~\ref{tb.pi} can be updated way before the path becomes obsolete. But there are protocols that don't have this built-in feedback mechanism, like UDP. In some UDP applications, all traffic is one way, there aren't any acknowledgements, which means that the sender can't get feedback information through piggybacked messages. Under this scenario, the sender won't be able to properly add new entries into Table~\ref{tb.pi}, then multipath feature can't be applied at all. 
 
-To solve this problem, in our system, we add periodical heartbeat message on one connection. At each side, when the node receives packets, the system checks Table~\ref{tb.ps} for the specific node, if it finds that the entry with the earliest feedback time is close to the obsolete value, it makes a copy of the received packet, switches the source/destination address information, and sends back the packet with CM block attached. The path to send this heartbeat message will be chosen through the same algorithm as regular IP packet as in Section~\ref{sec:selection}. Through the heartbeat message, we can effectively maintain the active paths between two nodes, and safely remove obsolete paths from Table~\ref{tb.pi}. 
+To solve this problem, in our system, we add periodical heartbeat mechanism. At each side, when the node receives packets, the system checks Table~\ref{tb.ps} for the specific node, if it finds the feedback time of this path is close to the obsolete value, it makes a copy of the received packet, switches the source/destination address information, and sends back the packet with CM block attached. The path to send this heartbeat message will be chosen through the same algorithm as regular IP packet as in Section~\ref{sec:selection}. Through the heartbeat message, we effectively maintain the active paths between two nodes, and obsolete paths can be safely removed from Table~\ref{tb.pi}. 
 
 All heartbeat packets have a special flags value $Flags\_HB$ in the CM block. These packets will be dropped after being processed at network layer.
-
 
 \subsection{Path Selection}
 \label{sec:selection}
@@ -255,20 +204,18 @@ Every time one node needs to send out packets, it chooses the most suitable path
 
 \subsubsection{Delay-based Path Selection}
 \label{sec:delay}
-In the current Internet, there are many high delay-bandwidth product connections. These connections generally have high delay and high bandwidth. For applications that want to achieve high throughput, we propose following mechanism to achieve the requirement.
+In the current Internet, there are many high delay-bandwidth product connections. These connections generally have both high delay and high bandwidth. For applications that want to achieve high throughput, we propose following mechanism to achieve the requirement. 
 
-
-As mentioned above, the candidate paths should have the correction session id for the target connection. The criterion of choosing the best path is on the column of \emph{Path Weight}. Given certain values of the is column for each path, we don't simply choose the path that has the largest path weight which may overuse the path and starve other paths at meantime, instead, we choose the path by random number. For one specific path $k$, the probability $P$ it will be chosen is calculated in Equation~\ref{eq.choose}. By balancing the percentage of packets on each path, system fluctuation can be effectively avoided.
+The criterion of choosing the best path that can achieve high throughput is on the column of \emph{Path Weight}. Given certain values of this column, we don't simply choose the path that has the largest path weight which may overuse the path and starve other paths; this will definitely cause terrible fluctuations on this connection. Instead, we choose the path by random number. For one specific path $k$, the probability $P(k)$ it will be chosen is calculated in Equation~\ref{eq.choose}. By balancing the percentage of packets on each path, system fluctuation can be effectively avoided.
 
 \be
 \label{eq.choose}
 P(k) = \frac{W_k}{\sum_{i=1}^{N}W_i}
 \ee
 
-From above, the path weight is the only criterion to choose the most suitable path, so the calculation of path weight $W$ is critical to the performance of the system. Wrong decision can result in catastrophic disaster. In our prototype, by introducing 
-delay-based solution, we calculate the value of $W$ in an incremental pattern.
+From above, the path weight is the only criterion to choose the target path, so the calculation of path weight $W$ is critical to the performance of the system. Wrong decision can result in catastrophic disaster. In our prototype, by introducing delay-based solution, we calculate the value of $W$ in an incremental pattern.
 
-When the system tries to send a packet, it will have to choose the most suitable one among all the available paths. To achieve this goal, we need to have some parameters to notate the capability of each path. Generally, there are two ways to notate the character of one path, the first is loss based and the second is delay based. Nowadays, packet losses in networks are rare events, this makes loss rate estimation is difficult and coarse in accuracy. But delay estimation can be accurate enough with a proper measurement.
+Generally, there are two ways to notate the character of one path which are loss based and delay based. Nowadays, packet losses in networks are rare events, this makes loss rate estimation is difficult and coarse in accuracy. But delay estimation can be accurate enough with a proper measurement.
 
 For network delay, it consists of following $4$ parts.
 
@@ -279,7 +226,7 @@ For network delay, it consists of following $4$ parts.
 \item Propagation delay. Time for a signal to reach its destination
 \end{enumerate}
 
-Among the $4$ parts above, processing delay, transmission delay and propagation delay are fixed value for one path, they can be treated as constant $C$. But for queuing delay $Q$, it will change as the traffic that passes through the router changes. igure~\ref{fig.delay} shows the trend of network delay as of the traffic on the path changes.
+Among the four parts above, processing delay, transmission delay and propagation delay are fixed value for one path, they can be treated as constant. But queuing delay changes as the traffic load on the path changes. Figure~\ref{fig.delay} shows the trend of network delay as of the traffic on the path changes.
 
 \begin{figure}
 \centering
@@ -288,7 +235,16 @@ Among the $4$ parts above, processing delay, transmission delay and propagation 
 \label{fig.delay}
 \end{figure}
 
-We can see that the queue in the router starts to accumulate at point $C$, but still, there is no loss. Starting from point $L$, the queue size overflows. The minimum and maximum network delay for the path can be measured at point $C$ and point $L$. The difference between the real-time delay and minimum can be treated as the approximate queuing delay $Q$ which represents congestion situation on the related path. By observing the real-time queuing delay of each path, we can adjust the weight of each path to properly assign future packets.
+We can see that the queue in the routers on the path starts to accumulate at point $C$, but still, there is no loss. Starting from point $L$, the queue size overflows and packet loss happens. The minimum and maximum network delay for the path can be measured at point $C$ and point $L$. The difference between the real-time delay and minimum delay can be treated as the approximate queuing delay which represents congestion situation on that path. By observing the real-time queuing delay, we can adjust the weight of each path to properly assign future packets.
+
+In Table~\ref{tb.pi}, except the column \emph{Real-Time Network Delay}, other three delay related columns are calculated through real time delay $D$.
+
+\begin{enumerate}
+\item \textbf{Minimum Network Delay $D_{min}$}. Every time one node receives update of network delay, it update this column with the minimum of its current value and the new real-time network delay.
+\item \textbf{Real-Time Queuing Delay $Q$}. According to Figure~\ref{fig.delay}, the value of queuing delay is calculated as $Q=D-D_{min}$ which is the difference between real-time network delay and minimum network delay.
+\item \textbf{Maximum Queuing Delay $Q_{max}$}. Maximum queuing delay is updated once the real-time queuing delay $Q$ is larger than $Q_{max}$. When packet loss happens, this value notates the curve section after point $L$ in Figure~\ref{fig.delay}.
+\end{enumerate}
+
 
 During our experiments, we found that calculating the weight of each path independently according to queuing delay can result in high fluctuation. So instead, we couple all the paths together and do micro adjustment to the weight of each path periodically. The detailed mechanism is shown in Algorithm~\ref{alg.bw}.
 
@@ -312,44 +268,42 @@ During our experiments, we found that calculating the weight of each path indepe
 \end{algorithmic}
 \end{algorithm}
 
-In Algorithm~\ref{alg.bw}, $N$ is the number of paths that belongs to one specific connection, $Q_i$ is the queuing delay of path $i$, $W_i$ is the path weight of path $i$, and $S$ is the adjustment granularity. Initially, every path has the same path weight of $\frac{1000}{N}$, in each loop, the path weight increases or decreases by the granularity value $S$. The maximum value of the weight is $1000$. The minimum value is $1$ because we try to keep all the paths alive in case the congestion on a bad path has huge relief.
+In Algorithm~\ref{alg.bw}, $N$ is the number of paths that belongs to one specific connection, $Q_i$ is the queuing delay of path $i$, $W_i$ is the path weight of path $i$, and $S$ is the adjustment granularity. Initially, every path has the same path weight of $\frac{1000}{N}$. In each loop, the path weight increases or decreases by $S$. The maximum value of the weight is $1000$. The minimum value is $1$ because we try to keep all the paths alive in case the congestion on a bad path has huge relief.
 
-Algorithm~\ref{alg.bw} is executed periodically, the length of of period is defined as a configurable system variable $T$. So here, we have two configurable parameters which are the granularity $S$ and the period $T$. There is a trade-off here. Larger $S$ and shorter $T$ can generate higher fluctuation but faster convergence while smaller $S$ and longer $T$ can result in slow convergence and lower fluctuation. In our system, according to the path weight range ($1~1000$), we set $S$ to $10$ and $T$ to $10$ milliseconds. In our evaluation, this configuration can converge fast with low fluctuation.
+Algorithm~\ref{alg.bw} is executed periodically, the length of of period is defined as a configurable system variable $T$. So here, we have two configurable parameters which are the granularity $S$ and the period $T$. There is a trade-off here. Larger $S$ and shorter $T$ can generate higher fluctuation but faster convergence while smaller $S$ and longer $T$ can result in slow convergence and lower fluctuation. In our system, according to the path weight range ($1~1000$), we set $S$ to $10$ and $T$ to $100$ milliseconds. During our evaluation, this configuration can converge fast with low fluctuation.
 
 \subsubsection{Customized Path Selection Framework}
 \label{sec:resp}
-In practice, maybe high throughput can represent most user requirements, but in some special use cases, responsiveness can be of the first priority. 
+In practice, maybe high throughput can represent most user requirements, but in some special cases, responsiveness can be of the first priority. 
 
-A typical example is Skype calls. When we make a Skype call, beside audio calls, we can also have video calls by enabling the camera. For Skype, audio packets and video packets are transmitted independently. In most scenarios, with responsive audio quality, real-time video streaming can be a bonus. But large delay in audio streaming can be a nightmare for a Skype call. In this case, obviously, audio packets and video packets have different priorities. During our study of Skype packets, although video packets can also be small, audio packets generally have substantially shorter length comparing to video packet. This provides a chance to define specific rules for Skype audio packets.
+A typical example is Skype\cite{skype} calls. When we make a Skype call, beside audio calls, we can also have video calls by enabling the camera. For Skype, audio packets and video packets are transmitted independently. In most scenarios, with responsive audio quality, real-time video streaming can be a bonus. But large delay in audio streaming can be a nightmare for a Skype call. In this case, obviously, audio packets and video packets have different priorities. During our study of Skype packets, although video packets can also be small, audio packets generally have substantially shorter length comparing to video packet. This provides a chance to define specific rules for Skype audio packets.
 
 Also, in a TCP connection with multipath, ACK packets are generally very small. On the other hand, delay in ACK packets can trigger TCP congestion control at the sender side. This will result in unnecessary degradation of performance. By sending small ACK packets on the path with lowest delay, unnecessary congestion control can be avoided, and further improve the overall performance of the connection.
 
-To address the requirement above, we enable the users to define their customized path selection policy based on the destination and  length of packets. This customization provides a fundamental framework for more advanced path selection algorithms.
+To address the requirement above, we enable the users to define their own customized path selection policy based on the destination and length of packets. This customization provides a fundamental framework for more advanced path selection algorithms. A dedicate MPIP routing table is defined in Table~\ref{tb.route}.
 
-In our prototype, we define a dedicate MPIP routing table as shown in Table~\ref{tb.route}.
-
-\begin{table*}[htbp]
+\begin{table}[htbp]
 \caption{\label{tb.route}MPIP routing table}
 \centering
 \begin{tabular}{|c|c|c|c|c|c|}
 \hline
- IP   		&   Port      & Protocol      & Start  & End    & Routing       \\
- Address    &  Number     &               & Length & Length & Priority       \\
+ IP   		&   Port   &          & Start  & End    & Routing       \\
+ Address    &  Number     & Protocol & Size   & Size & Priority       \\
 \hline
-$*$&$23$&$TCP$&$0$&$200$&$P\_Response$   \\
+$*$&$23$&$TCP$&$0$&$200$&$P\_Res$   \\
 \hline
-$192.168.1.2$&$80$&$TCP$&$200$&$*$&$R\_Throughput$   \\
+$192.168.1.2$&$80$&$TCP$&$200$&$*$&$P\_Tp$   \\
 \hline
-$192.168.1.3$&$5221$&$UDP$&$0$&$500$&$P\_Response$  \\
+$192.168.1.3$&$5221$&$UDP$&$0$&$500$&$P\_Res$  \\
 \hline
 \end{tabular}
-\end{table*}
+\end{table}
 
-When sending a packet, the system checks the destination IP address, port number, protocol and length of the target packet to get relative routing priority from Table~\ref{tb.route}. Different routing priority has different path selection policy. In our prototype, only two priorities are supported. $P\_Throughput$ means throughput is the first priority, the delay-based path selection algorithm in Section~\ref{sec:delay} will be used. When $P\_Response$ is assigned, it means responsiveness is the first priority; In this scenario, the path that has the lowest delay will be chosen to send out the packet.
+When sending a packet, the system checks the destination IP address, port number, protocol and length of the target packet to get relative routing priority from Table~\ref{tb.route}. Different routing priority has different path selection policy. In our system, only two priorities are supported. $P\_Throughput$ means throughput is the first priority, the delay-based path selection algorithm in Section~\ref{sec:delay} will be used. When $P\_Response$ is assigned, it means responsiveness is the first priority; In this scenario, the path that has the lowest delay will be chosen to send out the packet.
 
-In the first row of Table~\ref{tb.route}, for any TCP connection with port $23$, if the packet length is smaller than $200$ bytes, the lowest delay path will be chosen, otherwise, delay-based algorithm is used. The second row actually is useless in our prototype because all packets will use the delay-based algorithm even this row doesn't exist. The third row specifies that UDP packets sent to $192.168.1.3$'s $5221$ port will be assigned to the lowest delay path, otherwise, delay-based algorithm is used.
+In the first row of Table~\ref{tb.route}, for any TCP connection with destination port $23$, if the packet length is smaller than $200$ bytes, the path with the lowest delay will be chosen, otherwise, delay-based algorithm is used. The second row actually is useless because all packets will use the delay-based algorithm even this row doesn't exist. The third row specifies that UDP packets sent to $192.168.1.3$'s $5001$ port will be assigned to the lowest delay path, otherwise, delay-based algorithm is used.
 
-The same as regular routing table, the content of the MPIP routing table is configurable by users. In MPTCP, because all congestion control algorithms inherit from traditional TCP, it can't make the best of multipath. In MPIP, because we maintain the path in a customized pattern, it is more feasible to have application specific routing decision. As we mentioned above, we only provide a basic framework for customized routing in MPIP. It only has limited functionalities. It can only specify the application by port number. For some applications, like P2P software, they have arbitrary port numbers, we can't locate the specific application in this case. There can also be other scenarios that our prototype doesn't work. But based on this framework, a more powerful and smarter routing decision mechanism can be completed.
+The same as regular routing table, the content of the MPIP routing table is configurable by users. In MPTCP, because all congestion control algorithms inherit from traditional TCP, it can't make the best of multipath. On the other hand, MPIP maintains paths in a customized pattern, it is more feasible to have application specific routing decisions. As we mentioned above, we only provide a basic framework for customized routing in MPIP. It only has limited functionalities. For example, it only  specifies applications by port number. For some applications like P$2$P software, they have arbitrary port numbers, we can't locate the specific application in this case. There can also be other scenarios that our prototype doesn't work. But based on this framework, a more powerful and smarter routing decision mechanism can be completed.
 
 %In Equation~\ref{eq.bw}, we update the path weight by progressive increasing to make the trend of path weight smooth. The increment consists of two parts. In the first part, we calculate the weight with the total network delay. For applications that prefer low delay to high throughput, assigning high priority to this part will be of much benefit. In the second part, we calculate the weight with queuing delay. This is beneficial for high bandwidth-delay product links according to \cite{mptcp}. By assigning high priority for this part, we can achieve high throughput. 
 %
@@ -403,11 +357,11 @@ The same as regular routing table, the content of the MPIP routing table is conf
 %\label{fig.weight}
 %\end{figure}
 
-
 \subsection{Session Management}
 \label{sec:session}
 
-For one specific connection, it can be identified by a socket at each end.  Each socket pair is described by a unique $4$-tuple consisting of source and destination IP addresses and port numbers of local and remote socket addresses. In our prototype, we call a connection's unique socket a session. Since multiple IP paths is introduced into the system, a session module is development to manage the mapping between different IP addresses and session. To maintain all sessions, each MPIP enabled node will maintain an instance of Table~\ref{tb.ss}.
+For one specific connection, it can be identified by a socket at each end. Each socket pair is described by a unique $4$-tuple consisting of source and destination IP addresses and port numbers of local and remote nodes. In our prototype, we call a connection's unique socket a session. To maintain all sessions, each MPIP enabled node   
+maintains an instance of Table~\ref{tb.ss}.
 
 \begin{table*}
 \caption{\label{tb.ss}Session Information}
@@ -431,29 +385,28 @@ ${ID}_2$&${SID}_2$&${SIP}_{2}$&${SPORT}_{4}$&${DIP}_{2}$&${DPORT}_{4}$&$T_4$&UDP
 
 \subsubsection{Addition/Removal of Sessions}
 
-Session ID is the unique identity of one session in local system, but globally, it still needs node ID to identify the node it belongs to. From Table~\ref{tb.ss}, we can see that different nodes can have the same session ID. Same as path ID, session ID is Arab numbers starting from $1$. This value is generated only when adding new sessions into Table~\ref{tb.ss}. At both sides of one connection, the session ID needs to be the same to locate the correct entry in Table~\ref{tb.ss}.
+Session ID is the unique identity of one session. Unlike path ID in Table~\ref{tb.pi} which only requires to be unique locally, session ID needs to be unique on both ends of one connections which means that the session ID needs to be the same on both ends for the same session. But from Table~\ref{tb.ss}, we can see that different nodes can have the same session ID. Same as path ID, session ID is Arab numbers starting from $1$. This value is generated only when adding new sessions into Table~\ref{tb.ss}.
 
-After the MPIP availability handshake has been successfully completed on one connection, when sending out a packet, the sender checks Table~\ref{tb.ss} to see whether a proper session entry has been generated, if not, one new record will be added with an unique session id. Until now, no other paths have added into Table~\ref{tb.pi} for this session because there was no session id. We extract the IP addresses, port numbers and protocol from packet headers, and gets the destination node ID from Table~\ref{tb.wi}, then it generates a new session ID and adds one new entry into Table~\ref{tb.ss}. The receiver extracts these information and inserts one entry into its own Table~\ref{tb.ss}. For the same session, both sides of the connection have the same session id.
+After the MPIP availability handshake has been successfully completed, when sending out a packet, the sender checks Table~\ref{tb.ss} to see whether a proper session entry has been generated. If not, one new record will be added. We extract the IP addresses, port numbers and protocol from packet headers, and gets the destination node ID from Table~\ref{tb.wi}, then it generates a new session ID and adds one new entry into Table~\ref{tb.ss}. After this, the new session ID will be filled into \emph{Session ID} in the CM block whenever packets are sent out on this connection. The receiver extracts the session ID and inserts one entry into its own Table~\ref{tb.ss}. This will make sure that for the same session, both sides of the connection have the same session id because only one side generates it.
 
-Now, both sides of the connection has the entry that identify the same session. Besides the session ID, all IP addresses and port numbers can be different because of NAT devices, but this doesn't have a problem because the IP addresses and port numbers only need to be the values that are seen locally.
+Besides the session ID, all IP addresses and port numbers can be different in Tabel~\ref{tb.ss} of both sides because of NAT devices, but this doesn't have a problem because the IP addresses and port numbers only need to be the values that are seen locally.
 
-Removal of sessions is decided by expiration. At each node, every time it sends or receives a non-heartbeat packet, it will go to Table~\ref{tb.ss} to get the session ID to fill the control message, meantime, it updates the column \emph{Update Time}. For an active session, this time stamp should be updated frequently. If the timestamp expires a threshold value, the session is considered to be obsolete and removed from Table~\ref{tb.ss}.
+Removal of sessions is decided by expiration. At each node, every time it sends or receives a non-heartbeat packet, it goes to Table~\ref{tb.ss} to get the session ID to fill the control message, meantime, it updates the column \emph{Update Time}. For an active session, this time stamp should be updated frequently. If the timestamp expires a threshold value, the session is considered to be obsolete and removed from Table~\ref{tb.ss}. In our system, this threshold value is set to $120$ seconds.
 
-Session entries won't be modified after they have been added into Table~\ref{tb.ss} even the IP address that initiates the session doesn't exist any more. The only operation that can apply to them is removal. 
+For each connection, the system internally maintains a socket pair with source/destination IP addresses and port numbers, the system maintained socket information is the same as the pair maintained in Table~\ref{tb.ss}. The socket information for a session entries won't be modified after they have been added into Table~\ref{tb.ss} even the IP address that initiates the session doesn't exist any more. As will be shown later, the socket information in Table~\ref{tb.ss} is used to communicate with higher layer to guarantee seamless connection switching. If these information is modified, higher layers will notify the mismatch between the system maintained socket amd MPIP maintained socket which finally causes failure of seamless connection switching.
 
-Once session entry has been inserted into Table~\ref{tb.ss} at both side, different paths can be chosen to transmit future packets that belong to this session. For each connection, the system internally maintains a socket pair with source/destination IP addresses and ports, the system maintained socket information is the same as the pair maintained in Table~\ref{tb.ss}. 
+Once session entry has been inserted into Table~\ref{tb.ss} at both side, different paths will be added into Table~\ref{tb.pi} and available to be chosen to transmit future packets that belong to this session according to path selection algorithms. 
 
 \subsubsection{Workflow of Sending/Receiving Packets}
 
-For one regular packet, when being sent, it goes through application layer, transportation layer, then arrives at network layer which is IP layer. Before the packet arrives at IP layer, socket information inside the packet is the one that stores in a system maintained table. In regular scenario, the system will find a proper interface to push out the packet according to the destination IP address in the IP header and routing table. But since we need to apply MPIP, additional operations need to be done after the packet arrives.
+For one regular packet, when being sent, it goes through application layer, transportation layer, then arrives at network layer where IP protocol resides in. Before the packet arrives at network layer, socket information inside the packet is the one that stores in a system maintained table. In regular scenarios, the system finds a proper interface to push out the packet according to the destination IP address and routing table. The opposite flow is executed for inbound packets. For a MPIP enabled system, all the other operations remain the same except that of network layer.
 
-When sending a packet, the system looks into Table~\ref{tb.ss}, and finds the session entry that matches the original socket information, extracts the session ID to fill into the field \emph{Session ID} in the control message. To choose the proper path to send out the packet, the first thing is to locate which paths in Table~\ref{tb.pi} are eligible for this connection. Given the destination IP address in the socket pair, we can find the \emph{Node ID} in Table~\ref{tb.wi}, then in Table~\ref{tb.pi}, all entries that have the correct node ID are eligible. Among all these paths, the most suitable path will be chosen out through the mechanism introduced in Section~\ref{sec:path}. 
+For outbound packets, when the packet arrives at network layer from transportation layer, the system looks into Table~\ref{tb.ss}, and finds the session entry that matches socket information in the original packet, extracts the session ID to fill into the field \emph{Session ID} in the CM block. To choose the proper path to send out the packet, the first thing is to locate which paths in Table~\ref{tb.pi} are eligible for this connection. Given the destination IP address and port number in the socket information, we can find the \emph{Node ID} in Table~\ref{tb.wi}, then in Table~\ref{tb.pi}, all entries that have the correct node ID and session ID are eligible. Among all these paths, the most suitable path will be chosen out through the mechanism introduced in Section~\ref{sec:path}. 
 
-The chosen path's path ID will be assigned to the field \emph{Path ID} in the control message for delay measurement at the receiver as narrated above. Meantime, we modify the source and destination IP address in the IP header with the chosen path's source and destination IP address. Then we route the packet with the new IP header information to a proper interface.
+The chosen path's path ID will be assigned to the field \emph{Path ID} in the CM block for delay measurement at the receiver as narrated above. Meantime, we modify the source and destination IP address/port number in the IP header and transportation layer header with the chosen path's source and destination IP address/port number. Then we route the packet with the new IP header information to a proper interface.
 
-When receiving a packet, the receiver extract the node ID and session ID in the control message, with these two parameters, the node locates the original socket pair in Table~\ref{tb.ss}, and modify the IP header with source and destination IP address, modify TCP header with source and destination port. For the fields related to path measurement, they will be processed as explained int Section~\ref{sec:path}. Now the packet is back to it shape that can be recognized by upper layer, it is ready to be pushed up.
+For inbound packets, when receiving a packet, the receiver extract the node ID and session ID in the CM block, with these two parameters, the receiver locates the original socket pair in Table~\ref{tb.ss}, and modify the IP header and transportation layer headers with source and destination IP address/port number from Table~\ref{tb.ss}. Fields related to path measurement will be processed as explained int Section~\ref{sec:path}. Now the packet is back to its original shape that can be recognized by higher layers, it is ready to be pushed up.
 
-If UDP wrapper is used to transmit TCP traffic, when receiving one packet, we are capable to know this UDP packet is a wrapper for a TCP packet instead of a regular UDP packet by checking the column \emph{Protocol} in Table~\ref{tb.ss}. After removing the UDP wrapper, socket information will be extracted from Table~\ref{tb.ss} and filled into the TCP and IP header. The protocol field of IP header needs to be modified to TCP too.
 
 %The whole process of the sending and receiving packets is shown in Figure~\ref{fig.flow}.
 %
@@ -464,6 +417,31 @@ If UDP wrapper is used to transmit TCP traffic, when receiving one packet, we ar
 %\label{fig.flow}
 %\end{figure}
 
+\subsection{Multipath TCP Transmission}
+Through our experiments and previous studies\cite{mptcp}, NAT devices have a lot of interference to end-to-end connections, especially for TCP packets. The most straightforward limitation for TCP packets is that many NAT devices will drop TCP packets that don't have a connection related to them. This means that if we transmit TCP traffic on a path rather than the original one, the NAT devices on the path will probably drop these packets before they arrive at the destination. There is no such problem in Multipath TCP\cite{mptcp} because MPTCP has a totally independent TCP connection on each path which will pass this category of NAT devices successfully. In our MPIP implementation, we provide two options to solve this problem.
+
+\subsubsection{Fake TCP connection}
+In NAT devices that drop TCP packets without relative connection information, we cheat them by constructing fake TCP connections on relative paths. The construction of TCP contains three-way handshakes. Instead of constructing real TCP connections, we implement a simple three-way handshake at network layer which is similar as TCP handshake, but it only happens at network layer. 
+
+As shown in Table~\ref{tb.cm}, the field \emph{Local Address List} carries all local IP addresses. When the client receives the IP address list of the server, it extracts its own IP address list, then sends out a SYN packet through each possible path to the server except the original one which is the one that was used to initiate the connection. When the server receives this SYN packet, it replies with a SYN-ACK packet through the same path. After the client sends out the final ACK packet to the server, the three-way handshake for our fake TCP connection is completed successfully, then this path will be used to transmit MPIP TCP packet without being dropped. The whole process only happens at network layer, all packets for the three-way handshake have \emph{CM Flags} value of $5$, they will be dropped after being processed at network layer. By having fake TCP connections, we can make use of multiple feature for TCP traffic without the overhead of managing multiple TCP connections as in MPTCP.
+
+If some addresses of the server in the address list are not public address, then the SYN packet will never arrive to that address, in this case, this interface will not be used at all.
+
+\subsubsection{UDP wrapper}
+The other option we provide for multipath TCP traffic is UDP wrapper. Because there is no connection information in an UDP packet, most NAT devices don't have limitation on regular UDP traffic. We can make use of this feature to wrap our TCP packet with a UDP packet to pass the NAT devices and unwrap it when received.
+
+As shown in Figure~\ref{fig.udpwrapper}, at the sender side, every time the network layer gets a TCP packet from transport layer, the system chooses a path to send the packet out as shown in Section~\ref{sec:path}. If the chosen path isn't the original path, we wrap the user data and TCP header into an UDP packet.
+
+Also, if some addresses of the server in the IP address list are not public address, the packet may go to some other node with the private IP address, in this case, the \emph{node id} value verification will fail, then this packet will be dropped by that node. At the sender side, the path will expire soon because of no feedback for that path and this path will be deleted. 
+
+If UDP wrapper is used to transmit TCP traffic, when receiving one packet, we are capable to know this UDP packet is a wrapper for a TCP packet instead of a regular UDP packet by checking the column \emph{Protocol} in Table~\ref{tb.ss}. After removing the UDP wrapper, socket information will be extracted from Table~\ref{tb.ss} and filled into the TCP and IP header.
+
+%\begin{figure}
+%\centering
+%\includegraphics[width=0.8\linewidth]{fig/cm.eps}
+%\caption{UDP wrapper for TCP packet}
+%\label{fig.udpwrapper}
+%\end{figure}
 
 \subsubsection{Dealing with out of order TCP traffic}
 
@@ -495,9 +473,7 @@ When the expecting packet arrives, then all the waiting packets can be cleared f
 
 During our experiments, it happens that one specific packet can be late for a long time, like if the packet is lost. In this situation, holding all subsequent packets will halt the whole session because TCP layer will assume that all packets are lost, this will result in catastrophe for the connection. To address this problem, we set up the maximum size of the buffer, all the packets in the buffer will be forcefully pushed up once it is full. In our prototype, we set this maximum size to $10$.
 
-\subsection{MPIP and MPTCP work together}
+\subsubsection{MPIP and MPTCP work together}
 As the first implementation of multipath, MPTCP gains huge attractions in research. During the development of our prototype, we try to side-by-side comparison between MPTCP and MPIP when referring to TCP connection. Besides this, we also merge them together to see how the system works. Because MPTCP is implemented at Transportation layer, and MPIP is implemented at Network layer. When trying to merge the two together, we found that the work can be done in a straightforward pattern because of good modularization of the kernel source. 
 
 Assume that there are $2$ NICs at each end, MPTCP will have $4$ subflows for the session while each subflow is an independent TCP connection. MPIP will have four paths for all these four subflows which means that there will be totally $16$ paths for one MPTCP session in this case. We will see how this overlapped feature works in Section~\ref{sec:evaluation}.
-
-\subsection{Andriod implementation}
