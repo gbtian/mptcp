@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2014.11.2)  4 NOV 2014 00:54
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2014.11.2)  4 NOV 2014 01:22
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -475,10 +475,6 @@ y com-
  []
 
 [6]
-
-LaTeX Warning: Reference `fig.udpwrapper' on page \thepage  undefined on input 
-line 434.
-
 Package epstopdf Info: Source file: <fig/outoforder.eps>
 (epstopdf)                    date: 2014-10-04 01:15:57
 (epstopdf)                    size: 46934 bytes
@@ -487,16 +483,25 @@ Package epstopdf Info: Source file: <fig/outoforder.eps>
 (epstopdf)                    size: 33727 bytes
 (epstopdf)             Command: <repstopdf --outfile=fig/outoforder-eps-convert
 ed-to.pdf fig/outoforder.eps>
-(epstopdf)             \includegraphics on input line 457.
+(epstopdf)             \includegraphics on input line 458.
 Package epstopdf Info: Output file is already uptodate.
-<fig/outoforder-eps-converted-to.pdf, id=39, 1080.035pt x 1243.64626pt>
+ <fig/outoforder-eps-converted-to.pdf, id=39, 1080.035pt x 1243.64626pt>
 File: fig/outoforder-eps-converted-to.pdf Graphic file (type pdf)
 
 <use fig/outoforder-eps-converted-to.pdf>
 Package pdftex.def Info: fig/outoforder-eps-converted-to.pdf used on input line
- 457.
+ 458.
 (pdftex.def)             Requested size: 192.00073pt x 221.0761pt.
- [7]) (./evaluation.tex
+
+Overfull \hbox (2.57474pt too wide) in paragraph at lines 464--465
+\T1/ptm/m/n/9 pushed up to trans-porta-tion layer im-me-di-ately, and also, the
+ buffered
+ []
+
+
+Underfull \vbox (badness 7451) has occurred while \output is active []
+
+ [7 <./fig/outoforder-eps-converted-to.pdf>]) (./evaluation.tex
 
 LaTeX Warning: Reference `sec:together' on page \thepage  undefined on input li
 ne 11.
@@ -513,7 +518,7 @@ ps-converted-to.pdf fig/out_of_order_wo_sack.eps>
 (epstopdf)             \includegraphics on input line 26.
 Package epstopdf Info: Output file is already uptodate.
 
-<fig/out_of_order_wo_sack-eps-converted-to.pdf, id=44, 512.91624pt x 423.5825pt
+<fig/out_of_order_wo_sack-eps-converted-to.pdf, id=47, 512.91624pt x 423.5825pt
 >
 File: fig/out_of_order_wo_sack-eps-converted-to.pdf Graphic file (type pdf)
  <use fig/out_of_order_wo_sack-eps-converted-to.pdf>
@@ -532,7 +537,7 @@ s-converted-to.pdf fig/out_of_order_w_sack.eps>
 (epstopdf)             \includegraphics on input line 27.
 Package epstopdf Info: Output file is already uptodate.
 
-<fig/out_of_order_w_sack-eps-converted-to.pdf, id=45, 512.91624pt x 423.5825pt>
+<fig/out_of_order_w_sack-eps-converted-to.pdf, id=48, 512.91624pt x 423.5825pt>
 File: fig/out_of_order_w_sack-eps-converted-to.pdf Graphic file (type pdf)
 <use fig/out_of_order_w_sack-eps-converted-to.pdf>
 Package pdftex.def Info: fig/out_of_order_w_sack-eps-converted-to.pdf used on i
@@ -549,7 +554,7 @@ Package epstopdf Info: Source file: <fig/clock.eps>
 (epstopdf)             \includegraphics on input line 28.
 Package epstopdf Info: Output file is already uptodate.
 
-<fig/clock-eps-converted-to.pdf, id=46, 508.90125pt x 423.5825pt>
+<fig/clock-eps-converted-to.pdf, id=49, 508.90125pt x 423.5825pt>
 File: fig/clock-eps-converted-to.pdf Graphic file (type pdf)
 
 <use fig/clock-eps-converted-to.pdf>
@@ -566,7 +571,7 @@ verted-to.pdf fig/implementation.eps>
 (epstopdf)             \includegraphics on input line 29.
 Package epstopdf Info: Output file is already uptodate.
 
-<fig/implementation-eps-converted-to.pdf, id=47, 520.94624pt x 423.5825pt>
+<fig/implementation-eps-converted-to.pdf, id=50, 520.94624pt x 423.5825pt>
 File: fig/implementation-eps-converted-to.pdf Graphic file (type pdf)
 
 <use fig/implementation-eps-converted-to.pdf>
@@ -584,7 +589,7 @@ Package epstopdf Info: Source file: <fig/no_limit.eps>
 (epstopdf)             \includegraphics on input line 30.
 Package epstopdf Info: Output file is already uptodate.
 
-<fig/no_limit-eps-converted-to.pdf, id=48, 520.94624pt x 423.5825pt>
+<fig/no_limit-eps-converted-to.pdf, id=51, 520.94624pt x 423.5825pt>
 File: fig/no_limit-eps-converted-to.pdf Graphic file (type pdf)
 
 <use fig/no_limit-eps-converted-to.pdf>
@@ -603,7 +608,7 @@ onverted-to.pdf fig/no_limit_tp_comp.eps>
 (epstopdf)             \includegraphics on input line 31.
 Package epstopdf Info: Output file is already uptodate.
 
-<fig/no_limit_tp_comp-eps-converted-to.pdf, id=49, 520.94624pt x 423.5825pt>
+<fig/no_limit_tp_comp-eps-converted-to.pdf, id=52, 520.94624pt x 423.5825pt>
 File: fig/no_limit_tp_comp-eps-converted-to.pdf Graphic file (type pdf)
 
 <use fig/no_limit_tp_comp-eps-converted-to.pdf>
@@ -622,7 +627,7 @@ onverted-to.pdf fig/no_limit_qd_comp.eps>
 (epstopdf)             \includegraphics on input line 32.
 Package epstopdf Info: Output file is already uptodate.
 
-<fig/no_limit_qd_comp-eps-converted-to.pdf, id=50, 516.93124pt x 423.5825pt>
+<fig/no_limit_qd_comp-eps-converted-to.pdf, id=53, 516.93124pt x 423.5825pt>
 File: fig/no_limit_qd_comp-eps-converted-to.pdf Graphic file (type pdf)
 
 <use fig/no_limit_qd_comp-eps-converted-to.pdf>
@@ -640,7 +645,7 @@ Package epstopdf Info: Source file: <fig/limit.eps>
 (epstopdf)             \includegraphics on input line 33.
 Package epstopdf Info: Output file is already uptodate.
 
-<fig/limit-eps-converted-to.pdf, id=51, 520.94624pt x 423.5825pt>
+<fig/limit-eps-converted-to.pdf, id=54, 520.94624pt x 423.5825pt>
 File: fig/limit-eps-converted-to.pdf Graphic file (type pdf)
 
 <use fig/limit-eps-converted-to.pdf>
@@ -657,7 +662,7 @@ erted-to.pdf fig/limit_tp_comp.eps>
 (epstopdf)             \includegraphics on input line 34.
 Package epstopdf Info: Output file is already uptodate.
 
-<fig/limit_tp_comp-eps-converted-to.pdf, id=52, 520.94624pt x 423.5825pt>
+<fig/limit_tp_comp-eps-converted-to.pdf, id=55, 520.94624pt x 423.5825pt>
 File: fig/limit_tp_comp-eps-converted-to.pdf Graphic file (type pdf)
 
 <use fig/limit_tp_comp-eps-converted-to.pdf>
@@ -675,7 +680,7 @@ erted-to.pdf fig/limit_qd_comp.eps>
 (epstopdf)             \includegraphics on input line 35.
 Package epstopdf Info: Output file is already uptodate.
 
-<fig/limit_qd_comp-eps-converted-to.pdf, id=53, 516.93124pt x 423.5825pt>
+<fig/limit_qd_comp-eps-converted-to.pdf, id=56, 516.93124pt x 423.5825pt>
 File: fig/limit_qd_comp-eps-converted-to.pdf Graphic file (type pdf)
 
 <use fig/limit_qd_comp-eps-converted-to.pdf>
@@ -693,7 +698,7 @@ to.pdf fig/delay_1.eps>
 (epstopdf)             \includegraphics on input line 36.
 Package epstopdf Info: Output file is already uptodate.
 
-<fig/delay_1-eps-converted-to.pdf, id=54, 520.94624pt x 423.5825pt>
+<fig/delay_1-eps-converted-to.pdf, id=57, 520.94624pt x 423.5825pt>
 File: fig/delay_1-eps-converted-to.pdf Graphic file (type pdf)
 
 <use fig/delay_1-eps-converted-to.pdf>
@@ -711,7 +716,7 @@ erted-to.pdf fig/delay_tp_comp.eps>
 (epstopdf)             \includegraphics on input line 37.
 Package epstopdf Info: Output file is already uptodate.
 
-<fig/delay_tp_comp-eps-converted-to.pdf, id=55, 520.94624pt x 423.5825pt>
+<fig/delay_tp_comp-eps-converted-to.pdf, id=58, 520.94624pt x 423.5825pt>
 File: fig/delay_tp_comp-eps-converted-to.pdf Graphic file (type pdf)
 
 <use fig/delay_tp_comp-eps-converted-to.pdf>
@@ -729,7 +734,7 @@ rted-to.pdf fig/delay_qd_com.eps>
 (epstopdf)             \includegraphics on input line 38.
 Package epstopdf Info: Output file is already uptodate.
 
-<fig/delay_qd_com-eps-converted-to.pdf, id=56, 512.91624pt x 423.5825pt>
+<fig/delay_qd_com-eps-converted-to.pdf, id=59, 512.91624pt x 423.5825pt>
 File: fig/delay_qd_com-eps-converted-to.pdf Graphic file (type pdf)
 
 <use fig/delay_qd_com-eps-converted-to.pdf>
@@ -747,7 +752,7 @@ Package epstopdf Info: Source file: <fig/wireless.eps>
 (epstopdf)             \includegraphics on input line 39.
 Package epstopdf Info: Output file is already uptodate.
 
-<fig/wireless-eps-converted-to.pdf, id=57, 520.94624pt x 423.5825pt>
+<fig/wireless-eps-converted-to.pdf, id=60, 520.94624pt x 423.5825pt>
 File: fig/wireless-eps-converted-to.pdf Graphic file (type pdf)
 
 <use fig/wireless-eps-converted-to.pdf>
@@ -766,7 +771,7 @@ onverted-to.pdf fig/wireless_tp_comp.eps>
 (epstopdf)             \includegraphics on input line 40.
 Package epstopdf Info: Output file is already uptodate.
 
-<fig/wireless_tp_comp-eps-converted-to.pdf, id=58, 520.94624pt x 423.5825pt>
+<fig/wireless_tp_comp-eps-converted-to.pdf, id=61, 520.94624pt x 423.5825pt>
 File: fig/wireless_tp_comp-eps-converted-to.pdf Graphic file (type pdf)
 
 <use fig/wireless_tp_comp-eps-converted-to.pdf>
@@ -788,7 +793,7 @@ Package epstopdf Info: Source file: <fig/wireless_qd_comp.eps>
 onverted-to.pdf fig/wireless_qd_comp.eps>
 (epstopdf)             \includegraphics on input line 48.
 Package epstopdf Info: Output file is already uptodate.
-<fig/wireless_qd_comp-eps-converted-to.pdf, id=59, 512.91624pt x 423.5825pt>
+<fig/wireless_qd_comp-eps-converted-to.pdf, id=62, 512.91624pt x 423.5825pt>
 File: fig/wireless_qd_comp-eps-converted-to.pdf Graphic file (type pdf)
 
 <use fig/wireless_qd_comp-eps-converted-to.pdf>
@@ -806,7 +811,7 @@ ted-to.pdf fig/routing_ack.eps>
 (epstopdf)             \includegraphics on input line 49.
 Package epstopdf Info: Output file is already uptodate.
 
-<fig/routing_ack-eps-converted-to.pdf, id=60, 512.91624pt x 423.5825pt>
+<fig/routing_ack-eps-converted-to.pdf, id=63, 512.91624pt x 423.5825pt>
 File: fig/routing_ack-eps-converted-to.pdf Graphic file (type pdf)
 
 <use fig/routing_ack-eps-converted-to.pdf>
@@ -824,7 +829,7 @@ o.pdf fig/emulab.eps>
 (epstopdf)             \includegraphics on input line 50.
 Package epstopdf Info: Output file is already uptodate.
 
-<fig/emulab-eps-converted-to.pdf, id=61, 512.91624pt x 423.5825pt>
+<fig/emulab-eps-converted-to.pdf, id=64, 512.91624pt x 423.5825pt>
 File: fig/emulab-eps-converted-to.pdf Graphic file (type pdf)
 
 <use fig/emulab-eps-converted-to.pdf>
@@ -842,7 +847,7 @@ verted-to.pdf fig/emulab_tp_comp.eps>
 (epstopdf)             \includegraphics on input line 51.
 Package epstopdf Info: Output file is already uptodate.
 
-<fig/emulab_tp_comp-eps-converted-to.pdf, id=62, 512.91624pt x 423.5825pt>
+<fig/emulab_tp_comp-eps-converted-to.pdf, id=65, 512.91624pt x 423.5825pt>
 File: fig/emulab_tp_comp-eps-converted-to.pdf Graphic file (type pdf)
 
 <use fig/emulab_tp_comp-eps-converted-to.pdf>
@@ -860,7 +865,7 @@ verted-to.pdf fig/emulab_qd_comp.eps>
 (epstopdf)             \includegraphics on input line 52.
 Package epstopdf Info: Output file is already uptodate.
 
-<fig/emulab_qd_comp-eps-converted-to.pdf, id=63, 520.94624pt x 423.5825pt>
+<fig/emulab_qd_comp-eps-converted-to.pdf, id=66, 520.94624pt x 423.5825pt>
 File: fig/emulab_qd_comp-eps-converted-to.pdf Graphic file (type pdf)
 
 <use fig/emulab_qd_comp-eps-converted-to.pdf>
@@ -878,7 +883,7 @@ ed-to.pdf fig/pair_limit.eps>
 (epstopdf)             \includegraphics on input line 53.
 Package epstopdf Info: Output file is already uptodate.
 
-<fig/pair_limit-eps-converted-to.pdf, id=64, 520.94624pt x 423.5825pt>
+<fig/pair_limit-eps-converted-to.pdf, id=67, 520.94624pt x 423.5825pt>
 File: fig/pair_limit-eps-converted-to.pdf Graphic file (type pdf)
 
 <use fig/pair_limit-eps-converted-to.pdf>
@@ -897,7 +902,7 @@ f>
 (epstopdf)             \includegraphics on input line 54.
 Package epstopdf Info: Output file is already uptodate.
 
-<fig/pair_limit_tp_comp-eps-converted-to.pdf, id=65, 520.94624pt x 423.5825pt>
+<fig/pair_limit_tp_comp-eps-converted-to.pdf, id=68, 520.94624pt x 423.5825pt>
 File: fig/pair_limit_tp_comp-eps-converted-to.pdf Graphic file (type pdf)
 
 <use fig/pair_limit_tp_comp-eps-converted-to.pdf>
@@ -916,7 +921,7 @@ f>
 (epstopdf)             \includegraphics on input line 55.
 Package epstopdf Info: Output file is already uptodate.
 
-<fig/pair_limit_qd_comp-eps-converted-to.pdf, id=66, 516.93124pt x 423.5825pt>
+<fig/pair_limit_qd_comp-eps-converted-to.pdf, id=69, 516.93124pt x 423.5825pt>
 File: fig/pair_limit_qd_comp-eps-converted-to.pdf Graphic file (type pdf)
 
 <use fig/pair_limit_qd_comp-eps-converted-to.pdf>
@@ -934,7 +939,7 @@ to.pdf fig/twopath.eps>
 (epstopdf)             \includegraphics on input line 56.
 Package epstopdf Info: Output file is already uptodate.
 
-<fig/twopath-eps-converted-to.pdf, id=67, 520.94624pt x 423.5825pt>
+<fig/twopath-eps-converted-to.pdf, id=70, 520.94624pt x 423.5825pt>
 File: fig/twopath-eps-converted-to.pdf Graphic file (type pdf)
 
 <use fig/twopath-eps-converted-to.pdf>
@@ -953,7 +958,7 @@ onverted-to.pdf fig/twopaths_tp_comp.eps>
 (epstopdf)             \includegraphics on input line 57.
 Package epstopdf Info: Output file is already uptodate.
 
-<fig/twopaths_tp_comp-eps-converted-to.pdf, id=68, 520.94624pt x 423.5825pt>
+<fig/twopaths_tp_comp-eps-converted-to.pdf, id=71, 520.94624pt x 423.5825pt>
 File: fig/twopaths_tp_comp-eps-converted-to.pdf Graphic file (type pdf)
 
 <use fig/twopaths_tp_comp-eps-converted-to.pdf>
@@ -972,7 +977,7 @@ onverted-to.pdf fig/twopaths_qd_comp.eps>
 (epstopdf)             \includegraphics on input line 58.
 Package epstopdf Info: Output file is already uptodate.
 
-<fig/twopaths_qd_comp-eps-converted-to.pdf, id=69, 516.93124pt x 423.5825pt>
+<fig/twopaths_qd_comp-eps-converted-to.pdf, id=72, 516.93124pt x 423.5825pt>
 File: fig/twopaths_qd_comp-eps-converted-to.pdf Graphic file (type pdf)
 
 <use fig/twopaths_qd_comp-eps-converted-to.pdf>
@@ -990,7 +995,7 @@ erted-to.pdf fig/skype_tp_comp.eps>
 (epstopdf)             \includegraphics on input line 59.
 Package epstopdf Info: Output file is already uptodate.
 
-<fig/skype_tp_comp-eps-converted-to.pdf, id=70, 512.91624pt x 423.5825pt>
+<fig/skype_tp_comp-eps-converted-to.pdf, id=73, 512.91624pt x 423.5825pt>
 File: fig/skype_tp_comp-eps-converted-to.pdf Graphic file (type pdf)
 
 <use fig/skype_tp_comp-eps-converted-to.pdf>
@@ -1009,7 +1014,7 @@ onverted-to.pdf fig/skype_delay_comp.eps>
 (epstopdf)             \includegraphics on input line 60.
 Package epstopdf Info: Output file is already uptodate.
 
-<fig/skype_delay_comp-eps-converted-to.pdf, id=71, 516.93124pt x 423.5825pt>
+<fig/skype_delay_comp-eps-converted-to.pdf, id=74, 516.93124pt x 423.5825pt>
 File: fig/skype_delay_comp-eps-converted-to.pdf Graphic file (type pdf)
 
 <use fig/skype_delay_comp-eps-converted-to.pdf>
@@ -1030,7 +1035,7 @@ Overfull \hbox (5.6173pt too wide) in paragraph at lines 79--80
 hange
  []
 
-[8 <./fig/outoforder-eps-converted-to.pdf>]
+[8]
 
 LaTeX Warning: Reference `fig.switch' on page \thepage  undefined on input line
  85.
@@ -1061,10 +1066,10 @@ LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 4824 strings out of 493307
- 69984 string characters out of 6139905
+ 4823 strings out of 493307
+ 69968 string characters out of 6139905
  146710 words of memory out of 5000000
- 8124 multiletter control sequences out of 15000+600000
+ 8123 multiletter control sequences out of 15000+600000
  52603 words of font info for 67 fonts, out of 8000000 for 9000
  957 hyphenation exceptions out of 8191
  42i,12n,38p,1391b,591s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -1082,7 +1087,7 @@ usr/share/texlive/texmf-dist/fonts/type1/urw/helvetic/uhvb8a.pfb></usr/share/te
 xlive/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-dis
 t/fonts/type1/urw/times/utmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/u
 rw/times/utmri8a.pfb>
-Output written on conext14.pdf (11 pages, 674843 bytes).
+Output written on conext14.pdf (11 pages, 674480 bytes).
 PDF statistics:
  274 PDF objects out of 1000 (max. 8388607)
  185 compressed objects within 2 object streams
