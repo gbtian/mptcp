@@ -2,24 +2,63 @@
 \section{Performance Evaluation}
 \label{sec:evaluation}
 
-To evaluate the performance of our proposed system, we implemented our multipath IP in Ubuntu under Linux kernel $3.12.1$ and install the prototype on two desktops. Both desktops are connected directly to one router without any middlebox. At each desktop, two NICs working with $100Mbps$ capacity are installed which means that there are totally $4$ paths and the throughput upper bound is $200MBps$ between the two nodes. Also, to evaluate our prototype under multiple scenarios, for some experiments, we limit the capacity of one NIC card on the client to $30Mbps$ with built-in netem feature in Ubuntu. Also, we replace one NIC card on the client with a wireless NIC to evaluate our system for wireless environment.
+To evaluate the performance of our proposed system, we implemented our multipath IP in Linux kernel $3.12.1$ under Ubuntu system and install the prototype on two desktops. Both desktops are connected directly to one router without any middle-box. Each desktop has two $100Mbps$ NICs which means that there are totally $4$ paths and the capacity is $200MBps$ between the two nodes. We use Netem\cite{netem} to throttle the connection to evaluate our prototype under multiple scenarios. Wireless connection is also considered in our evaluation.
 
-Besides the controlled lab experiments, we also evaluate MPIP on the Internet. We connect the client to a customized node in Emulab. According to our test, the capacity between our client in the lab and the server in Emulab is about $5Mbps$, so we limit the bandwidth of both NICs on the client to be $2Mbps$. Because there is only one NIC that connects to Internet on the Emulab card, there are only $2$ paths in this case.
+Besides the controlled lab experiments, we also evaluate MPIP on the Internet to verify NAT immunization and system robustness. We connect our client to a MPIP enabled node in Emulab\cite{emulab} located in Utah . According to our test, the capacity between our client and the server in Emulab is about $5Mbps$, so we limit the bandwidth of both NICs on the client to be $2Mbps$. Because there is only one NIC that connects to Internet on the Emulab node, there are only $2$ paths in this case.
 
-In all experiments, we try to keep the configuration of each node unchanged after installation. We don't any special configuration to the default TCP congestion control algorithm, neither we do any optimization to TCP parameters to squeeze out all possible throughput. Beside enabling MPIP feature at he kernel source tree, to make MPIP feasible, we need to configure IP routing rules to route incoming packets to a proper NIC as in MPTCP.
+In all experiments, we try to keep the configuration of each node unchanged after installation. We don't do any special configuration to the system, neither we do any optimization to squeeze out all possible throughput. Except specific experiments that can only be applied to MPIP like UDP experiment and customization MPIP routing, we try to do side-by-side comparison with MPTCP for TCP connections. We will figure out how these two features work independently and together as stated in Section~\ref{sec:together};
 
-Except specific experiments that can only be applied to MPIP like UDP experiment and customization MPIP routing, we try to do side-by-side comparison with MPTCP for TCP connections. We will figure out how these two features work independently and together as stated in Section~\ref{sec:together};
+For all throughput related experiments, we use iperf3 to generate traffic between the client to the server.
 
-For all throughput related experiments, we used iperf3 to transmit packets from the client to the server.
 
-%We modify an open source software \bf{Simple Traffic Monitor}\cite{simon01} to record the real time traffic that goes through each NIC.
+\subsection{Clock Offset}
+\label{sec:clock}
 
-%For mobile devices, we implement this feature in Google Nexus $4$ with Android $4.01$.
+During our experiments, we found that the clock of each node has some small difference. In our experiment configuration, the clock of the server is slightly faster than the client. Even this error is very small, we still see the difference in a long experiment.
+Certainly, nowadays, most computers have NTP enabled and the system's local time synchronize with time server periodically, but we still think that this difference is worth to be shown here.
 
-\subsection{TCP/UDP throughput enhancement}
+On our experiment plat, we turn off NTP on both nodes, do a TCP transmission with iperf3 for one day with consistent traffic. Inside MPIP, we record the one-way delay of each packet from the client to server. Because the traffic load is consistent, queuing delay roughly remains the same. But as shown in Figure~\ref{fig.clock}, because of the clock offset between the two nodes, the trend of queuing delay exposes an linearly increasing curve even the trend is very slow. In Figure~\ref{fig.clock}, we record the queuing delay every one minute. For the whole day($1400$ minutes), we can see that the clock offset is about $350$ milliseconds which means that the server's clock runs one millisecond fast than the client for each four minutes. We will be able to see this trend again in following results.
+
+\begin{figure}
+\centering{
+\subfigure[Clock offset
+\label{fig.clock}]{\includegraphics[width=0.49\linewidth,height=1.4in]{fig/clock.eps}}
+\subfigure[Out-of-order process
+\label{fig.outoforder}]{\includegraphics[width=0.49\linewidth,height=1.4in]{fig/out_of_order_w_sack.eps}}
+}
+\caption{Clock and Out-of-order}
+\label{fig.clockandoutoforder}
+\end{figure}
+
+
+\subsection{TCP Evaluation}
 \label{sec:tcp}
 
-In this section, we try to verify that our system can achieve high throughput in both TCP and UDP scenarios. 
+As the dominating traffic, TCP plays a critical role in today's Internet. We try to evaluate the performance of MPIP over TCP connections in multiple network configurations. 
+
+\subsubsection{TCP Out-of-order Process}
+\label{sec:outoforder}
+
+In Section~\ref{sec:outoforder}, we explained why out-of-order is a problem that must be dealt with in multipath implementations, and we also proposed our solution to this problem. To verify our proposition, we replace one NIC card on the client with a wireless interface. In our experiment plat, the RTT of one path with two wired NICs is about $0.1$ms while paths with one the wireless NIC is about $0.5$ms which will generate enough out-of-order packets. Also, to make sure that there are heavy load of packets to be assigned to the wireless NIC card, instead of using the standard path selection algorithm in Section~\ref{sec:selection}, we fix the weight of all the four paths to be the same. Then we make sure that $50\%$ of outbound packets will be assigned to the wireless NIC.
+With this configuration, we do a regular TCP transmission that lasts for $20$ minutes with out-of-order process enabled and disabled respectively. The result is shown in Figure~\ref{fig.outoforder}.
+
+With the same configuration, Figure~\ref{fig.outoforder} shows the improvement brought by the out-of-order process. The average throughput is $XX$Mbps and $XX$Mbps with/out out-of-order process respectively. The improvement maybe trivial if the delay on all the paths is the same because most packets will arrive at the receiver in the order of being sent out. But for multipath connections, it can be very often that each path goes through a totally different route, that is where out-of-order happens most. In all following experiments, we enable out-of-order process by default.
+
+\subsubsection{TCP Throughput Enhancement}
+\label{sec:tcptp}
+
+As we mentioned in Section~\ref{sec:tcp}, there are two different implementation of multipath TCP in our system to solve NAT problem which are fake TCP connection and UDP wrapper. We do a specific experiment to evaluate the performance of each approach as shown in Figure~\ref{fig.implementation}. With regular TCP, the average throughput we can achieve is about $92$Mbps. For MPIP, with either fake TCP or UDP wrapper, we both achieve an average throughput of about $165$Mbps. This result shows that both implementations have roughly the same performance. In all following experiments, we use fake TCP by default, but UDP is still kept as an option for users.
+
+\begin{figure}
+\centering{
+\subfigure[Fake TCP vs UDP Wrapper
+\label{fig.implementation}]{\includegraphics[width=0.49\linewidth,height=1.4in]{fig/implementation.eps}}
+}
+\caption{TCP evaluation}
+\label{fig.tcptp}
+\end{figure}
+
+
 
 \begin{figure*}[htb]
 \centering{

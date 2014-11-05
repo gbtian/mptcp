@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2014.11.2)  4 NOV 2014 01:22
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2014.5.2)  5 NOV 2014 01:59
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -356,6 +356,9 @@ LaTeX Warning: Unused global option(s):
 
 (./conext14.aux
 
+LaTeX Warning: Label `sec:tcp' multiply defined.
+
+
 LaTeX Warning: Label `fig.no_limit' multiply defined.
 
 )
@@ -448,616 +451,644 @@ Overfull \hbox (30.22418pt too wide) in paragraph at lines 113--127
 
 [3]
 Package epstopdf Info: Source file: <fig/delay.eps>
-(epstopdf)                    date: 2014-10-04 01:15:57
+(epstopdf)                    date: 2014-11-04 12:32:10
 (epstopdf)                    size: 21016 bytes
 (epstopdf)             Output file: <fig/delay-eps-converted-to.pdf>
-(epstopdf)                    date: 2014-10-04 01:15:57
+(epstopdf)                    date: 2014-11-04 12:32:10
 (epstopdf)                    size: 18741 bytes
 (epstopdf)             Command: <repstopdf --outfile=fig/delay-eps-converted-to
 .pdf fig/delay.eps>
-(epstopdf)             \includegraphics on input line 233.
+(epstopdf)             \includegraphics on input line 234.
 Package epstopdf Info: Output file is already uptodate.
  <fig/delay-eps-converted-to.pdf, id=20, 1888.05376pt x 991.705pt>
 File: fig/delay-eps-converted-to.pdf Graphic file (type pdf)
 
 <use fig/delay-eps-converted-to.pdf>
-Package pdftex.def Info: fig/delay-eps-converted-to.pdf used on input line 233.
+Package pdftex.def Info: fig/delay-eps-converted-to.pdf used on input line 234.
 
 (pdftex.def)             Requested size: 192.00073pt x 100.84085pt.
  [4]
 
-LaTeX Warning: Citation `skype' on page \thepage  undefined on input line 279.
+LaTeX Warning: Citation `skype' on page \thepage  undefined on input line 280.
 
 [5 <./fig/delay-eps-converted-to.pdf>]
-Overfull \hbox (3.14084pt too wide) in paragraph at lines 390--391
+Overfull \hbox (3.14084pt too wide) in paragraph at lines 391--392
 []\T1/ptm/m/n/9 After the MPIP avail-abil-ity hand-shake has been suc-cess-full
 y com-
  []
 
 [6]
-Package epstopdf Info: Source file: <fig/outoforder.eps>
-(epstopdf)                    date: 2014-10-04 01:15:57
-(epstopdf)                    size: 46934 bytes
-(epstopdf)             Output file: <fig/outoforder-eps-converted-to.pdf>
-(epstopdf)                    date: 2014-10-04 01:15:57
-(epstopdf)                    size: 33727 bytes
-(epstopdf)             Command: <repstopdf --outfile=fig/outoforder-eps-convert
-ed-to.pdf fig/outoforder.eps>
-(epstopdf)             \includegraphics on input line 458.
-Package epstopdf Info: Output file is already uptodate.
- <fig/outoforder-eps-converted-to.pdf, id=39, 1080.035pt x 1243.64626pt>
-File: fig/outoforder-eps-converted-to.pdf Graphic file (type pdf)
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
-<use fig/outoforder-eps-converted-to.pdf>
-Package pdftex.def Info: fig/outoforder-eps-converted-to.pdf used on input line
- 458.
-(pdftex.def)             Requested size: 192.00073pt x 221.0761pt.
+ [7])
+(./evaluation.tex
 
-Overfull \hbox (2.57474pt too wide) in paragraph at lines 464--465
-\T1/ptm/m/n/9 pushed up to trans-porta-tion layer im-me-di-ately, and also, the
- buffered
- []
+LaTeX Warning: Citation `netem' on page \thepage  undefined on input line 5.
 
 
-Underfull \vbox (badness 7451) has occurred while \output is active []
+LaTeX Warning: Citation `emulab' on page \thepage  undefined on input line 7.
 
- [7 <./fig/outoforder-eps-converted-to.pdf>]) (./evaluation.tex
 
 LaTeX Warning: Reference `sec:together' on page \thepage  undefined on input li
-ne 11.
+ne 9.
 
-Package epstopdf Info: Source file: <fig/out_of_order_wo_sack.eps>
-(epstopdf)                    date: 2014-11-01 23:48:52
-(epstopdf)                    size: 23897 bytes
-(epstopdf)             Output file: <fig/out_of_order_wo_sack-eps-converted-to.
-pdf>
-(epstopdf)                    date: 2014-11-02 13:37:37
-(epstopdf)                    size: 19002 bytes
-(epstopdf)             Command: <repstopdf --outfile=fig/out_of_order_wo_sack-e
-ps-converted-to.pdf fig/out_of_order_wo_sack.eps>
-(epstopdf)             \includegraphics on input line 26.
+Package epstopdf Info: Source file: <fig/clock.eps>
+(epstopdf)                    date: 2014-11-04 12:32:10
+(epstopdf)                    size: 10464 bytes
+(epstopdf)             Output file: <fig/clock-eps-converted-to.pdf>
+(epstopdf)                    date: 2014-11-04 12:32:10
+(epstopdf)                    size: 7322 bytes
+(epstopdf)             Command: <repstopdf --outfile=fig/clock-eps-converted-to
+.pdf fig/clock.eps>
+(epstopdf)             \includegraphics on input line 25.
 Package epstopdf Info: Output file is already uptodate.
+<fig/clock-eps-converted-to.pdf, id=43, 508.90125pt x 423.5825pt>
+File: fig/clock-eps-converted-to.pdf Graphic file (type pdf)
 
-<fig/out_of_order_wo_sack-eps-converted-to.pdf, id=47, 512.91624pt x 423.5825pt
->
-File: fig/out_of_order_wo_sack-eps-converted-to.pdf Graphic file (type pdf)
- <use fig/out_of_order_wo_sack-eps-converted-to.pdf>
-Package pdftex.def Info: fig/out_of_order_wo_sack-eps-converted-to.pdf used on 
-input line 26.
-(pdftex.def)             Requested size: 166.32092pt x 137.35243pt.
+<use fig/clock-eps-converted-to.pdf>
+Package pdftex.def Info: fig/clock-eps-converted-to.pdf used on input line 25.
+(pdftex.def)             Requested size: 117.59615pt x 101.17712pt.
 Package epstopdf Info: Source file: <fig/out_of_order_w_sack.eps>
-(epstopdf)                    date: 2014-11-01 23:48:52
+(epstopdf)                    date: 2014-11-04 12:32:10
 (epstopdf)                    size: 23877 bytes
 (epstopdf)             Output file: <fig/out_of_order_w_sack-eps-converted-to.p
 df>
-(epstopdf)                    date: 2014-11-02 13:37:39
+(epstopdf)                    date: 2014-11-04 12:32:10
 (epstopdf)                    size: 18956 bytes
 (epstopdf)             Command: <repstopdf --outfile=fig/out_of_order_w_sack-ep
 s-converted-to.pdf fig/out_of_order_w_sack.eps>
 (epstopdf)             \includegraphics on input line 27.
 Package epstopdf Info: Output file is already uptodate.
 
-<fig/out_of_order_w_sack-eps-converted-to.pdf, id=48, 512.91624pt x 423.5825pt>
+<fig/out_of_order_w_sack-eps-converted-to.pdf, id=44, 512.91624pt x 423.5825pt>
 File: fig/out_of_order_w_sack-eps-converted-to.pdf Graphic file (type pdf)
 <use fig/out_of_order_w_sack-eps-converted-to.pdf>
 Package pdftex.def Info: fig/out_of_order_w_sack-eps-converted-to.pdf used on i
 nput line 27.
-(pdftex.def)             Requested size: 166.32092pt x 137.35243pt.
-Package epstopdf Info: Source file: <fig/clock.eps>
-(epstopdf)                    date: 2014-11-01 23:48:52
-(epstopdf)                    size: 10464 bytes
-(epstopdf)             Output file: <fig/clock-eps-converted-to.pdf>
-(epstopdf)                    date: 2014-11-02 13:37:40
-(epstopdf)                    size: 7322 bytes
-(epstopdf)             Command: <repstopdf --outfile=fig/clock-eps-converted-to
-.pdf fig/clock.eps>
-(epstopdf)             \includegraphics on input line 28.
-Package epstopdf Info: Output file is already uptodate.
-
-<fig/clock-eps-converted-to.pdf, id=49, 508.90125pt x 423.5825pt>
-File: fig/clock-eps-converted-to.pdf Graphic file (type pdf)
-
-<use fig/clock-eps-converted-to.pdf>
-Package pdftex.def Info: fig/clock-eps-converted-to.pdf used on input line 28.
-(pdftex.def)             Requested size: 166.32092pt x 138.43828pt.
+(pdftex.def)             Requested size: 117.6004pt x 101.17712pt.
+ [8 <./fig/clock-eps-converted-to.pdf> <./fig/out_of_order_w_sack-eps-converted
+-to.pdf>]
 Package epstopdf Info: Source file: <fig/implementation.eps>
-(epstopdf)                    date: 2014-11-01 23:48:52
+(epstopdf)                    date: 2014-11-04 12:32:10
 (epstopdf)                    size: 26382 bytes
 (epstopdf)             Output file: <fig/implementation-eps-converted-to.pdf>
-(epstopdf)                    date: 2014-11-02 13:37:41
+(epstopdf)                    date: 2014-11-04 12:32:10
 (epstopdf)                    size: 18232 bytes
 (epstopdf)             Command: <repstopdf --outfile=fig/implementation-eps-con
 verted-to.pdf fig/implementation.eps>
-(epstopdf)             \includegraphics on input line 29.
+(epstopdf)             \includegraphics on input line 55.
 Package epstopdf Info: Output file is already uptodate.
 
-<fig/implementation-eps-converted-to.pdf, id=50, 520.94624pt x 423.5825pt>
+<fig/implementation-eps-converted-to.pdf, id=58, 520.94624pt x 423.5825pt>
 File: fig/implementation-eps-converted-to.pdf Graphic file (type pdf)
 
 <use fig/implementation-eps-converted-to.pdf>
 Package pdftex.def Info: fig/implementation-eps-converted-to.pdf used on input 
-line 29.
+line 55.
+(pdftex.def)             Requested size: 117.59734pt x 101.17712pt.
+Package epstopdf Info: Source file: <fig/out_of_order_wo_sack.eps>
+(epstopdf)                    date: 2014-11-04 12:32:10
+(epstopdf)                    size: 23897 bytes
+(epstopdf)             Output file: <fig/out_of_order_wo_sack-eps-converted-to.
+pdf>
+(epstopdf)                    date: 2014-11-04 12:32:10
+(epstopdf)                    size: 19002 bytes
+(epstopdf)             Command: <repstopdf --outfile=fig/out_of_order_wo_sack-e
+ps-converted-to.pdf fig/out_of_order_wo_sack.eps>
+(epstopdf)             \includegraphics on input line 65.
+Package epstopdf Info: Output file is already uptodate.
+
+<fig/out_of_order_wo_sack-eps-converted-to.pdf, id=59, 512.91624pt x 423.5825pt
+>
+File: fig/out_of_order_wo_sack-eps-converted-to.pdf Graphic file (type pdf)
+ <use fig/out_of_order_wo_sack-eps-converted-to.pdf>
+Package pdftex.def Info: fig/out_of_order_wo_sack-eps-converted-to.pdf used on 
+input line 65.
+(pdftex.def)             Requested size: 166.32092pt x 137.35243pt.
+Package epstopdf Info: Source file: <fig/out_of_order_w_sack.eps>
+(epstopdf)                    date: 2014-11-04 12:32:10
+(epstopdf)                    size: 23877 bytes
+(epstopdf)             Output file: <fig/out_of_order_w_sack-eps-converted-to.p
+df>
+(epstopdf)                    date: 2014-11-04 12:32:10
+(epstopdf)                    size: 18956 bytes
+(epstopdf)             Command: <repstopdf --outfile=fig/out_of_order_w_sack-ep
+s-converted-to.pdf fig/out_of_order_w_sack.eps>
+(epstopdf)             \includegraphics on input line 66.
+Package epstopdf Info: Output file is already uptodate.
+File: fig/out_of_order_w_sack-eps-converted-to.pdf Graphic file (type pdf)
+
+<use fig/out_of_order_w_sack-eps-converted-to.pdf>
+Package pdftex.def Info: fig/out_of_order_w_sack-eps-converted-to.pdf used on i
+nput line 66.
+(pdftex.def)             Requested size: 166.32092pt x 137.35243pt.
+Package epstopdf Info: Source file: <fig/clock.eps>
+(epstopdf)                    date: 2014-11-04 12:32:10
+(epstopdf)                    size: 10464 bytes
+(epstopdf)             Output file: <fig/clock-eps-converted-to.pdf>
+(epstopdf)                    date: 2014-11-04 12:32:10
+(epstopdf)                    size: 7322 bytes
+(epstopdf)             Command: <repstopdf --outfile=fig/clock-eps-converted-to
+.pdf fig/clock.eps>
+(epstopdf)             \includegraphics on input line 67.
+Package epstopdf Info: Output file is already uptodate.
+File: fig/clock-eps-converted-to.pdf Graphic file (type pdf)
+
+<use fig/clock-eps-converted-to.pdf>
+Package pdftex.def Info: fig/clock-eps-converted-to.pdf used on input line 67.
+(pdftex.def)             Requested size: 166.32092pt x 138.43828pt.
+Package epstopdf Info: Source file: <fig/implementation.eps>
+(epstopdf)                    date: 2014-11-04 12:32:10
+(epstopdf)                    size: 26382 bytes
+(epstopdf)             Output file: <fig/implementation-eps-converted-to.pdf>
+(epstopdf)                    date: 2014-11-04 12:32:10
+(epstopdf)                    size: 18232 bytes
+(epstopdf)             Command: <repstopdf --outfile=fig/implementation-eps-con
+verted-to.pdf fig/implementation.eps>
+(epstopdf)             \includegraphics on input line 68.
+Package epstopdf Info: Output file is already uptodate.
+File: fig/implementation-eps-converted-to.pdf Graphic file (type pdf)
+
+<use fig/implementation-eps-converted-to.pdf>
+Package pdftex.def Info: fig/implementation-eps-converted-to.pdf used on input 
+line 68.
 (pdftex.def)             Requested size: 166.32092pt x 135.23247pt.
 Package epstopdf Info: Source file: <fig/no_limit.eps>
-(epstopdf)                    date: 2014-11-01 23:48:52
+(epstopdf)                    date: 2014-11-04 12:32:10
 (epstopdf)                    size: 28608 bytes
 (epstopdf)             Output file: <fig/no_limit-eps-converted-to.pdf>
-(epstopdf)                    date: 2014-11-02 13:37:43
+(epstopdf)                    date: 2014-11-04 12:32:10
 (epstopdf)                    size: 22425 bytes
 (epstopdf)             Command: <repstopdf --outfile=fig/no_limit-eps-converted
 -to.pdf fig/no_limit.eps>
-(epstopdf)             \includegraphics on input line 30.
+(epstopdf)             \includegraphics on input line 69.
 Package epstopdf Info: Output file is already uptodate.
 
-<fig/no_limit-eps-converted-to.pdf, id=51, 520.94624pt x 423.5825pt>
+<fig/no_limit-eps-converted-to.pdf, id=60, 520.94624pt x 423.5825pt>
 File: fig/no_limit-eps-converted-to.pdf Graphic file (type pdf)
 
 <use fig/no_limit-eps-converted-to.pdf>
-Package pdftex.def Info: fig/no_limit-eps-converted-to.pdf used on input line 3
-0.
+Package pdftex.def Info: fig/no_limit-eps-converted-to.pdf used on input line 6
+9.
 (pdftex.def)             Requested size: 166.32092pt x 135.23247pt.
 Package epstopdf Info: Source file: <fig/no_limit_tp_comp.eps>
-(epstopdf)                    date: 2014-11-01 23:48:52
+(epstopdf)                    date: 2014-11-04 12:32:10
 (epstopdf)                    size: 25162 bytes
 (epstopdf)             Output file: <fig/no_limit_tp_comp-eps-converted-to.pdf>
 
-(epstopdf)                    date: 2014-11-02 13:37:44
+(epstopdf)                    date: 2014-11-04 12:32:10
 (epstopdf)                    size: 19463 bytes
 (epstopdf)             Command: <repstopdf --outfile=fig/no_limit_tp_comp-eps-c
 onverted-to.pdf fig/no_limit_tp_comp.eps>
-(epstopdf)             \includegraphics on input line 31.
+(epstopdf)             \includegraphics on input line 70.
 Package epstopdf Info: Output file is already uptodate.
 
-<fig/no_limit_tp_comp-eps-converted-to.pdf, id=52, 520.94624pt x 423.5825pt>
+<fig/no_limit_tp_comp-eps-converted-to.pdf, id=61, 520.94624pt x 423.5825pt>
 File: fig/no_limit_tp_comp-eps-converted-to.pdf Graphic file (type pdf)
 
 <use fig/no_limit_tp_comp-eps-converted-to.pdf>
 Package pdftex.def Info: fig/no_limit_tp_comp-eps-converted-to.pdf used on inpu
-t line 31.
+t line 70.
 (pdftex.def)             Requested size: 166.32092pt x 135.23247pt.
 Package epstopdf Info: Source file: <fig/no_limit_qd_comp.eps>
-(epstopdf)                    date: 2014-11-01 23:48:52
+(epstopdf)                    date: 2014-11-04 12:32:10
 (epstopdf)                    size: 23387 bytes
 (epstopdf)             Output file: <fig/no_limit_qd_comp-eps-converted-to.pdf>
 
-(epstopdf)                    date: 2014-11-02 13:37:45
+(epstopdf)                    date: 2014-11-04 12:32:10
 (epstopdf)                    size: 18072 bytes
 (epstopdf)             Command: <repstopdf --outfile=fig/no_limit_qd_comp-eps-c
 onverted-to.pdf fig/no_limit_qd_comp.eps>
-(epstopdf)             \includegraphics on input line 32.
+(epstopdf)             \includegraphics on input line 71.
 Package epstopdf Info: Output file is already uptodate.
 
-<fig/no_limit_qd_comp-eps-converted-to.pdf, id=53, 516.93124pt x 423.5825pt>
+<fig/no_limit_qd_comp-eps-converted-to.pdf, id=62, 516.93124pt x 423.5825pt>
 File: fig/no_limit_qd_comp-eps-converted-to.pdf Graphic file (type pdf)
 
 <use fig/no_limit_qd_comp-eps-converted-to.pdf>
 Package pdftex.def Info: fig/no_limit_qd_comp-eps-converted-to.pdf used on inpu
-t line 32.
+t line 71.
 (pdftex.def)             Requested size: 166.32092pt x 136.28598pt.
 Package epstopdf Info: Source file: <fig/limit.eps>
-(epstopdf)                    date: 2014-11-01 23:48:52
+(epstopdf)                    date: 2014-11-04 12:32:10
 (epstopdf)                    size: 28756 bytes
 (epstopdf)             Output file: <fig/limit-eps-converted-to.pdf>
-(epstopdf)                    date: 2014-11-02 13:37:47
+(epstopdf)                    date: 2014-11-04 12:32:10
 (epstopdf)                    size: 22264 bytes
 (epstopdf)             Command: <repstopdf --outfile=fig/limit-eps-converted-to
 .pdf fig/limit.eps>
-(epstopdf)             \includegraphics on input line 33.
+(epstopdf)             \includegraphics on input line 72.
 Package epstopdf Info: Output file is already uptodate.
 
-<fig/limit-eps-converted-to.pdf, id=54, 520.94624pt x 423.5825pt>
+<fig/limit-eps-converted-to.pdf, id=63, 520.94624pt x 423.5825pt>
 File: fig/limit-eps-converted-to.pdf Graphic file (type pdf)
 
 <use fig/limit-eps-converted-to.pdf>
-Package pdftex.def Info: fig/limit-eps-converted-to.pdf used on input line 33.
+Package pdftex.def Info: fig/limit-eps-converted-to.pdf used on input line 72.
 (pdftex.def)             Requested size: 166.32092pt x 135.23247pt.
 Package epstopdf Info: Source file: <fig/limit_tp_comp.eps>
-(epstopdf)                    date: 2014-11-01 23:48:52
+(epstopdf)                    date: 2014-11-04 12:32:10
 (epstopdf)                    size: 25494 bytes
 (epstopdf)             Output file: <fig/limit_tp_comp-eps-converted-to.pdf>
-(epstopdf)                    date: 2014-11-02 13:37:48
+(epstopdf)                    date: 2014-11-04 12:32:10
 (epstopdf)                    size: 20455 bytes
 (epstopdf)             Command: <repstopdf --outfile=fig/limit_tp_comp-eps-conv
 erted-to.pdf fig/limit_tp_comp.eps>
-(epstopdf)             \includegraphics on input line 34.
+(epstopdf)             \includegraphics on input line 73.
 Package epstopdf Info: Output file is already uptodate.
 
-<fig/limit_tp_comp-eps-converted-to.pdf, id=55, 520.94624pt x 423.5825pt>
+<fig/limit_tp_comp-eps-converted-to.pdf, id=64, 520.94624pt x 423.5825pt>
 File: fig/limit_tp_comp-eps-converted-to.pdf Graphic file (type pdf)
 
 <use fig/limit_tp_comp-eps-converted-to.pdf>
 Package pdftex.def Info: fig/limit_tp_comp-eps-converted-to.pdf used on input l
-ine 34.
+ine 73.
 (pdftex.def)             Requested size: 166.32092pt x 135.23247pt.
 Package epstopdf Info: Source file: <fig/limit_qd_comp.eps>
-(epstopdf)                    date: 2014-11-01 23:48:52
+(epstopdf)                    date: 2014-11-04 12:32:10
 (epstopdf)                    size: 23165 bytes
 (epstopdf)             Output file: <fig/limit_qd_comp-eps-converted-to.pdf>
-(epstopdf)                    date: 2014-11-02 13:37:50
+(epstopdf)                    date: 2014-11-04 12:32:10
 (epstopdf)                    size: 17977 bytes
 (epstopdf)             Command: <repstopdf --outfile=fig/limit_qd_comp-eps-conv
 erted-to.pdf fig/limit_qd_comp.eps>
-(epstopdf)             \includegraphics on input line 35.
+(epstopdf)             \includegraphics on input line 74.
 Package epstopdf Info: Output file is already uptodate.
 
-<fig/limit_qd_comp-eps-converted-to.pdf, id=56, 516.93124pt x 423.5825pt>
+<fig/limit_qd_comp-eps-converted-to.pdf, id=65, 516.93124pt x 423.5825pt>
 File: fig/limit_qd_comp-eps-converted-to.pdf Graphic file (type pdf)
 
 <use fig/limit_qd_comp-eps-converted-to.pdf>
 Package pdftex.def Info: fig/limit_qd_comp-eps-converted-to.pdf used on input l
-ine 35.
+ine 74.
 (pdftex.def)             Requested size: 166.32092pt x 136.28598pt.
 Package epstopdf Info: Source file: <fig/delay_1.eps>
-(epstopdf)                    date: 2014-11-01 23:48:52
+(epstopdf)                    date: 2014-11-04 12:32:10
 (epstopdf)                    size: 29262 bytes
 (epstopdf)             Output file: <fig/delay_1-eps-converted-to.pdf>
-(epstopdf)                    date: 2014-11-02 13:37:51
+(epstopdf)                    date: 2014-11-04 12:32:10
 (epstopdf)                    size: 23243 bytes
 (epstopdf)             Command: <repstopdf --outfile=fig/delay_1-eps-converted-
 to.pdf fig/delay_1.eps>
-(epstopdf)             \includegraphics on input line 36.
+(epstopdf)             \includegraphics on input line 75.
 Package epstopdf Info: Output file is already uptodate.
 
-<fig/delay_1-eps-converted-to.pdf, id=57, 520.94624pt x 423.5825pt>
+<fig/delay_1-eps-converted-to.pdf, id=66, 520.94624pt x 423.5825pt>
 File: fig/delay_1-eps-converted-to.pdf Graphic file (type pdf)
 
 <use fig/delay_1-eps-converted-to.pdf>
-Package pdftex.def Info: fig/delay_1-eps-converted-to.pdf used on input line 36
+Package pdftex.def Info: fig/delay_1-eps-converted-to.pdf used on input line 75
 .
 (pdftex.def)             Requested size: 166.32092pt x 135.23247pt.
 Package epstopdf Info: Source file: <fig/delay_tp_comp.eps>
-(epstopdf)                    date: 2014-11-01 23:48:52
+(epstopdf)                    date: 2014-11-04 12:32:10
 (epstopdf)                    size: 25755 bytes
 (epstopdf)             Output file: <fig/delay_tp_comp-eps-converted-to.pdf>
-(epstopdf)                    date: 2014-11-02 13:37:53
+(epstopdf)                    date: 2014-11-04 12:32:10
 (epstopdf)                    size: 20580 bytes
 (epstopdf)             Command: <repstopdf --outfile=fig/delay_tp_comp-eps-conv
 erted-to.pdf fig/delay_tp_comp.eps>
-(epstopdf)             \includegraphics on input line 37.
+(epstopdf)             \includegraphics on input line 76.
 Package epstopdf Info: Output file is already uptodate.
 
-<fig/delay_tp_comp-eps-converted-to.pdf, id=58, 520.94624pt x 423.5825pt>
+<fig/delay_tp_comp-eps-converted-to.pdf, id=67, 520.94624pt x 423.5825pt>
 File: fig/delay_tp_comp-eps-converted-to.pdf Graphic file (type pdf)
 
 <use fig/delay_tp_comp-eps-converted-to.pdf>
 Package pdftex.def Info: fig/delay_tp_comp-eps-converted-to.pdf used on input l
-ine 37.
+ine 76.
 (pdftex.def)             Requested size: 166.32092pt x 135.23247pt.
 Package epstopdf Info: Source file: <fig/delay_qd_com.eps>
-(epstopdf)                    date: 2014-10-09 20:45:07
+(epstopdf)                    date: 2014-11-04 12:32:10
 (epstopdf)                    size: 25957 bytes
 (epstopdf)             Output file: <fig/delay_qd_com-eps-converted-to.pdf>
-(epstopdf)                    date: 2014-10-09 20:45:07
+(epstopdf)                    date: 2014-11-04 12:32:10
 (epstopdf)                    size: 18373 bytes
 (epstopdf)             Command: <repstopdf --outfile=fig/delay_qd_com-eps-conve
 rted-to.pdf fig/delay_qd_com.eps>
-(epstopdf)             \includegraphics on input line 38.
+(epstopdf)             \includegraphics on input line 77.
 Package epstopdf Info: Output file is already uptodate.
 
-<fig/delay_qd_com-eps-converted-to.pdf, id=59, 512.91624pt x 423.5825pt>
+<fig/delay_qd_com-eps-converted-to.pdf, id=68, 512.91624pt x 423.5825pt>
 File: fig/delay_qd_com-eps-converted-to.pdf Graphic file (type pdf)
 
 <use fig/delay_qd_com-eps-converted-to.pdf>
 Package pdftex.def Info: fig/delay_qd_com-eps-converted-to.pdf used on input li
-ne 38.
+ne 77.
 (pdftex.def)             Requested size: 166.32092pt x 137.35243pt.
 Package epstopdf Info: Source file: <fig/wireless.eps>
-(epstopdf)                    date: 2014-11-01 23:48:52
+(epstopdf)                    date: 2014-11-04 12:32:11
 (epstopdf)                    size: 28662 bytes
 (epstopdf)             Output file: <fig/wireless-eps-converted-to.pdf>
-(epstopdf)                    date: 2014-11-02 13:37:54
+(epstopdf)                    date: 2014-11-04 12:32:11
 (epstopdf)                    size: 22233 bytes
 (epstopdf)             Command: <repstopdf --outfile=fig/wireless-eps-converted
 -to.pdf fig/wireless.eps>
-(epstopdf)             \includegraphics on input line 39.
+(epstopdf)             \includegraphics on input line 78.
 Package epstopdf Info: Output file is already uptodate.
 
-<fig/wireless-eps-converted-to.pdf, id=60, 520.94624pt x 423.5825pt>
+<fig/wireless-eps-converted-to.pdf, id=69, 520.94624pt x 423.5825pt>
 File: fig/wireless-eps-converted-to.pdf Graphic file (type pdf)
 
 <use fig/wireless-eps-converted-to.pdf>
-Package pdftex.def Info: fig/wireless-eps-converted-to.pdf used on input line 3
-9.
+Package pdftex.def Info: fig/wireless-eps-converted-to.pdf used on input line 7
+8.
 (pdftex.def)             Requested size: 166.32092pt x 135.23247pt.
 Package epstopdf Info: Source file: <fig/wireless_tp_comp.eps>
-(epstopdf)                    date: 2014-11-01 23:48:52
+(epstopdf)                    date: 2014-11-04 12:32:11
 (epstopdf)                    size: 25264 bytes
 (epstopdf)             Output file: <fig/wireless_tp_comp-eps-converted-to.pdf>
 
-(epstopdf)                    date: 2014-11-02 13:37:55
+(epstopdf)                    date: 2014-11-04 12:32:11
 (epstopdf)                    size: 19941 bytes
 (epstopdf)             Command: <repstopdf --outfile=fig/wireless_tp_comp-eps-c
 onverted-to.pdf fig/wireless_tp_comp.eps>
-(epstopdf)             \includegraphics on input line 40.
+(epstopdf)             \includegraphics on input line 79.
 Package epstopdf Info: Output file is already uptodate.
 
-<fig/wireless_tp_comp-eps-converted-to.pdf, id=61, 520.94624pt x 423.5825pt>
+<fig/wireless_tp_comp-eps-converted-to.pdf, id=70, 520.94624pt x 423.5825pt>
 File: fig/wireless_tp_comp-eps-converted-to.pdf Graphic file (type pdf)
 
 <use fig/wireless_tp_comp-eps-converted-to.pdf>
 Package pdftex.def Info: fig/wireless_tp_comp-eps-converted-to.pdf used on inpu
-t line 40.
+t line 79.
 (pdftex.def)             Requested size: 166.32092pt x 135.23247pt.
 
 
-LaTeX Warning: Float too large for page by 72.59512pt on input line 44.
+LaTeX Warning: Float too large for page by 72.59512pt on input line 83.
 
 Package epstopdf Info: Source file: <fig/wireless_qd_comp.eps>
-(epstopdf)                    date: 2014-11-01 23:48:52
+(epstopdf)                    date: 2014-11-04 12:32:11
 (epstopdf)                    size: 21021 bytes
 (epstopdf)             Output file: <fig/wireless_qd_comp-eps-converted-to.pdf>
 
-(epstopdf)                    date: 2014-11-02 13:37:57
+(epstopdf)                    date: 2014-11-04 12:32:11
 (epstopdf)                    size: 15777 bytes
 (epstopdf)             Command: <repstopdf --outfile=fig/wireless_qd_comp-eps-c
 onverted-to.pdf fig/wireless_qd_comp.eps>
-(epstopdf)             \includegraphics on input line 48.
+(epstopdf)             \includegraphics on input line 87.
 Package epstopdf Info: Output file is already uptodate.
-<fig/wireless_qd_comp-eps-converted-to.pdf, id=62, 512.91624pt x 423.5825pt>
+<fig/wireless_qd_comp-eps-converted-to.pdf, id=71, 512.91624pt x 423.5825pt>
 File: fig/wireless_qd_comp-eps-converted-to.pdf Graphic file (type pdf)
 
 <use fig/wireless_qd_comp-eps-converted-to.pdf>
 Package pdftex.def Info: fig/wireless_qd_comp-eps-converted-to.pdf used on inpu
-t line 48.
+t line 87.
 (pdftex.def)             Requested size: 166.32092pt x 137.35243pt.
 Package epstopdf Info: Source file: <fig/routing_ack.eps>
-(epstopdf)                    date: 2014-11-01 23:48:52
+(epstopdf)                    date: 2014-11-04 12:32:11
 (epstopdf)                    size: 23960 bytes
 (epstopdf)             Output file: <fig/routing_ack-eps-converted-to.pdf>
-(epstopdf)                    date: 2014-11-02 13:37:58
+(epstopdf)                    date: 2014-11-04 12:32:11
 (epstopdf)                    size: 18908 bytes
 (epstopdf)             Command: <repstopdf --outfile=fig/routing_ack-eps-conver
 ted-to.pdf fig/routing_ack.eps>
-(epstopdf)             \includegraphics on input line 49.
+(epstopdf)             \includegraphics on input line 88.
 Package epstopdf Info: Output file is already uptodate.
 
-<fig/routing_ack-eps-converted-to.pdf, id=63, 512.91624pt x 423.5825pt>
+<fig/routing_ack-eps-converted-to.pdf, id=72, 512.91624pt x 423.5825pt>
 File: fig/routing_ack-eps-converted-to.pdf Graphic file (type pdf)
 
 <use fig/routing_ack-eps-converted-to.pdf>
 Package pdftex.def Info: fig/routing_ack-eps-converted-to.pdf used on input lin
-e 49.
+e 88.
 (pdftex.def)             Requested size: 166.32092pt x 137.35243pt.
 Package epstopdf Info: Source file: <fig/emulab.eps>
-(epstopdf)                    date: 2014-11-01 23:48:52
+(epstopdf)                    date: 2014-11-04 12:32:10
 (epstopdf)                    size: 50511 bytes
 (epstopdf)             Output file: <fig/emulab-eps-converted-to.pdf>
-(epstopdf)                    date: 2014-11-02 13:37:59
+(epstopdf)                    date: 2014-11-04 12:32:10
 (epstopdf)                    size: 38892 bytes
 (epstopdf)             Command: <repstopdf --outfile=fig/emulab-eps-converted-t
 o.pdf fig/emulab.eps>
-(epstopdf)             \includegraphics on input line 50.
+(epstopdf)             \includegraphics on input line 89.
 Package epstopdf Info: Output file is already uptodate.
 
-<fig/emulab-eps-converted-to.pdf, id=64, 512.91624pt x 423.5825pt>
+<fig/emulab-eps-converted-to.pdf, id=73, 512.91624pt x 423.5825pt>
 File: fig/emulab-eps-converted-to.pdf Graphic file (type pdf)
 
 <use fig/emulab-eps-converted-to.pdf>
-Package pdftex.def Info: fig/emulab-eps-converted-to.pdf used on input line 50.
+Package pdftex.def Info: fig/emulab-eps-converted-to.pdf used on input line 89.
 
 (pdftex.def)             Requested size: 166.32092pt x 137.35243pt.
 Package epstopdf Info: Source file: <fig/emulab_tp_comp.eps>
-(epstopdf)                    date: 2014-11-01 23:48:52
+(epstopdf)                    date: 2014-11-04 12:32:10
 (epstopdf)                    size: 19720 bytes
 (epstopdf)             Output file: <fig/emulab_tp_comp-eps-converted-to.pdf>
-(epstopdf)                    date: 2014-11-02 13:38:01
+(epstopdf)                    date: 2014-11-04 12:32:10
 (epstopdf)                    size: 15681 bytes
 (epstopdf)             Command: <repstopdf --outfile=fig/emulab_tp_comp-eps-con
 verted-to.pdf fig/emulab_tp_comp.eps>
-(epstopdf)             \includegraphics on input line 51.
+(epstopdf)             \includegraphics on input line 90.
 Package epstopdf Info: Output file is already uptodate.
 
-<fig/emulab_tp_comp-eps-converted-to.pdf, id=65, 512.91624pt x 423.5825pt>
+<fig/emulab_tp_comp-eps-converted-to.pdf, id=74, 512.91624pt x 423.5825pt>
 File: fig/emulab_tp_comp-eps-converted-to.pdf Graphic file (type pdf)
 
 <use fig/emulab_tp_comp-eps-converted-to.pdf>
 Package pdftex.def Info: fig/emulab_tp_comp-eps-converted-to.pdf used on input 
-line 51.
+line 90.
 (pdftex.def)             Requested size: 166.32092pt x 137.35243pt.
 Package epstopdf Info: Source file: <fig/emulab_qd_comp.eps>
-(epstopdf)                    date: 2014-11-01 23:48:52
+(epstopdf)                    date: 2014-11-04 12:32:10
 (epstopdf)                    size: 16344 bytes
 (epstopdf)             Output file: <fig/emulab_qd_comp-eps-converted-to.pdf>
-(epstopdf)                    date: 2014-11-02 13:38:02
+(epstopdf)                    date: 2014-11-04 12:32:10
 (epstopdf)                    size: 12377 bytes
 (epstopdf)             Command: <repstopdf --outfile=fig/emulab_qd_comp-eps-con
 verted-to.pdf fig/emulab_qd_comp.eps>
-(epstopdf)             \includegraphics on input line 52.
+(epstopdf)             \includegraphics on input line 91.
 Package epstopdf Info: Output file is already uptodate.
 
-<fig/emulab_qd_comp-eps-converted-to.pdf, id=66, 520.94624pt x 423.5825pt>
+<fig/emulab_qd_comp-eps-converted-to.pdf, id=75, 520.94624pt x 423.5825pt>
 File: fig/emulab_qd_comp-eps-converted-to.pdf Graphic file (type pdf)
 
 <use fig/emulab_qd_comp-eps-converted-to.pdf>
 Package pdftex.def Info: fig/emulab_qd_comp-eps-converted-to.pdf used on input 
-line 52.
+line 91.
 (pdftex.def)             Requested size: 166.32092pt x 135.23247pt.
 Package epstopdf Info: Source file: <fig/pair_limit.eps>
-(epstopdf)                    date: 2014-11-01 23:48:52
+(epstopdf)                    date: 2014-11-04 12:32:11
 (epstopdf)                    size: 28673 bytes
 (epstopdf)             Output file: <fig/pair_limit-eps-converted-to.pdf>
-(epstopdf)                    date: 2014-11-02 13:38:03
+(epstopdf)                    date: 2014-11-04 12:32:11
 (epstopdf)                    size: 22125 bytes
 (epstopdf)             Command: <repstopdf --outfile=fig/pair_limit-eps-convert
 ed-to.pdf fig/pair_limit.eps>
-(epstopdf)             \includegraphics on input line 53.
+(epstopdf)             \includegraphics on input line 92.
 Package epstopdf Info: Output file is already uptodate.
 
-<fig/pair_limit-eps-converted-to.pdf, id=67, 520.94624pt x 423.5825pt>
+<fig/pair_limit-eps-converted-to.pdf, id=76, 520.94624pt x 423.5825pt>
 File: fig/pair_limit-eps-converted-to.pdf Graphic file (type pdf)
 
 <use fig/pair_limit-eps-converted-to.pdf>
 Package pdftex.def Info: fig/pair_limit-eps-converted-to.pdf used on input line
- 53.
+ 92.
 (pdftex.def)             Requested size: 166.32092pt x 135.23247pt.
 Package epstopdf Info: Source file: <fig/pair_limit_tp_comp.eps>
-(epstopdf)                    date: 2014-11-01 23:48:52
+(epstopdf)                    date: 2014-11-04 12:32:11
 (epstopdf)                    size: 25921 bytes
 (epstopdf)             Output file: <fig/pair_limit_tp_comp-eps-converted-to.pd
 f>
-(epstopdf)                    date: 2014-11-02 13:38:05
+(epstopdf)                    date: 2014-11-04 12:32:11
 (epstopdf)                    size: 20337 bytes
 (epstopdf)             Command: <repstopdf --outfile=fig/pair_limit_tp_comp-eps
 -converted-to.pdf fig/pair_limit_tp_comp.eps>
-(epstopdf)             \includegraphics on input line 54.
+(epstopdf)             \includegraphics on input line 93.
 Package epstopdf Info: Output file is already uptodate.
 
-<fig/pair_limit_tp_comp-eps-converted-to.pdf, id=68, 520.94624pt x 423.5825pt>
+<fig/pair_limit_tp_comp-eps-converted-to.pdf, id=77, 520.94624pt x 423.5825pt>
 File: fig/pair_limit_tp_comp-eps-converted-to.pdf Graphic file (type pdf)
 
 <use fig/pair_limit_tp_comp-eps-converted-to.pdf>
 Package pdftex.def Info: fig/pair_limit_tp_comp-eps-converted-to.pdf used on in
-put line 54.
+put line 93.
 (pdftex.def)             Requested size: 166.32092pt x 135.23247pt.
 Package epstopdf Info: Source file: <fig/pair_limit_qd_comp.eps>
-(epstopdf)                    date: 2014-11-01 23:48:52
+(epstopdf)                    date: 2014-11-04 12:32:11
 (epstopdf)                    size: 23479 bytes
 (epstopdf)             Output file: <fig/pair_limit_qd_comp-eps-converted-to.pd
 f>
-(epstopdf)                    date: 2014-11-02 13:38:06
+(epstopdf)                    date: 2014-11-04 12:32:11
 (epstopdf)                    size: 18085 bytes
 (epstopdf)             Command: <repstopdf --outfile=fig/pair_limit_qd_comp-eps
 -converted-to.pdf fig/pair_limit_qd_comp.eps>
-(epstopdf)             \includegraphics on input line 55.
+(epstopdf)             \includegraphics on input line 94.
 Package epstopdf Info: Output file is already uptodate.
 
-<fig/pair_limit_qd_comp-eps-converted-to.pdf, id=69, 516.93124pt x 423.5825pt>
+<fig/pair_limit_qd_comp-eps-converted-to.pdf, id=78, 516.93124pt x 423.5825pt>
 File: fig/pair_limit_qd_comp-eps-converted-to.pdf Graphic file (type pdf)
 
 <use fig/pair_limit_qd_comp-eps-converted-to.pdf>
 Package pdftex.def Info: fig/pair_limit_qd_comp-eps-converted-to.pdf used on in
-put line 55.
+put line 94.
 (pdftex.def)             Requested size: 166.32092pt x 136.28598pt.
 Package epstopdf Info: Source file: <fig/twopath.eps>
-(epstopdf)                    date: 2014-10-30 22:08:07
+(epstopdf)                    date: 2014-11-04 12:32:11
 (epstopdf)                    size: 15265 bytes
 (epstopdf)             Output file: <fig/twopath-eps-converted-to.pdf>
-(epstopdf)                    date: 2014-10-30 22:08:07
+(epstopdf)                    date: 2014-11-04 12:32:11
 (epstopdf)                    size: 11153 bytes
 (epstopdf)             Command: <repstopdf --outfile=fig/twopath-eps-converted-
 to.pdf fig/twopath.eps>
-(epstopdf)             \includegraphics on input line 56.
+(epstopdf)             \includegraphics on input line 95.
 Package epstopdf Info: Output file is already uptodate.
 
-<fig/twopath-eps-converted-to.pdf, id=70, 520.94624pt x 423.5825pt>
+<fig/twopath-eps-converted-to.pdf, id=79, 520.94624pt x 423.5825pt>
 File: fig/twopath-eps-converted-to.pdf Graphic file (type pdf)
 
 <use fig/twopath-eps-converted-to.pdf>
-Package pdftex.def Info: fig/twopath-eps-converted-to.pdf used on input line 56
+Package pdftex.def Info: fig/twopath-eps-converted-to.pdf used on input line 95
 .
 (pdftex.def)             Requested size: 166.32092pt x 135.23247pt.
 Package epstopdf Info: Source file: <fig/twopaths_tp_comp.eps>
-(epstopdf)                    date: 2014-11-01 23:48:52
+(epstopdf)                    date: 2014-11-04 12:32:11
 (epstopdf)                    size: 19583 bytes
 (epstopdf)             Output file: <fig/twopaths_tp_comp-eps-converted-to.pdf>
 
-(epstopdf)                    date: 2014-11-02 13:38:07
+(epstopdf)                    date: 2014-11-04 12:32:11
 (epstopdf)                    size: 15568 bytes
 (epstopdf)             Command: <repstopdf --outfile=fig/twopaths_tp_comp-eps-c
 onverted-to.pdf fig/twopaths_tp_comp.eps>
-(epstopdf)             \includegraphics on input line 57.
+(epstopdf)             \includegraphics on input line 96.
 Package epstopdf Info: Output file is already uptodate.
 
-<fig/twopaths_tp_comp-eps-converted-to.pdf, id=71, 520.94624pt x 423.5825pt>
+<fig/twopaths_tp_comp-eps-converted-to.pdf, id=80, 520.94624pt x 423.5825pt>
 File: fig/twopaths_tp_comp-eps-converted-to.pdf Graphic file (type pdf)
 
 <use fig/twopaths_tp_comp-eps-converted-to.pdf>
 Package pdftex.def Info: fig/twopaths_tp_comp-eps-converted-to.pdf used on inpu
-t line 57.
+t line 96.
 (pdftex.def)             Requested size: 166.32092pt x 135.23247pt.
 Package epstopdf Info: Source file: <fig/twopaths_qd_comp.eps>
-(epstopdf)                    date: 2014-10-30 22:08:07
+(epstopdf)                    date: 2014-11-04 12:32:11
 (epstopdf)                    size: 16772 bytes
 (epstopdf)             Output file: <fig/twopaths_qd_comp-eps-converted-to.pdf>
 
-(epstopdf)                    date: 2014-10-30 22:08:07
+(epstopdf)                    date: 2014-11-04 12:32:11
 (epstopdf)                    size: 12803 bytes
 (epstopdf)             Command: <repstopdf --outfile=fig/twopaths_qd_comp-eps-c
 onverted-to.pdf fig/twopaths_qd_comp.eps>
-(epstopdf)             \includegraphics on input line 58.
+(epstopdf)             \includegraphics on input line 97.
 Package epstopdf Info: Output file is already uptodate.
 
-<fig/twopaths_qd_comp-eps-converted-to.pdf, id=72, 516.93124pt x 423.5825pt>
+<fig/twopaths_qd_comp-eps-converted-to.pdf, id=81, 516.93124pt x 423.5825pt>
 File: fig/twopaths_qd_comp-eps-converted-to.pdf Graphic file (type pdf)
 
 <use fig/twopaths_qd_comp-eps-converted-to.pdf>
 Package pdftex.def Info: fig/twopaths_qd_comp-eps-converted-to.pdf used on inpu
-t line 58.
+t line 97.
 (pdftex.def)             Requested size: 166.32092pt x 136.28598pt.
 Package epstopdf Info: Source file: <fig/skype_tp_comp.eps>
-(epstopdf)                    date: 2014-11-01 23:48:52
+(epstopdf)                    date: 2014-11-04 12:32:11
 (epstopdf)                    size: 14675 bytes
 (epstopdf)             Output file: <fig/skype_tp_comp-eps-converted-to.pdf>
-(epstopdf)                    date: 2014-11-02 13:38:08
+(epstopdf)                    date: 2014-11-04 12:32:11
 (epstopdf)                    size: 10171 bytes
 (epstopdf)             Command: <repstopdf --outfile=fig/skype_tp_comp-eps-conv
 erted-to.pdf fig/skype_tp_comp.eps>
-(epstopdf)             \includegraphics on input line 59.
+(epstopdf)             \includegraphics on input line 98.
 Package epstopdf Info: Output file is already uptodate.
 
-<fig/skype_tp_comp-eps-converted-to.pdf, id=73, 512.91624pt x 423.5825pt>
+<fig/skype_tp_comp-eps-converted-to.pdf, id=82, 512.91624pt x 423.5825pt>
 File: fig/skype_tp_comp-eps-converted-to.pdf Graphic file (type pdf)
 
 <use fig/skype_tp_comp-eps-converted-to.pdf>
 Package pdftex.def Info: fig/skype_tp_comp-eps-converted-to.pdf used on input l
-ine 59.
+ine 98.
 (pdftex.def)             Requested size: 166.32092pt x 137.35243pt.
 Package epstopdf Info: Source file: <fig/skype_delay_comp.eps>
-(epstopdf)                    date: 2014-11-01 23:48:52
+(epstopdf)                    date: 2014-11-04 12:32:11
 (epstopdf)                    size: 12136 bytes
 (epstopdf)             Output file: <fig/skype_delay_comp-eps-converted-to.pdf>
 
-(epstopdf)                    date: 2014-11-02 13:38:10
+(epstopdf)                    date: 2014-11-04 12:32:11
 (epstopdf)                    size: 8571 bytes
 (epstopdf)             Command: <repstopdf --outfile=fig/skype_delay_comp-eps-c
 onverted-to.pdf fig/skype_delay_comp.eps>
-(epstopdf)             \includegraphics on input line 60.
+(epstopdf)             \includegraphics on input line 99.
 Package epstopdf Info: Output file is already uptodate.
 
-<fig/skype_delay_comp-eps-converted-to.pdf, id=74, 516.93124pt x 423.5825pt>
+<fig/skype_delay_comp-eps-converted-to.pdf, id=83, 516.93124pt x 423.5825pt>
 File: fig/skype_delay_comp-eps-converted-to.pdf Graphic file (type pdf)
 
 <use fig/skype_delay_comp-eps-converted-to.pdf>
 Package pdftex.def Info: fig/skype_delay_comp-eps-converted-to.pdf used on inpu
-t line 60.
+t line 99.
 (pdftex.def)             Requested size: 166.32092pt x 136.28598pt.
 
 
-LaTeX Warning: Float too large for page by 68.12924pt on input line 65.
+LaTeX Warning: Float too large for page by 68.12924pt on input line 104.
 
 
 LaTeX Warning: Reference `fig.skype' on page \thepage  undefined on input line 
-79.
+118.
 
 
-Overfull \hbox (5.6173pt too wide) in paragraph at lines 79--80
+Overfull \hbox (5.6173pt too wide) in paragraph at lines 118--119
 []\T1/ptm/m/n/9 To show how this rule in-flu-ence Skype au-dio stream-ing, we c
 hange
  []
 
-[8]
 
 LaTeX Warning: Reference `fig.switch' on page \thepage  undefined on input line
- 85.
+ 124.
 
-) (./conext14.bbl) [9
-
-] [10 <./fig/out_of_order_wo_sack-eps-converted-to.pdf> <./fig/out_of_order_w_s
-ack-eps-converted-to.pdf> <./fig/clock-eps-converted-to.pdf> <./fig/implementat
-ion-eps-converted-to.pdf> <./fig/no_limit-eps-converted-to.pdf> <./fig/no_limit
-_tp_comp-eps-converted-to.pdf> <./fig/no_limit_qd_comp-eps-converted-to.pdf> <.
-/fig/limit-eps-converted-to.pdf> <./fig/limit_tp_comp-eps-converted-to.pdf> <./
-fig/limit_qd_comp-eps-converted-to.pdf> <./fig/delay_1-eps-converted-to.pdf> <.
-/fig/delay_tp_comp-eps-converted-to.pdf> <./fig/delay_qd_com-eps-converted-to.p
-df> <./fig/wireless-eps-converted-to.pdf> <./fig/wireless_tp_comp-eps-converted
--to.pdf>] [11 <./fig/wireless_qd_comp-eps-converted-to.pdf> <./fig/routing_ack-
-eps-converted-to.pdf> <./fig/emulab-eps-converted-to.pdf> <./fig/emulab_tp_comp
--eps-converted-to.pdf> <./fig/emulab_qd_comp-eps-converted-to.pdf> <./fig/pair_
-limit-eps-converted-to.pdf> <./fig/pair_limit_tp_comp-eps-converted-to.pdf> <./
-fig/pair_limit_qd_comp-eps-converted-to.pdf> <./fig/twopath-eps-converted-to.pd
-f> <./fig/twopaths_tp_comp-eps-converted-to.pdf> <./fig/twopaths_qd_comp-eps-co
-nverted-to.pdf> <./fig/skype_tp_comp-eps-converted-to.pdf> <./fig/skype_delay_c
-omp-eps-converted-to.pdf>] (./conext14.aux)
+) (./conext14.bbl) [9 <./fig/implementation-eps-converted-to.pdf>] [10 <./fig/o
+ut_of_order_wo_sack-eps-converted-to.pdf> <./fig/no_limit-eps-converted-to.pdf>
+ <./fig/no_limit_tp_comp-eps-converted-to.pdf> <./fig/no_limit_qd_comp-eps-conv
+erted-to.pdf> <./fig/limit-eps-converted-to.pdf> <./fig/limit_tp_comp-eps-conve
+rted-to.pdf> <./fig/limit_qd_comp-eps-converted-to.pdf> <./fig/delay_1-eps-conv
+erted-to.pdf> <./fig/delay_tp_comp-eps-converted-to.pdf> <./fig/delay_qd_com-ep
+s-converted-to.pdf> <./fig/wireless-eps-converted-to.pdf> <./fig/wireless_tp_co
+mp-eps-converted-to.pdf>] [11 <./fig/wireless_qd_comp-eps-converted-to.pdf> <./
+fig/routing_ack-eps-converted-to.pdf> <./fig/emulab-eps-converted-to.pdf> <./fi
+g/emulab_tp_comp-eps-converted-to.pdf> <./fig/emulab_qd_comp-eps-converted-to.p
+df> <./fig/pair_limit-eps-converted-to.pdf> <./fig/pair_limit_tp_comp-eps-conve
+rted-to.pdf> <./fig/pair_limit_qd_comp-eps-converted-to.pdf> <./fig/twopath-eps
+-converted-to.pdf> <./fig/twopaths_tp_comp-eps-converted-to.pdf> <./fig/twopath
+s_qd_comp-eps-converted-to.pdf> <./fig/skype_tp_comp-eps-converted-to.pdf> <./f
+ig/skype_delay_comp-eps-converted-to.pdf>] (./conext14.aux)
 
 LaTeX Warning: There were undefined references.
 
@@ -1066,10 +1097,10 @@ LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 4823 strings out of 493307
- 69968 string characters out of 6139905
- 146710 words of memory out of 5000000
- 8123 multiletter control sequences out of 15000+600000
+ 4830 strings out of 493307
+ 69973 string characters out of 6139906
+ 147710 words of memory out of 5000000
+ 8131 multiletter control sequences out of 15000+600000
  52603 words of font info for 67 fonts, out of 8000000 for 9000
  957 hyphenation exceptions out of 8191
  42i,12n,38p,1391b,591s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -1087,10 +1118,10 @@ usr/share/texlive/texmf-dist/fonts/type1/urw/helvetic/uhvb8a.pfb></usr/share/te
 xlive/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-dis
 t/fonts/type1/urw/times/utmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/u
 rw/times/utmri8a.pfb>
-Output written on conext14.pdf (11 pages, 674480 bytes).
+Output written on conext14.pdf (11 pages, 646487 bytes).
 PDF statistics:
- 274 PDF objects out of 1000 (max. 8388607)
- 185 compressed objects within 2 object streams
+ 270 PDF objects out of 1000 (max. 8388607)
+ 183 compressed objects within 2 object streams
  0 named destinations out of 1000 (max. 500000)
- 151 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 146 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -91,7 +91,7 @@ copies the current packet. Besides sending out the original packet, the system i
 \begin{enumerate}
 \item For protocols rather than TCP, like UDP, because they don't have built-in feedback loop, which means that all traffic can be one direction. In this scenario, we can't wait until there are packets available to piggyback the confirmation.
 
-\item For TCP protocol, we don't simply populate a new TCP packet and send back because the sequence numbers of each direction are way different. Through our experiments, some NAT devices will refuse to transfer this packet if the sequence number messes up for the same TCP connection. We can manage to maintain the right sequence numbers to fill them into the confirmation packet, but by considering the whole design of our system, we choose to add the request into a waiting list. When there are TCP packets on this connection available to send back, we make a copy of the packet and insert the CM block with \emph{CM Flags} of $Flags\_Enabled$. In this case, there will be two consecutive TCP packets that go through the path with the same sequence number. The NAT devices will simply consider them as retransmissions instead of dropping them.
+\item For TCP protocol, we don't simply populate a new TCP packet and send back because the sequence numbers of each direction are way different. Through our experiments, some NAT devices will refuse to transfer this packet if the sequence number messes up for the same TCP connection. To solve this problem, we add the request into a waiting list. When there are TCP packets available to send , we make a copy of the packet and insert the CM block with \emph{CM Flags} of $Flags\_Enabled$. In this case, there will be two consecutive TCP packets with the same sequence number. The NAT devices will simply consider them as retransmissions instead of dropping them.
 \end{enumerate}
 
 For both the MPIP query packet and MPIP confirmation packet, we populate new packets based on the original packets by making copies. All copied packets won't be passed to higher layers because they are generated at the network layer and stop there too, they don't mean anything to higher layers. The network layer drops all MPIP packets with \emph{CM Flags} of $Flags\_Enable$ and $Flags\_Enabled$ after processing them.
@@ -419,6 +419,7 @@ For inbound packets, when receiving a packet, the receiver extract the node ID a
 %\end{figure}
 
 \subsection{Multipath TCP Transmission}
+\label{sec:tcp}
 Through our experiments and previous studies\cite{mptcp}, NAT devices have a lot of interferences to end-to-end connections, especially for TCP packets. The most straightforward limitation for TCP packets is that many NAT devices will drop TCP packets that don't have a connection related to them. MPTCP doesn't have this problem each subflow in MPTCP is a regular TCP connection. But in MPIP, if we transmit TCP packets on a path rather than the original one, NAT devices on the path will probably drop these packets before they arrive at the destination. To solve this problem, in our MPIP implementation, we provide two options to solve this problem.
 
 \subsubsection{Fake TCP connection}
@@ -452,17 +453,19 @@ In TCP Congestion Avoidance algorithm, a retransmission timer expiring or the re
 
 %(the minimum of the congestion window and the receiver's advertised window size), but to at least two segments. If congestion was indicated by a timeout, the congestion window is reset to one segment, which automatically puts the sender into Slow Start mode. If congestion was indicated by duplicate ACKs, the Fast Retransmit and Fast Recovery algorithms are invoked.
 
-Considering multipath scenario, if the delay behaviour difference among different paths is not trivial, we can expect a lot of out-of-order packets. This will result in many fast retransmit events, even TCP can go back to slow start stage. Given that in modern Internet, real packet loss has become rare event, most of transmission window cut-off events are unnecessary at all. In our prototype, to solve the heterogeneous delay performance of different paths, we make specific process of TCP out-of-order packets. The overall process is shown in Figure~\ref{fig.outoforder}.
+Considering multipath scenario, if the delay behaviour difference among different paths is not trivial, we can expect a lot of out-of-order packets. This will result in many fast retransmit events, even TCP can go back to slow start stage. Given that in modern Internet, real packet loss has become rare event, most of transmission window cut-off events are unnecessary at all. In our prototype, to solve the heterogeneous delay performance of different paths, we make specific process of TCP out-of-order packets. 
 
-\begin{figure}
-\centering
-\includegraphics[width=0.8\linewidth]{fig/outoforder.eps}
-\caption{TCP Out-Of-Order Packet Process}
-\label{fig.outoforder}
-\end{figure}
+%The overall process is shown in Figure~\ref{fig.outoforder}.
+
+%\begin{figure}
+%\centering
+%\includegraphics[width=0.8\linewidth]{fig/outoforder.eps}
+%\caption{TCP Out-Of-Order Packet Process}
+%\label{fig.outoforder}
+%\end{figure}
 
 
-For each session in Table~\ref{tb.ss}, if it is TCP protocol, the system will maintain a buffer $B$ to store all out-of-order packets and the next expecting sequence number $S$. Every time one node receives a TCP packet, it takes out the sequence number, if it equals with the current expecting sequence number of that session, the packet is pushed up to transportation layer immediately, and also, the buffered packets will be checked to see whether there are qualified packet for delivery. If not, the packet will be buffered into $B$ for future delivery. Every time one packet is pushed up to transportation layer, the next expecting sequence number $S$ of this session is updated through Equation~\ref{eq.seq} where $L$ is size of the whole packet, $H_{ip}$ is IP header size, and $H_{tcp}$ is TCP header size. TCP sequence number ranges from $0$ to $2^{32}-1$, Equation~\ref{eq.seq} can overflow $S$. But the data type of sequence number is unsigned integral, the number will loop back to $0$ automatically after that. 
+For each session in Table~\ref{tb.ss}, if it is TCP protocol, MPIP maintains a buffer $B$ to store all out-of-order packets and the next expecting sequence number $S$. Every time one node receives a TCP packet, it takes out the sequence number, if it equals with the current expecting sequence number of that session, the packet is pushed up to transportation layer immediately, and also, the buffered packets will be checked to see whether there are qualified packet for delivery. If not, the packet will be buffered into $B$ for future delivery. Every time one packet is pushed up to transportation layer, the next expecting sequence number $S$ of this session is updated through Equation~\ref{eq.seq} where $L$ is size of the whole packet, $H_{ip}$ is IP header size, and $H_{tcp}$ is TCP header size. TCP sequence number ranges from $0$ to $2^{32}-1$, Equation~\ref{eq.seq} can overflow $S$. But the data type of sequence number is unsigned integral, the number will loop back to $0$ automatically after that. 
 
 \be
 \label{eq.seq}
