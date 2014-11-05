@@ -19,16 +19,18 @@ Certainly, nowadays, most computers have NTP enabled and the system's local time
 
 On our experiment plat, we turn off NTP on both nodes, do a TCP transmission with iperf3 for one day with consistent traffic. Inside MPIP, we record the one-way delay of each packet from the client to server. Because the traffic load is consistent, queuing delay roughly remains the same. But as shown in Figure~\ref{fig.clock}, because of the clock offset between the two nodes, the trend of queuing delay exposes an linearly increasing curve even the trend is very slow. In Figure~\ref{fig.clock}, we record the queuing delay every one minute. For the whole day($1400$ minutes), we can see that the clock offset is about $350$ milliseconds which means that the server's clock runs one millisecond fast than the client for each four minutes. We will be able to see this trend again in following results.
 
-\begin{figure}
+\begin{figure*}
 \centering{
 \subfigure[Clock offset
-\label{fig.clock}]{\includegraphics[width=0.49\linewidth,height=1.4in]{fig/clock.eps}}
+\label{fig.clock}]{\includegraphics[width=0.33\linewidth,height=1.4in]{fig/clock.eps}}
 \subfigure[Out-of-order process
-\label{fig.outoforder}]{\includegraphics[width=0.49\linewidth,height=1.4in]{fig/out_of_order_w_sack.eps}}
+\label{fig.outoforder}]{\includegraphics[width=0.33\linewidth,height=1.4in]{fig/out_of_order_w_sack.eps}}
+\subfigure[Fake TCP vs UDP Wrapper
+\label{fig.implementation}]{\includegraphics[width=0.33\linewidth,height=1.4in]{fig/implementation.eps}}
 }
-\caption{Clock and Out-of-order}
+\caption{}
 \label{fig.clockandoutoforder}
-\end{figure}
+\end{figure*}
 
 
 \subsection{TCP Evaluation}
@@ -49,14 +51,54 @@ With the same configuration, Figure~\ref{fig.outoforder} shows the improvement b
 
 As we mentioned in Section~\ref{sec:tcp}, there are two different implementation of multipath TCP in our system to solve NAT problem which are fake TCP connection and UDP wrapper. We do a specific experiment to evaluate the performance of each approach as shown in Figure~\ref{fig.implementation}. With regular TCP, the average throughput we can achieve is about $92$Mbps. For MPIP, with either fake TCP or UDP wrapper, we both achieve an average throughput of about $165$Mbps. This result shows that both implementations have roughly the same performance. In all following experiments, we use fake TCP by default, but UDP is still kept as an option for users.
 
-\begin{figure}
+
+Now we start to do side-by-side comparison between MPIP and MPTCP for TCP traffic. Table~\ref{tb.tcp} shows the average throughput comparison results for multiple configurations. 
+
+We first do the transmission without any throttles which means the capacity of the connection is $200$Mbps. We can see that MPIP achieves the highest throughput which is $171$Mbps, MPTCP only gets $129.5$Mbps. When we combine MPIP and MPTCP together as stated in Section~\ref{sec:together}, we get a throughput of $164.6$Mbps.
+
+When we limit the outbound bandwidth of one NIC card on the client to $40$Mbps, we get the result of the second row of Table~\ref{tb.tcp}. In this scenario, the capacity of the connection is $140$Mbps. In this case, MPIP and MPTCP get roughly the same throughput, but when they work together, the highest throughput is achieved.
+
+In our experiment plat, with wired connection, the round trip time is trivial(about $0.1$ms). To emulate a connection with more delay, we manually add $5$ms delay to each NIC on the client and get result of the third row in Table~\ref{tb.tcp}. The result is roughly the same as without limit, but we even get higher throughput for MPIP.
+
+By replacing one NIC on the client to a wireless interface, we get the fourth row in Table~\ref{tb.tcp}. In this case, MPTCP achieves higher throughput than MPIP, but still, when they work together, the highest throughput is achieved.
+
+
+\begin{table}
+\caption{\label{tb.tcp}TCP Throughput Comparison}
+\centering
+\begin{tabular}{|c|c|c|c|}
+\hline
+  & MPTCP &  MPIP &  MPIP and MPTCP  \\
+  & (Mbps) &  (Mbps) &  (Mbps)  \\
+\hline
+No Limit & $129.5$ & $171.2$ & $164.6$  \\
+\hline
+Bandwidth Limit & $112.6$ & $113.4$ & $125.6$  \\
+\hline
+Delay Limit & $129.7$ & $182.0$ & $165.0$  \\
+\hline
+Wireless & $97.9$ & $89.2$ & $107.5$  \\
+\hline
+\end{tabular}
+\end{table}
+
+
+Figure~\ref{fig.no_limit} shows the result of throughput comparison of MPIP, MPTCP and MPIP/MPTCP work together. We can see the throughput enhancement brought by MPIP from Figure~\ref{fig.nolimit}. In our experiment plat, without any throughput squeezing configuration, MPTCP achieve an average throughput of $135$Mbps, MPIP achieves an average throughput of $170$Mbps, when MPIP and MPTCP work together,
+
+
+
+\begin{figure*}[htb]
 \centering{
-\subfigure[Fake TCP vs UDP Wrapper
-\label{fig.implementation}]{\includegraphics[width=0.49\linewidth,height=1.4in]{fig/implementation.eps}}
+\subfigure[Throughput Comparison
+\label{fig.nolimit}]{\includegraphics[width=0.33\linewidth,height=1.4in]{fig/no_limit.eps}}
+\subfigure[Path throughput Comparison for MPIP
+\label{fig.nolimittpcomp}]{\includegraphics[width=0.33\linewidth,height=1.4in]{fig/no_limit_tp_comp.eps}}
+\subfigure[Path Queuing Delay Comparison for MPIP
+\label{fig.nolimitqdcomp}]{\includegraphics[width=0.33\linewidth,height=1.4in]{fig/no_limit_qd_comp.eps}}
 }
-\caption{TCP evaluation}
-\label{fig.tcptp}
-\end{figure}
+\caption{Side-by-side comparison without any limitation}
+\label{fig.no_limit}
+\end{figure*}
 
 
 

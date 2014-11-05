@@ -478,6 +478,7 @@ When the expecting packet arrives, then all the waiting packets can be cleared f
 During our experiments, it happens that one specific packet can be late for a long time, like if the packet is lost. In this situation, holding all subsequent packets will halt the whole session because TCP layer will assume that all packets are lost, this will result in catastrophe for the connection. To address this problem, we set up the maximum size of the buffer, all the packets in the buffer will be forcefully pushed up once it is full. In our prototype, we set this maximum size to $10$.
 
 \subsubsection{MPIP and MPTCP work together}
+\label{sec:together}
 As the first implementation of multipath, MPTCP gains huge attractions in research. During the development of our prototype, we try to do side-by-side comparison between MPTCP and MPIP when referring to TCP connection. Besides this, for investigation purpose, we merge them together to see how the system works. Because MPTCP is implemented at transportation layer, and MPIP is implemented at network layer, when trying to merge the two together, we found that the work can be done easily because of good modularization of the kernel source. 
 
 Assume that there are $2$ NICs at each end, MPTCP will have $4$ subflows for the session while each subflow is an independent TCP connection. MPIP will have four paths for all these four subflows which means that there will be totally $16$ paths for one MPTCP session in this case. We will see how this overlapped feature works in Section~\ref{sec:evaluation}.
