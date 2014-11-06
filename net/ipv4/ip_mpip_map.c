@@ -1785,9 +1785,9 @@ bool init_mpip_tcp_connection(__be32 daddr1, __be32 daddr2,
 			{
 				if ((daddr2 != 0) && !find_path_info(local_addr->addr, daddr2, sport + 1, dport, session_id))
 				{
-					mpip_log("%d, %d, %d: %s, %s, %d\n", session_id, sport + 1, dport, __FILE__, __FUNCTION__, __LINE__);
-					print_addr(local_addr->addr);
-					print_addr(daddr2);
+					printk("%d, %d, %d: %s, %s, %d\n", session_id, sport + 1, dport, __FILE__, __FUNCTION__, __LINE__);
+					print_addr_1(local_addr->addr);
+					print_addr_1(daddr2);
 
 					send_mpip_syn(NULL, local_addr->addr, daddr2,
 							sport + 1, dport, true, false, session_id);
@@ -1797,9 +1797,9 @@ bool init_mpip_tcp_connection(__be32 daddr1, __be32 daddr2,
 			{
 				if ((daddr1 != 0) && !find_path_info(local_addr->addr, daddr1, sport + 1, dport, session_id))
 				{
-					mpip_log("%d, %d, %d: %s, %s, %d\n", session_id, sport + 1, dport, __FILE__, __FUNCTION__, __LINE__);
-					print_addr(local_addr->addr);
-					print_addr(daddr1);
+					printk("%d, %d, %d: %s, %s, %d\n", session_id, sport + 1, dport, __FILE__, __FUNCTION__, __LINE__);
+					print_addr_1(local_addr->addr);
+					print_addr_1(daddr1);
 
 					send_mpip_syn(NULL, local_addr->addr, daddr1,
 							sport + 1, dport, true, false, session_id);
@@ -1810,9 +1810,9 @@ bool init_mpip_tcp_connection(__be32 daddr1, __be32 daddr2,
 		{
 			if ((daddr1 != 0) && !find_path_info(local_addr->addr, daddr1, sport + 2, dport, session_id))
 			{
-				mpip_log("%d, %d, %d: %s, %s, %d\n", session_id, sport + 2, dport, __FILE__, __FUNCTION__, __LINE__);
-				print_addr(local_addr->addr);
-				print_addr(daddr1);
+				printk("%d, %d, %d: %s, %s, %d\n", session_id, sport + 2, dport, __FILE__, __FUNCTION__, __LINE__);
+				print_addr_1(local_addr->addr);
+				print_addr_1(daddr1);
 
 				send_mpip_syn(NULL, local_addr->addr, daddr1,
 						sport + 2, dport, true, false, session_id);
@@ -1820,9 +1820,9 @@ bool init_mpip_tcp_connection(__be32 daddr1, __be32 daddr2,
 
 			if ((daddr2 != 0) && !find_path_info(local_addr->addr, daddr2, sport + 3, dport, session_id))
 			{
-				mpip_log("%d, %d, %d: %s, %s, %d\n", session_id, sport + 3, dport, __FILE__, __FUNCTION__, __LINE__);
-				print_addr(local_addr->addr);
-				print_addr(daddr2);
+				printk("%d, %d, %d: %s, %s, %d\n", session_id, sport + 3, dport, __FILE__, __FUNCTION__, __LINE__);
+				print_addr_1(local_addr->addr);
+				print_addr_1(daddr2);
 
 				send_mpip_syn(NULL, local_addr->addr, daddr2,
 						sport + 3, dport, true, false, session_id);
