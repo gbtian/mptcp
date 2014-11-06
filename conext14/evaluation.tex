@@ -26,7 +26,7 @@ On our experiment plat, we turn off NTP on both nodes, do a TCP transmission wit
 \subfigure[Fake TCP vs UDP Wrapper
 \label{fig.implementation}]{\includegraphics[width=0.33\linewidth,height=1.4in]{fig/implementation.eps}}
 }
-\caption{}
+\caption{Clock, Out-oforder and MPIP implementation}
 \label{fig.clockandoutoforder}
 \end{figure*}
 
@@ -151,7 +151,7 @@ Skype uses direct connection for two parties calls. All the video and audio pack
 
 For this experiment, we only use one NIC on the server while on the client we still have two NICs working. For path $1$, we set the bandwidth to $2$Mbps and the delay to $50$ms. For path $2$, we set the bandwidth to $300$Kbps and the delay to $20$ms. Then we have one high bandwidth-delay product path and one low bandwidth-delay product path. By enabling and disabling customization routing, we get the result in Figure~\ref{fig.skype}. Figure~\ref{fig.skypetpcomp} shows the throughput of iperf3 TCP connection with/out customization, Figure~\ref{fig.skypedelaycomp} shows Skype's audio round trip time during the whole experiment with/out customization. This round trip time information is extracted from Skype's own real-time technical report, it shows the amount of delay the user experience during the audio call. 
 
-From Figure~\ref{fig.skypedelaycomp}, we see the huge reduction of audio delay. Because with queuing delay based algorithm, most Skype audio packet with be assigned to path $1$ because of its high bandwidth, but the by-product is higher delay. By assigning audio packets to path $2$, a much better audio call quality can be achieved. From Figure~\ref{fig.skypetpcomp}, we see that we get roughly the same throughput in both case, but the result with customization routing enabled is more consistent. This is because with customization routing enabled, path $2$ has its designated traffic. Because of its low bandwidth, the queuing delay accumulates, then the TCP traffic from the iperf3 session will probably only be assigned to path $1$ and results in a more consistent throughput.
+From Figure~\ref{fig.skypedelaycomp}, we see the huge reduction of audio delay. The average RTT is $82$ms and $119$ ms with/out routing optimization. Because with queuing delay based algorithm, most Skype audio packet with be assigned to path $1$ because of its high bandwidth, but the by-product is higher delay. By assigning audio packets to path $2$, a much better audio call quality can be achieved. From Figure~\ref{fig.skypetpcomp}, we see that we get roughly the same throughput in both case, but the result with customization routing enabled is more consistent. This is because with customization routing enabled, path $2$ has its designated traffic. Because of its low bandwidth, the queuing delay accumulates, then the TCP traffic from the iperf3 session will probably only be assigned to path $1$ and results in a more consistent throughput.
 
 \begin{figure*}[htb]
 \centering{

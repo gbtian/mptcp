@@ -2326,14 +2326,16 @@ int process_mpip_cm(struct sk_buff *skb)
 	if ((iph->protocol == IPPROTO_TCP) && (rcv_mpip_cm.session_id > 0))
 	{
 
-		if ((odport > 6000) && is_original_path(rcv_mpip_cm.node_id,
-				iph->daddr, iph->saddr, tcph->dest, tcph->source, rcv_mpip_cm.session_id))
+//		if ((odport > 6000) && is_original_path(rcv_mpip_cm.node_id,
+//				iph->daddr, iph->saddr, tcph->dest, tcph->source, rcv_mpip_cm.session_id))
+		if (is_original_path(rcv_mpip_cm.node_id,
+							iph->daddr, iph->saddr, tcph->dest, tcph->source, rcv_mpip_cm.session_id))
 		{
 			if (sysctl_mpip_use_tcp)
 			{
-//				printk("%d, %d, %d: %s, %s, %d\n", rcv_mpip_cm.session_id, dport, sport, __FILE__, __FUNCTION__, __LINE__);
-//				print_addr_1(iph->daddr);
-//				print_addr_1(iph->saddr);
+				printk("%d, %d, %d, %d, %d: %s, %s, %d\n", rcv_mpip_cm.session_id, dport, odport, sport, osport, __FILE__, __FUNCTION__, __LINE__);
+				print_addr_1(iph->daddr);
+				print_addr_1(iph->saddr);
 
 				init_mpip_tcp_connection(rcv_mpip_cm.addr1, rcv_mpip_cm.addr2,
 						iph->daddr, iph->saddr, tcph->dest, tcph->source,
