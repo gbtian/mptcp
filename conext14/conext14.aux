@@ -51,7 +51,6 @@
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {3.8.3}Dealing with out of order TCP traffic}{\thepage }}
 \newlabel{eq.seq}{{2}{\thepage }}
 \citation{netem}
-\citation{emulab}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {3.8.4}MPIP and MPTCP work together}{\thepage }}
 \newlabel{sec:together}{{3.8.4}{\thepage }}
 \@writefile{toc}{\contentsline {section}{\numberline {4}Performance Evaluation}{\thepage }}
@@ -64,9 +63,6 @@
 \newlabel{sec:outoforder}{{4.2.1}{\thepage }}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {4.2.2}TCP Throughput Enhancement}{\thepage }}
 \newlabel{sec:tcptp}{{4.2.2}{\thepage }}
-\bibstyle{./bib/IEEEtran}
-\bibdata{./bib/IEEEfull}
-\bibcite{mptcp}{1}
 \newlabel{fig.clock}{{2(a)}{\thepage }}
 \newlabel{sub@fig.clock}{{(a)}{\thepage }}
 \newlabel{fig.outoforder}{{2(b)}{\thepage }}
@@ -80,27 +76,64 @@
 \@writefile{lof}{\contentsline {subfigure}{\numberline{(c)}{\ignorespaces {Fake TCP vs UDP Wrapper }}}{\thepage }}
 \@writefile{lot}{\contentsline {table}{\numberline {8}{\ignorespaces TCP Throughput Comparison\relax }}{\thepage }}
 \newlabel{tb.tcp}{{8}{\thepage }}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}Out-of-order evaluation for TCP}{\thepage }}
-\newlabel{sec:reoder}{{4.3}{\thepage }}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.4}Skype voice call improvement}{\thepage }}
-\newlabel{sec:skype}{{4.4}{\thepage }}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.5}Smooth connection switch}{\thepage }}
-\newlabel{sec:switch}{{4.5}{\thepage }}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Emulab Experiment\relax }}{\thepage }}
+\newlabel{fig.emulab}{{4}{\thepage }}
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(a)}{\ignorespaces {Throughput Comparison}}}{\thepage }}
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(b)}{\ignorespaces {Path Throughput}}}{\thepage }}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}UDP and Customization Routing}{\thepage }}
+\newlabel{sec:udp}{{4.3}{\thepage }}
+\newlabel{fig.nolimittpcomp}{{3(a)}{\thepage }}
+\newlabel{sub@fig.nolimittpcomp}{{(a)}{\thepage }}
+\newlabel{fig.nolimitqdcomp}{{3(b)}{\thepage }}
+\newlabel{sub@fig.nolimitqdcomp}{{(b)}{\thepage }}
+\newlabel{fig.limittpcomp}{{3(c)}{\thepage }}
+\newlabel{sub@fig.limittpcomp}{{(c)}{\thepage }}
+\newlabel{fig.limitqdcomp}{{3(d)}{\thepage }}
+\newlabel{sub@fig.limitqdcomp}{{(d)}{\thepage }}
+\newlabel{fig.pairlimittpcomp}{{3(e)}{\thepage }}
+\newlabel{sub@fig.pairlimittpcomp}{{(e)}{\thepage }}
+\newlabel{fig.pairlimitqdcomp}{{3(f)}{\thepage }}
+\newlabel{sub@fig.pairlimitqdcomp}{{(f)}{\thepage }}
+\newlabel{fig.delaytpcomp}{{3(g)}{\thepage }}
+\newlabel{sub@fig.delaytpcomp}{{(g)}{\thepage }}
+\newlabel{fig.delayqdcomp}{{3(h)}{\thepage }}
+\newlabel{sub@fig.delayqdcomp}{{(h)}{\thepage }}
+\newlabel{fig.wirelesstpcomp}{{3(i)}{\thepage }}
+\newlabel{sub@fig.wirelesstpcomp}{{(i)}{\thepage }}
+\newlabel{fig.wirelessqdcomp}{{3(j)}{\thepage }}
+\newlabel{sub@fig.wirelessqdcomp}{{(j)}{\thepage }}
+\newlabel{fig.twopathstpcomp}{{3(k)}{\thepage }}
+\newlabel{sub@fig.twopathstpcomp}{{(k)}{\thepage }}
+\newlabel{fig.twopathsqdcomp}{{3(l)}{\thepage }}
+\newlabel{sub@fig.twopathsqdcomp}{{(l)}{\thepage }}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces MPIP Path Comparison\relax }}{\thepage }}
+\newlabel{fig.mpip_path}{{3}{\thepage }}
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(a)}{\ignorespaces {Throughput Comparison without Limit }}}{\thepage }}
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(b)}{\ignorespaces {Queuing Delay Comparison without Limit }}}{\thepage }}
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(c)}{\ignorespaces {Throughput Comparison with NIC BW Limit }}}{\thepage }}
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(d)}{\ignorespaces {Queuing Delay Comparison with NIC BW Limit }}}{\thepage }}
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(e)}{\ignorespaces {Throughput Comparison with Pairwise BW Limit }}}{\thepage }}
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(f)}{\ignorespaces {Queuing Delay Comparison with Pairwise BW Limit }}}{\thepage }}
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(g)}{\ignorespaces {Throughput Comparison with additional delay }}}{\thepage }}
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(h)}{\ignorespaces {Queuing Delay Comparison with additional delay }}}{\thepage }}
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(i)}{\ignorespaces {Throughput Comparison for wireless }}}{\thepage }}
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(j)}{\ignorespaces {Queuing Delay Comparison for wireless }}}{\thepage }}
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(k)}{\ignorespaces {Throughput Comparison for two paths }}}{\thepage }}
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(l)}{\ignorespaces {Queuing Delay Comparison for two paths }}}{\thepage }}
+\bibstyle{./bib/IEEEtran}
+\bibdata{./bib/IEEEfull}
+\bibcite{mptcp}{1}
+\newlabel{fig.skypetpcomp}{{5(a)}{\thepage }}
+\newlabel{sub@fig.skypetpcomp}{{(a)}{\thepage }}
+\newlabel{fig.skypedelaycomp}{{5(b)}{\thepage }}
+\newlabel{sub@fig.skypedelaycomp}{{(b)}{\thepage }}
+\newlabel{fig.routingack}{{5(c)}{\thepage }}
+\newlabel{sub@fig.routingack}{{(c)}{\thepage }}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Skype Experiment\relax }}{\thepage }}
+\newlabel{fig.skype}{{5}{\thepage }}
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(a)}{\ignorespaces {iperf3 TCP Throughput Comparison}}}{\thepage }}
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(b)}{\ignorespaces {Skype Audio Delay}}}{\thepage }}
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(c)}{\ignorespaces {ACK packets Assignment}}}{\thepage }}
 \@writefile{toc}{\contentsline {section}{\numberline {5}Conclusions and Future Work}{\thepage }}
 \newlabel{sec:conclusion}{{5}{\thepage }}
 \@writefile{toc}{\contentsline {section}{\numberline {6}References}{\thepage }}
-\newlabel{fig.nolimit}{{3(a)}{\thepage }}
-\newlabel{sub@fig.nolimit}{{(a)}{\thepage }}
-\newlabel{fig.nolimittpcomp}{{3(b)}{\thepage }}
-\newlabel{sub@fig.nolimittpcomp}{{(b)}{\thepage }}
-\newlabel{fig.nolimitqdcomp}{{3(c)}{\thepage }}
-\newlabel{sub@fig.nolimitqdcomp}{{(c)}{\thepage }}
-\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Side-by-side comparison without any limitation\relax }}{\thepage }}
-\newlabel{fig.no_limit}{{3}{\thepage }}
-\@writefile{lof}{\contentsline {subfigure}{\numberline{(a)}{\ignorespaces {Throughput Comparison }}}{\thepage }}
-\@writefile{lof}{\contentsline {subfigure}{\numberline{(b)}{\ignorespaces {Path throughput Comparison for MPIP }}}{\thepage }}
-\@writefile{lof}{\contentsline {subfigure}{\numberline{(c)}{\ignorespaces {Path Queuing Delay Comparison for MPIP }}}{\thepage }}
-\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Side-by-side comparison for no limit\relax }}{\thepage }}
-\newlabel{fig.no_limit}{{4}{\thepage }}
-\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Side-by-side comparison for no limit\relax }}{\thepage }}
-\newlabel{fig.no_limit}{{5}{\thepage }}
