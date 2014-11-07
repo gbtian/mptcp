@@ -165,8 +165,12 @@ int ip_local_out(struct sk_buff *skb)
 
 
 	err = __ip_local_out(skb);
+	printk("err=%d: %s, %d\n", err, __FILE__, __LINE__);
 	if (likely(err == 1))
+	{
 		err = dst_output(skb);
+		printk("err=%d: %s, %d\n", err, __FILE__, __LINE__);
+	}
 
 	if (sysctl_mpip_enabled && myskb)
 	{
