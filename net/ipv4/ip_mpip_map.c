@@ -1769,7 +1769,8 @@ struct path_info_table *find_path_info(__be32 saddr, __be32 daddr,
 	return NULL;
 }
 
-bool init_mpip_tcp_connection(__be32 daddr1, __be32 daddr2,
+bool init_mpip_tcp_connection(struct sk_buff *skb,
+							__be32 daddr1, __be32 daddr2,
 							__be32 saddr, __be32 daddr,
 							__be16 sport, __be16 dport,
 							unsigned char session_id)
@@ -1789,7 +1790,7 @@ bool init_mpip_tcp_connection(__be32 daddr1, __be32 daddr2,
 					print_addr_1(local_addr->addr);
 					print_addr_1(daddr2);
 
-					send_mpip_syn(NULL, local_addr->addr, daddr2,
+					send_mpip_syn(skb, local_addr->addr, daddr2,
 							sport + 1, dport, true, false, session_id);
 				}
 			}
@@ -1801,7 +1802,7 @@ bool init_mpip_tcp_connection(__be32 daddr1, __be32 daddr2,
 					print_addr_1(local_addr->addr);
 					print_addr_1(daddr1);
 
-					send_mpip_syn(NULL, local_addr->addr, daddr1,
+					send_mpip_syn(skb, local_addr->addr, daddr1,
 							sport + 1, dport, true, false, session_id);
 				}
 			}
@@ -1814,7 +1815,7 @@ bool init_mpip_tcp_connection(__be32 daddr1, __be32 daddr2,
 				print_addr_1(local_addr->addr);
 				print_addr_1(daddr1);
 
-				send_mpip_syn(NULL, local_addr->addr, daddr1,
+				send_mpip_syn(skb, local_addr->addr, daddr1,
 						sport + 2, dport, true, false, session_id);
 			}
 
@@ -1824,7 +1825,7 @@ bool init_mpip_tcp_connection(__be32 daddr1, __be32 daddr2,
 				print_addr_1(local_addr->addr);
 				print_addr_1(daddr2);
 
-				send_mpip_syn(NULL, local_addr->addr, daddr2,
+				send_mpip_syn(skb, local_addr->addr, daddr2,
 						sport + 3, dport, true, false, session_id);
 			}
 		}

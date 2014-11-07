@@ -393,7 +393,8 @@ struct path_info_table *find_path_info(__be32 saddr, __be32 daddr,
 bool is_dest_added(unsigned char *node_id, __be32 addr, __be16 port,
 					unsigned char session_id, unsigned int protocol);
 
-bool init_mpip_tcp_connection(__be32 daddr1, __be32 daddr2,
+bool init_mpip_tcp_connection(struct sk_buff *skb,
+							__be32 daddr1, __be32 daddr2,
 							__be32 saddr, __be32 daddr,
 							__be16 sport, __be16 dport,
 							unsigned char session_id);
