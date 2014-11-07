@@ -1305,8 +1305,10 @@ bool send_mpip_syn(struct sk_buff *skb_in, __be32 saddr, __be32 daddr,
 //	struct rtable *rt;
 
 	if (session_id <= 0)
+	{
+		printk("%d: %s, %s, %d\n", session_id, __FILE__, __FUNCTION__, __LINE__);
 		return false;
-
+	}
 	/*
 	if(!skb_in)
 	{
@@ -1408,7 +1410,8 @@ bool send_mpip_syn(struct sk_buff *skb_in, __be32 saddr, __be32 daddr,
 		return false;
 	}
 
-	unsigned int id = get_random_int() % 100000;
+//	unsigned int id = get_random_int() % 100000;
+	unsigned int id = 98;
 
 	skb_reserve(skb, MAX_TCP_HEADER);
 //
@@ -1431,9 +1434,9 @@ bool send_mpip_syn(struct sk_buff *skb_in, __be32 saddr, __be32 daddr,
 		tcph->ece = 0;
 		TCP_SKB_CB(skb)->tcp_flags = TCPHDR_SYN;
 
-		mpip_log("%d, %d, %d, %d: %s, %s, %d\n", id, session_id, sport, dport, __FILE__, __FUNCTION__, __LINE__);
-		print_addr(saddr);
-		print_addr(daddr);
+		printk("%d, %d, %d, %d: %s, %s, %d\n", id, session_id, sport, dport, __FILE__, __FUNCTION__, __LINE__);
+		print_addr_1(saddr);
+		print_addr_1(daddr);
 	}
 	if (syn && ack)
 	{
@@ -1448,9 +1451,9 @@ bool send_mpip_syn(struct sk_buff *skb_in, __be32 saddr, __be32 daddr,
 		tcph->ece = 0;
 		TCP_SKB_CB(skb)->tcp_flags = TCPHDR_SYN | TCPHDR_ACK;
 
-		mpip_log("%d, %d, %d, %d: %s, %s, %d\n", id, session_id, sport, dport, __FILE__, __FUNCTION__, __LINE__);
-//		print_addr_1(saddr);
-//		print_addr_1(daddr);
+		printk("%d, %d, %d, %d: %s, %s, %d\n", id, session_id, sport, dport, __FILE__, __FUNCTION__, __LINE__);
+		print_addr_1(saddr);
+		print_addr_1(daddr);
 	}
 	if (!syn && ack)
 	{
@@ -1465,9 +1468,9 @@ bool send_mpip_syn(struct sk_buff *skb_in, __be32 saddr, __be32 daddr,
 		tcph->ece = 0;
 		TCP_SKB_CB(skb)->tcp_flags = TCPHDR_ACK;
 
-		mpip_log("%d, %d, %d, %d: %s, %s, %d\n", id, session_id, sport, dport, __FILE__, __FUNCTION__, __LINE__);
-//		print_addr_1(saddr);
-//		print_addr_1(daddr);
+		printk("%d, %d, %d, %d: %s, %s, %d\n", id, session_id, sport, dport, __FILE__, __FUNCTION__, __LINE__);
+		print_addr_1(saddr);
+		print_addr_1(daddr);
 	}
 
 	skb->ip_summed = CHECKSUM_PARTIAL;
@@ -1489,14 +1492,6 @@ bool send_mpip_syn(struct sk_buff *skb_in, __be32 saddr, __be32 daddr,
 	tcph->doff = sizeof(struct tcphdr) / 4;
 	tcph->seq = 0;
 	tcph->ack_seq	= 0;
-//	if (convert_addr(192,168,1,15) == saddr)
-//	{
-//		tcph->source = 9999;
-//	}
-//	else
-//	{
-//		tcph->source = sport;
-//	}
 
 	tcph->source = sport;
 	tcph->dest = dport;
@@ -1522,7 +1517,7 @@ bool send_mpip_syn(struct sk_buff *skb_in, __be32 saddr, __be32 daddr,
 	iph->daddr = daddr;
 
 	if (!insert_mpip_cm(skb, iph->saddr, iph->daddr, NULL, NULL,
-			iph->protocol, 5, session_id))
+			iph->protocol, MPIP_SYNC_FLAGS, session_id))
 	{
 		kfree_skb(skb);
 		printk("%s, %s, %d\n", __FILE__, __FUNCTION__, __LINE__);
@@ -1536,6 +1531,11 @@ bool send_mpip_syn(struct sk_buff *skb_in, __be32 saddr, __be32 daddr,
 	{
 		skb_dst(skb)->dev = find_dev_by_addr(iph->saddr);
 		skb->dev = find_dev_by_addr(iph->saddr);
+
+		printk("route output dev=%s: %s, %s, %d\n", skb->dev->name, __FILE__, __LINE__);
+		print_addr_1(iph->saddr);
+		print_addr_1(iph->daddr);
+
 		err = __ip_local_out(skb);
 		if (likely(err == 1))
 			err = dst_output(skb);
