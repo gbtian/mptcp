@@ -1434,7 +1434,7 @@ bool send_mpip_syn(struct sk_buff *skb_in, __be32 saddr, __be32 daddr,
 		tcph->ece = 0;
 		TCP_SKB_CB(skb)->tcp_flags = TCPHDR_SYN;
 
-		printk("%d, %d, %d, %d: %s, %s, %d\n", id, session_id, sport, dport, __FILE__, __FUNCTION__, __LINE__);
+		printk("%d, %d, %d: %s, %s, %d\n", session_id, sport, dport, __FILE__, __FUNCTION__, __LINE__);
 		print_addr_1(saddr);
 		print_addr_1(daddr);
 	}
@@ -1451,7 +1451,7 @@ bool send_mpip_syn(struct sk_buff *skb_in, __be32 saddr, __be32 daddr,
 		tcph->ece = 0;
 		TCP_SKB_CB(skb)->tcp_flags = TCPHDR_SYN | TCPHDR_ACK;
 
-		printk("%d, %d, %d, %d: %s, %s, %d\n", id, session_id, sport, dport, __FILE__, __FUNCTION__, __LINE__);
+		printk("%d, %d, %d: %s, %s, %d\n", session_id, sport, dport, __FILE__, __FUNCTION__, __LINE__);
 		print_addr_1(saddr);
 		print_addr_1(daddr);
 	}
@@ -1468,7 +1468,7 @@ bool send_mpip_syn(struct sk_buff *skb_in, __be32 saddr, __be32 daddr,
 		tcph->ece = 0;
 		TCP_SKB_CB(skb)->tcp_flags = TCPHDR_ACK;
 
-		printk("%d, %d, %d, %d: %s, %s, %d\n", id, session_id, sport, dport, __FILE__, __FUNCTION__, __LINE__);
+		printk("%d, %d, %d: %s, %s, %d\n", session_id, sport, dport, __FILE__, __FUNCTION__, __LINE__);
 		print_addr_1(saddr);
 		print_addr_1(daddr);
 	}
