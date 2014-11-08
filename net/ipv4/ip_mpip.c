@@ -1536,13 +1536,13 @@ bool send_mpip_syn(struct sk_buff *skb_in, __be32 saddr, __be32 daddr,
 		print_addr_1(iph->daddr);
 
 		err = __ip_local_out(skb);
-		printk("id=%d, err=%d: %s, %d\n", iph->id, err, __FILE__, __LINE__);
+//		printk("id=%d, err=%d: %s, %d\n", iph->id, err, __FILE__, __LINE__);
 		if (likely(err == 1))
 		{
 			err = dst_output(skb);
-			printk("id=%d, err=%d: %s, %d\n", iph->id, err, __FILE__, __LINE__);
+//			printk("id=%d, err=%d: %s, %d\n", iph->id, err, __FILE__, __LINE__);
 		}
-		printk("id=%d, err=%d: %s, %d\n", iph->id, err, __FILE__, __LINE__);
+//		printk("id=%d, err=%d: %s, %d\n", iph->id, err, __FILE__, __LINE__);
 	}
 	else
 	{
