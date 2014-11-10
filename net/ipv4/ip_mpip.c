@@ -1410,7 +1410,7 @@ bool send_mpip_syn(struct sk_buff *skb_in, __be32 saddr, __be32 daddr,
 		return false;
 	}
 
-	unsigned int id = get_random_int() % 100000;
+//	unsigned int id = get_random_int() % 100000;
 	unsigned int id = 98;
 
 	skb_reserve(skb, MAX_TCP_HEADER);
