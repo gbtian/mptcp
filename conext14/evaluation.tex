@@ -1,4 +1,4 @@
-%!TEX root =conext14.tex
+%!TEX root=mpip.tex
 \section{Performance Evaluation}
 \label{sec:evaluation}
 
@@ -17,18 +17,18 @@ Certainly, nowadays, most computers have NTP enabled and the system's local time
 
 On our experiment plat, we turn off NTP on both nodes, do a TCP transmission with iperf3 for one day with consistent traffic. Inside MPIP, we record the one-way delay of each packet from the client to server. Because the traffic load is consistent, queuing delay roughly remains the same. But as shown in Figure~\ref{fig.clock}, because of the clock offset between the two nodes, the trend of queuing delay exposes an linearly increasing curve even the trend is very slow. In Figure~\ref{fig.clock}, we record the queuing delay every one minute. For the whole day($1400$ minutes), we can see that the clock offset is about $350$ milliseconds which means that the server's clock runs one millisecond fast than the client for each four minutes. We will be able to see this trend again in following results.
 
-\begin{figure*}
+\begin{figure}
 \centering{
 \subfigure[Clock offset
-\label{fig.clock}]{\includegraphics[width=0.33\linewidth,height=1.4in]{fig/clock.eps}}
+\label{fig.clock}]{\includegraphics[width=0.49\linewidth,height=1.4in]{fig/clock.eps}}
 \subfigure[Out-of-order process
-\label{fig.outoforder}]{\includegraphics[width=0.33\linewidth,height=1.4in]{fig/out_of_order_w_sack.eps}}
-\subfigure[Fake TCP vs UDP Wrapper
-\label{fig.implementation}]{\includegraphics[width=0.33\linewidth,height=1.4in]{fig/implementation.eps}}
+\label{fig.outoforder}]{\includegraphics[width=0.49\linewidth,height=1.4in]{fig/out_of_order_w_sack.eps}}
+%\subfigure[Fake TCP vs UDP Wrapper
+%\label{fig.implementation}]{\includegraphics[width=0.33\linewidth,height=1.4in]{fig/implementation.eps}}
 }
-\caption{Clock, Out-oforder and MPIP implementation}
+\caption{Clock and Out-of-order}
 \label{fig.clockandoutoforder}
-\end{figure*}
+\end{figure}
 
 
 \subsection{TCP Evaluation}
@@ -47,85 +47,126 @@ With the same configuration, Figure~\ref{fig.outoforder} shows the improvement b
 \subsubsection{TCP Throughput Enhancement}
 \label{sec:tcptp}
 
-As we mentioned in Section~\ref{sec:tcp}, there are two different implementation of multipath TCP in our system to solve NAT problem which are fake TCP connection and UDP wrapper. We do a specific experiment to evaluate the performance of each approach as shown in Figure~\ref{fig.implementation}. With regular TCP, the average throughput we can achieve is about $92$Mbps. For MPIP, with either fake TCP or UDP wrapper, we both achieve an average throughput of about $165$Mbps. This result shows that both implementations have roughly the same performance. In all following experiments, we use fake TCP by default, but UDP is still kept as an option for users.
+As we mentioned in Section~\ref{sec:tcp}, there are two different implementation of multipath TCP in our system to solve NAT problem which are fake TCP connection and UDP wrapper. We do a specific experiment to evaluate the performance of each approach. With a $20$ minutes TCP transmission for each, the average throughput for fake TCP and UDP wrapper is $165.4$Mbps and $164.7$Mbps respectively while we get an average throughput of $92.7$Mbps for regular TCP. This result shows that both implementations have roughly the same performance. In all following experiments, we use fake TCP by default, but UDP is still kept as an option for users.
 
 
-Now we start to do side-by-side comparison between MPIP and MPTCP for TCP traffic. Table~\ref{tb.tcp} shows the average throughput comparison results for multiple configurations. 
+Now we start to do side-by-side comparison between MPIP and MPTCP for TCP traffic. Figure~\ref{fig.tp_bar} shows the average throughput comparison results for multiple configurations. 
 
 We first do the transmission without any throttles which means the capacity of the connection is $200$Mbps. We can see that MPIP achieves the highest throughput which is $171$Mbps, MPTCP only gets $129.5$Mbps. When we combine MPIP and MPTCP together as stated in Section~\ref{sec:together}, we get a throughput of $164.6$Mbps.
 
-When we limit the outbound bandwidth of one NIC card on the client to $40$Mbps, we get the result of the second row of Table~\ref{tb.tcp}. In this scenario, the capacity of the connection is $140$Mbps. In this case, MPIP and MPTCP get roughly the same throughput, but when they work together, the highest throughput is achieved.
+%\textbf{NIC BW Limit}. When we limit the outbound bandwidth of one NIC card on the client to $40$Mbps, we get the result of the second bar group in Figure~\ref{fig.tp_bar}. In this scenario, the capacity of the connection is $140$Mbps, MPIP and MPTCP get roughly the same throughput, but when they work together, the highest throughput is achieved.
 
-Besides limiting the outbound bandwidth of one NIC, we also limit the pairwise bandwidth. In this case, we limit the bandwidth from one NIC of the client to the two NICs on the server to $20$Mbps which means the capacity of the connection is still $140$Mbps. In this case, MPIP gets the lowest bandwidth, still, the highest bandwidth is achieved when they work together.
+By limiting the bandwidth from one NIC of the client to the two NICs on the server to $20$Mbps, we create a connection with capacity of $140$Mbps. MPIP gets the lowest bandwidth here followed by MPTCP, but when they work together, the highest throughput is achieved.
 
-In our experiment plat, with wired connection, the round trip time is trivial(about $0.1$ms). To emulate a connection with more delay, we manually add $5$ms delay to each NIC on the client and get result of the third row in Table~\ref{tb.tcp}. The result is roughly the same as without limit, but we even get higher throughput for MPIP.
+In our experiment plat, with wired connection, the round trip time is trivial(about $0.1$ms). To emulate a connection with more delay, we manually add $5$ms delay to each NIC on the client and get result of the fourth bar group in Figure~\ref{fig.tp_bar}. The result is roughly the same as without limit.
 
-By replacing one NIC on the client to a wireless interface, we get the fourth row in Table~\ref{tb.tcp}. In this case, MPTCP achieves higher throughput than MPIP, but still, when they work together, the highest throughput is achieved.
+By replacing one NIC on the client to a wireless interface, we evaluate the performance of MPIP under wireless connection. In this case, MPTCP achieves higher throughput than MPIP, but still, when they work together, the highest throughput is achieved.
 
-
-\begin{table}
-\caption{\label{tb.tcp}TCP Throughput Comparison}
+\begin{figure}
 \centering
-\begin{tabular}{|c|c|c|c|}
-\hline
-  & MPTCP &  MPIP &  MPIP and MPTCP  \\
-  & (Mbps) &  (Mbps) &  (Mbps)  \\
-\hline
-No Limit & $129.5$ & $171.2$ & $164.6$  \\
-\hline
-NIC BW Limit & $112.6$ & $113.4$ & $125.6$  \\
-\hline
-Pairwise BW Limit & $114.5$ & $94.7$ & $125.1$  \\
-\hline
-Delay Limit & $129.7$ & $182.0$ & $165.0$  \\
-\hline
-Wireless & $97.9$ & $89.2$ & $107.5$  \\
-\hline
-\end{tabular}
-\end{table}
+\includegraphics[width=0.8\linewidth,height=1.4in]{fig/tp_bar.eps}
+\caption{Throughput Comparison}
+\label{fig.tp_bar}
+\end{figure}
 
-From Figure~\ref{fig.nolimittpcomp} to Figure~\ref{fig.wirelessqdcomp}, we do a analysis among different paths for MPIP transmission to clarify how all packets are assigned to each path. Figure~\ref{fig.nolimittpcomp} to Figure~\ref{fig.wirelessqdcomp} contains four scenarios which refer to the five rows in Table~\ref{tb.tcp} respectively. 
+\begin{figure}
+\centering
+\includegraphics[width=0.8\linewidth,height=1.4in]{fig/path_tp_bar.eps}
+\caption{Path Throughput Comparison}
+\label{fig.path_tp_bar}
+\end{figure}
 
-From the throughput comparison results, we can see that even the characters of a path is almost the same, because the coupling of different paths, there can be huge difference in their throughput. In Figure~\ref{fig.nolimittpcomp}, all the four paths are the same, but obviously path $1$ and path $2$ almost take all the traffic. This happens because the four paths are not independent while one NIC is shared by two paths. The queuing delay generated by one path may also affect the queuing delay on the other path. The same explanation can be applied to other throughput comparison results. In Figure~\ref{fig.pairlimittpcomp}, we can see that the two pairwise limited paths don't use all their bandwidth, neither the unlimited two paths, this results in the low throughput for MPIP in this scenario. Figure~\ref{fig.wirelesstpcomp} shows the wireless throughput comparison. The two paths that contains the wireless interface almost get nothing assigned. This is because the high queuing delay of these two paths.
 
-For the queuing delay results, because of the clock offset issue we mentioned in Section~\ref{sec:clock}, we all see a increasing trend. We can calculate the amount of offset during the whole experiment is consistent with the result shown in Figure~\ref{fig.clock}. Generally the queuing delay of wired connection keeps stable once the TCP transmission. For wireless, the fluctuation is very large. In Figure~\ref{fig.delayqdcomp}, we manually add $5$ms delay to each NIC, and also get large but systematic fluctuation, this should be cause by Netem tool that is used to add the delay.
+%\begin{table}
+%\caption{\label{tb.tcp}TCP Throughput Comparison}
+%\centering
+%\begin{tabular}{|c|c|c|c|}
+%\hline
+%  & MPTCP &  MPIP &  MPIP and MPTCP  \\
+%  & (Mbps) &  (Mbps) &  (Mbps)  \\
+%\hline
+%No Limit & $129.5$ & $171.2$ & $164.6$  \\
+%\hline
+%NIC BW Limit & $112.6$ & $113.4$ & $125.6$  \\
+%\hline
+%Pairwise BW Limit & $114.5$ & $94.7$ & $125.1$  \\
+%\hline
+%Delay Limit & $129.7$ & $182.0$ & $165.0$  \\
+%\hline
+%Wireless & $97.9$ & $89.2$ & $107.5$  \\
+%\hline
+%\end{tabular}
+%\end{table}
+
+
+In Figure~\ref{fig.path_tp_bar}, we do a analysis among different paths for MPIP transmission to clarify how all packets are assigned to each path. 
+
+From the throughput comparison results, we can see that even the characters of a path is almost the same, because the coupling of different paths, there can be huge difference in their throughput. In our experiment set-up, in the case of no limit and adding delay , all four paths literally have the same characters, but results show that most traffic is taken by two paths. This happens because the four paths are not independent while one NIC is shared by two paths. The queuing delay generated by one path may also affect the queuing delay on the other path. The same explanation can be applied to other throughput comparison results. When limiting bandwidth, we can see that the two limited paths($1$ and $2$) don't use all their bandwidth, neither the unlimited two paths($3$ and $4$), this results in the low throughput for MPIP in this scenario shown in Figure~\ref{fig.tp_bar}. When wireless is applied to the connection, the two paths that contains the wireless interface almost get nothing assigned. This is because the high queuing delay of these two paths.
+
+Figure~\ref{fig.mpip_qd} shows the queuing delay information. Because of the clock offset issue we mentioned in Section~\ref{sec:clock}, we see an increasing trend in all results. According to calculation, the amount of offset during the whole experiment is consistent with the result shown in Figure~\ref{fig.clock}. Generally the queuing delay of wired connection keeps stable once the TCP transmission except wireless. In Figure~\ref{fig.delayqdcomp}, we manually add $5$ms delay to each NIC, and also get large but systematic fluctuation, this is cause by Netem tool that is used to add the delay. 
 
 
 \begin{figure*}[htb]
 \centering{
-\subfigure[Throughput Comparison without Limit
-\label{fig.nolimittpcomp}]{\includegraphics[width=0.24\linewidth,height=1.4in]{fig/no_limit_tp_comp.eps}}
+%\subfigure[Throughput Comparison without Limit
+%\label{fig.nolimittpcomp}]{\includegraphics[width=0.24\linewidth,height=1.4in]{fig/no_limit_tp_comp.eps}}
 \subfigure[Queuing Delay Comparison without Limit
 \label{fig.nolimitqdcomp}]{\includegraphics[width=0.24\linewidth,height=1.4in]{fig/no_limit_qd_comp.eps}}
-\subfigure[Throughput Comparison with NIC BW Limit
-\label{fig.limittpcomp}]{\includegraphics[width=0.24\linewidth,height=1.4in]{fig/limit_tp_comp.eps}}
-\subfigure[Queuing Delay Comparison with NIC BW Limit
-\label{fig.limitqdcomp}]{\includegraphics[width=0.24\linewidth,height=1.4in]{fig/limit_qd_comp.eps}}
-\subfigure[Throughput Comparison with Pairwise BW Limit
-\label{fig.pairlimittpcomp}]{\includegraphics[width=0.24\linewidth,height=1.4in]{fig/pair_limit_tp_comp.eps}}
+%\subfigure[Throughput Comparison with NIC BW Limit
+%\label{fig.limittpcomp}]{\includegraphics[width=0.24\linewidth,height=1.4in]{fig/limit_tp_comp.eps}}
+%\subfigure[Queuing Delay Comparison with NIC BW Limit
+%\label{fig.limitqdcomp}]{\includegraphics[width=0.24\linewidth,height=1.4in]{fig/limit_qd_comp.eps}}
+%\subfigure[Throughput Comparison with Pairwise BW Limit
+%\label{fig.pairlimittpcomp}]{\includegraphics[width=0.24\linewidth,height=1.4in]{fig/pair_limit_tp_comp.eps}}
 \subfigure[Queuing Delay Comparison with Pairwise BW Limit
 \label{fig.pairlimitqdcomp}]{\includegraphics[width=0.24\linewidth,height=1.4in]{fig/pair_limit_qd_comp.eps}}
-\subfigure[Throughput Comparison with additional delay
-\label{fig.delaytpcomp}]{\includegraphics[width=0.24\linewidth,height=1.4in]{fig/delay_tp_comp.eps}}
+%\subfigure[Throughput Comparison with additional delay
+%\label{fig.delaytpcomp}]{\includegraphics[width=0.24\linewidth,height=1.4in]{fig/delay_tp_comp.eps}}
 \subfigure[Queuing Delay Comparison with additional delay
 \label{fig.delayqdcomp}]{\includegraphics[width=0.24\linewidth,height=1.4in]{fig/delay_qd_comp.eps}}
-\subfigure[Throughput Comparison for wireless
-\label{fig.wirelesstpcomp}]{\includegraphics[width=0.24\linewidth,height=1.4in]{fig/wireless_tp_comp.eps}}
+%\subfigure[Throughput Comparison for wireless
+%\label{fig.wirelesstpcomp}]{\includegraphics[width=0.24\linewidth,height=1.4in]{fig/wireless_tp_comp.eps}}
 \subfigure[Queuing Delay Comparison for wireless
 \label{fig.wirelessqdcomp}]{\includegraphics[width=0.24\linewidth,height=1.4in]{fig/wireless_qd_comp.eps}}
-\subfigure[Throughput Comparison for two paths
-\label{fig.twopathstpcomp}]{\includegraphics[width=0.24\linewidth,height=1.4in]{fig/twopaths_tp_comp.eps}}
-\subfigure[Queuing Delay Comparison for two paths
-\label{fig.twopathsqdcomp}]{\includegraphics[width=0.24\linewidth,height=1.4in]{fig/twopaths_qd_comp.eps}}
 }
-\caption{MPIP Path Comparison}
-\label{fig.mpip_path}
+\caption{MPIP Path Queuing Delay}
+\label{fig.mpip_qd}
 \end{figure*}
 
-Besides using all four paths, we also limit the number of path to two. Also we limit the bandwidth of one path to $40$Mbps which makes the capacity $140$Mbps on the connection. Figure~\ref{fig.twopathstpcomp} and Figure~\ref{fig.twopathsqdcomp} shows the throughput and queuing delay result for this configuration. The result we get here is roughly the same as in Figure~\ref{fig.pairlimittpcomp} and Figure~\ref{fig.pairlimitqdcomp}.
+
+For paths that have wireless interface, the fluctuation is very large. In the wireless case of Figure~\ref{fig.mpip_qd}, path $1$ and $2$ are the wireless paths. Besides their average value is almost two times of wired connection, their variation is even larger as shown in Table~\ref{tb.wireless}. From Table~\ref{tb.wireless} and Figure~\ref{fig.wirelessqdcomp}, wireless connection is way less stable than wired connection. In Figure~\ref{fig.path_tp_bar}, we can see that the two wireless paths get little traffic because the large queuing delay values results very small value of path weight.
 
 
-Besides the controlled lab experiments, we also evaluate MPIP on the Internet to verify the prototype's NAT immunization and system robustness. We set up our server at Emulab\cite{emulab} which is located in Utah while the client is in New York. Because there is only one NIC that connects to Internet on the Emulab node, there are only $2$ paths in this case. According to our test, the capacity between our client and the server in Emulab is about $5Mbps$. Also, our client's two NICs share the same bottleneck because they connection to the server throughput the same gateway. The result of iperf3 TCP transmission result is shown in Figure~\ref{fig.emulab}. Comparing to regular TCP, we don't get any throughput enhancement because of the shared bottleneck, but we can see that MPIP, MPTCP and MPIP/MPTCP achieve the capacity of the connection. The two paths of MPIP are successfully added into Table~\ref{tb.pi} throughput fake TCP connection. 
+\begin{table}
+\caption{\label{tb.wireless}Wireless MPIP Queuing Delay}
+\centering
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+  & Path $1$   &  Path $2$   &  Path $3$ &  Path $4$\\
+  & (Wireless) &  (Wireless) &  (Wired)  &  (Wired) \\
+\hline
+Average &   &   &   & \\
+(ms) & $4.15$ & $3.84$ & $1.88$ & $2.09$ \\
+\hline
+Variation  & $169.81$ & $127.11$ & $0.63$ & $0.64$ \\
+\hline
+\end{tabular}
+\end{table}
+
+%Besides using all four paths, we also limit the number of paths to two by properly configuring MPIP. We limit the bandwidth of one path to $40$Mbps which makes the capacity $140$Mbps on the connection. Figure~\ref{fig.twopathstpcomp} and Figure~\ref{fig.twopathsqdcomp} shows the throughput and queuing delay result for this configuration. The result we get here is roughly the same as when we limit the bandwidth for full mesh.
+%
+%\begin{figure}[htb]
+%\centering{
+%\subfigure[Throughput for two paths
+%\label{fig.twopathstpcomp}]{\includegraphics[width=0.49\linewidth,height=1.4in]{fig/twopaths_tp_comp.eps}}
+%\subfigure[Queuing Delay Comparison for two paths
+%\label{fig.twopathsqdcomp}]{\includegraphics[width=0.49\linewidth,height=1.4in]{fig/twopaths_qd_comp.eps}}
+%}
+%\caption{MPIP with two paths}
+%\label{fig.mpip_path}
+%\end{figure}
+
+Besides the controlled lab experiments, we also evaluate MPIP on the Internet to verify the prototype's NAT immunization and system robustness. We set up our server at Emulab\cite{emulab} which is located in Utah while the client is in New York. Because there is only one NIC that connects to Internet on the Emulab node, there are only $2$ paths in this case. According to our test, the capacity between our client and the server in Emulab is about $5Mbps$. Also, our client's two NICs share the same bottleneck because they connection to the server throughput the same gateway. The result of iperf3 TCP transmission result is shown in Figure~\ref{fig.emulab}. Comparing to regular TCP, we don't get any throughput enhancement because of the shared bottleneck, but we can see that MPIP, MPTCP and MPIP/MPTCP achieve the capacity of the connection. The two paths of MPIP are successfully added into Table~\ref{tb.pi} throughput fake TCP connection in spite of all the middle boxes on the path.
 
 
 \begin{figure}[htb]
@@ -162,7 +203,7 @@ From Figure~\ref{fig.skypedelaycomp}, we see the huge reduction of audio delay. 
 \subfigure[ACK packets Assignment\label{fig.routingack}]
 {\includegraphics[width=0.33\linewidth,height=1.4in]{fig/routing_ack.eps}}
 }
-\caption{Skype Experiment}
+\caption{UDP and Customized Routing with Skype and ACK Optimization}
 \label{fig.skype}
 \end{figure*}
 

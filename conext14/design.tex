@@ -1,4 +1,4 @@
-%!TEX root =conext14.tex
+%!TEX root =mpip.tex
 \section{the Design}
 \label{sec:design}
 Based on Linux kernel $3.12$, the implementation is mainly at the network layer and targets to IP protocol. To make the implementation transparent to users and other layers, we try to keep all kernel modifications inside network layer. Later in the paper we will merge MPTCP and MPIP together, this good modularization makes the two features work together seamlessly. To keep the simplicity of IP protocol, we keep the connectionless feature of IP protocol while maintaining some feedback information of different paths. As will be shown later, we achieve this goal by simply by keeping track of several tables. This can make sure that we don't add excessive overhead to the system.
@@ -96,7 +96,16 @@ copies the current packet. Besides sending out the original packet, the system i
 
 For both the MPIP query packet and MPIP confirmation packet, we populate new packets based on the original packets by making copies. All copied packets won't be passed to higher layers because they are generated at the network layer and stop there too, they don't mean anything to higher layers. The network layer drops all MPIP packets with \emph{CM Flags} of $Flags\_Enable$ and $Flags\_Enabled$ after processing them.
 
-With the handshake flow above, the smallest number of query packet that will be sent for the whole process is only one. But sometimes because of packet loss or synchronization issues, there can be multiple query packet sent out at both ends. This is not a problem because the design of the system allows receiving more than one query packet and confirmation packet. But on the other hand, for nodes that don't support MPIP, we can't send out query messages forever. In Table~\ref{tb.me}, the column \emph{Query Count} maintains the number of query messages that have been sent out to relative IP addresses. If the number is larger than a threshold value, it assumes that IP address doesn't support MPIP. Considering that packet loss is rare event in Internet nowadays, we set this value to $5$ in our system, this is more than enough to make sure a MPIP enabled node can receive and reply this message with successful transmissions. In a connection with only one-way traffic, if the receiver is MPIP enabled while the sender isn't, then no query packet will be sent out at all.
+The MPIP handshake process is shown in Figure~\ref{fig.handshake}.
+
+\begin{figure}
+\centering
+\includegraphics[width=0.8\linewidth]{fig/handshake.eps}
+\caption{MPIP Handshake}
+\label{fig.handshake}
+\end{figure}
+
+With the handshake flow above, the smallest number of query packet that will be sent for the whole process is only one. But sometimes because of packet loss or synchronization issues, there can be multiple query packet sent out at both ends as shown in Figure~\ref{fig.handshake}. This is not a problem because the design of the system allows receiving more than one query packet and confirmation packet. But on the other hand, for nodes that don't support MPIP, we can't send out query messages forever. In Table~\ref{tb.me}, the column \emph{Query Count} maintains the number of query messages that have been sent out to relative IP addresses. If the number is larger than a threshold value, it assumes that IP address doesn't support MPIP. Considering that packet loss is rare event in Internet nowadays, we set this value to $5$ in our system, this is more than enough to make sure a MPIP enabled node can receive and reply this message with successful transmissions. In a connection with only one-way traffic, if the receiver is MPIP enabled while the sender isn't, then no query packet will be sent out at all.
 
 Generally, for MPIP enabled nodes, they may have more than one IP address. In this situation, multiple synchronization messages will be transmitted for the same node.
 
@@ -455,14 +464,14 @@ In TCP Congestion Avoidance algorithm, a retransmission timer expiring or the re
 
 Considering multipath scenario, if the delay behaviour difference among different paths is not trivial, we can expect a lot of out-of-order packets. This will result in many fast retransmit events, even TCP can go back to slow start stage. Given that in modern Internet, real packet loss has become rare event, most of transmission window cut-off events are unnecessary at all. In our prototype, to solve the heterogeneous delay performance of different paths, we make specific process of TCP out-of-order packets. 
 
-%The overall process is shown in Figure~\ref{fig.outoforder}.
+The overall process of out-of-order packet is shown in Figure~\ref{fig.outoforder}.
 
-%\begin{figure}
-%\centering
-%\includegraphics[width=0.8\linewidth]{fig/outoforder.eps}
-%\caption{TCP Out-Of-Order Packet Process}
-%\label{fig.outoforder}
-%\end{figure}
+\begin{figure}
+\centering
+\includegraphics[width=0.8\linewidth]{fig/outoforder.eps}
+\caption{TCP Out-Of-Order Packet Process}
+\label{fig.outoforder}
+\end{figure}
 
 
 For each session in Table~\ref{tb.ss}, if it is TCP protocol, MPIP maintains a buffer $B$ to store all out-of-order packets and the next expecting sequence number $S$. Every time one node receives a TCP packet, it takes out the sequence number, if it equals with the current expecting sequence number of that session, the packet is pushed up to transportation layer immediately, and also, the buffered packets will be checked to see whether there are qualified packet for delivery. If not, the packet will be buffered into $B$ for future delivery. Every time one packet is pushed up to transportation layer, the next expecting sequence number $S$ of this session is updated through Equation~\ref{eq.seq} where $L$ is size of the whole packet, $H_{ip}$ is IP header size, and $H_{tcp}$ is TCP header size. TCP sequence number ranges from $0$ to $2^{32}-1$, Equation~\ref{eq.seq} can overflow $S$. But the data type of sequence number is unsigned integral, the number will loop back to $0$ automatically after that. 
