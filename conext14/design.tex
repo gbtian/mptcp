@@ -94,9 +94,7 @@ copies the current packet. Besides sending out the original packet, the system i
 \item For TCP protocol, we don't simply populate a new TCP packet and send back because the sequence numbers of each direction are way different. Through our experiments, some NAT devices will refuse to transfer this packet if the sequence number messes up for the same TCP connection. To solve this problem, we add the request into a waiting list. When there are TCP packets available to send , we make a copy of the packet and insert the CM block with \emph{CM Flags} of $Flags\_Enabled$. In this case, there will be two consecutive TCP packets with the same sequence number. The NAT devices will simply consider them as retransmissions instead of dropping them.
 \end{enumerate}
 
-For both the MPIP query packet and MPIP confirmation packet, we populate new packets based on the original packets by making copies. All copied packets won't be passed to higher layers because they are generated at the network layer and stop there too, they don't mean anything to higher layers. The network layer drops all MPIP packets with \emph{CM Flags} of $Flags\_Enable$ and $Flags\_Enabled$ after processing them.
-
-The MPIP handshake process is shown in Figure~\ref{fig.handshake}.
+For both the MPIP query packet and MPIP confirmation packet, we populate new packets based on the original packets by making copies. All copied packets won't be passed to higher layers because they are generated at the network layer and stop there too, they don't mean anything to higher layers. The network layer drops all MPIP packets with \emph{CM Flags} of $Flags\_Enable$ and $Flags\_Enabled$ after processing them. The MPIP handshake process is shown in Figure~\ref{fig.handshake}.
 
 \begin{figure}
 \centering
@@ -119,18 +117,18 @@ Given $M$ and $N$ interfaces at each end of one connection, there are totally $M
 \small
 \caption{\label{tb.pi}Path information}
 \centering
-\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|}
 \hline
-Node &  Path & Session & Src &   Src & Dest & Dest &   Minimum       & Real-Time      & Real-Time      & Maximum       & Path    & Feedback\\
- ID  &   ID  & ID & IP  &  Port &  IP  & Port &  Network Delay  & Network Delay  & Queuing Delay  & Queuing Delay & Weight  & Time\\
+Node &  Path & Session & Src &   Src & Dest & Dest &   Minimum       & Real-Time      & Real-Time      & Maximum       & Path   \\
+ ID  &   ID  & ID & IP  &  Port &  IP  & Port &  Network Delay  & Network Delay  & Queuing Delay  & Queuing Delay & Weight \\
 \hline
-$ID$&${PID}_{11}$&${SID}_{1}$&${SIP}_{1}$&${SP}_{1}$&${DIP}_{1}$&${DP}_{1}$&${D_{min}}_{11}$&$D_{11}$&${Q}_{11}$&${{Q}_{max}}_{11}$&$W_{11}$&$T_{11}$ \\
+$ID$&${PID}_{11}$&${SID}_{1}$&${SIP}_{1}$&${SP}_{1}$&${DIP}_{1}$&${DP}_{1}$&${D_{min}}_{11}$&$D_{11}$&${Q}_{11}$&${{Q}_{max}}_{11}$&$W_{11}$\\
 \hline
-$ID$&${PID}_{12}$&${SID}_{1}$&${SIP}_{1}$&${SP}_{1}$&${DIP}_{1}$&${DP}_{2}$&${D_{min}}_{12}$&$D_{12}$&${Q}_{12}$&${{Q}_{max}}_{12}$&$W_{12}$&$T_{12}$ \\
+$ID$&${PID}_{12}$&${SID}_{1}$&${SIP}_{1}$&${SP}_{1}$&${DIP}_{1}$&${DP}_{2}$&${D_{min}}_{12}$&$D_{12}$&${Q}_{12}$&${{Q}_{max}}_{12}$&$W_{12}$\\
 \hline
-$ID$&${PID}_{21}$&${SID}_{2}$&${SIP}_{1}$&${SP}_{2}$&${DIP}_{1}$&${DP}_{1}$&${D_{min}}_{21}$&$D_{21}$&${Q}_{21}$&${{Q}_{max}}_{21}$&$W_{21}$&$T_{21}$ \\
+$ID$&${PID}_{21}$&${SID}_{2}$&${SIP}_{1}$&${SP}_{2}$&${DIP}_{1}$&${DP}_{1}$&${D_{min}}_{21}$&$D_{21}$&${Q}_{21}$&${{Q}_{max}}_{21}$&$W_{21}$\\
 \hline
-$ID$&${PID}_{22}$&${SID}_{2}$&${SIP}_{1}$&${SP}_{2}$&${DIP}_{1}$&${DP}_{2}$&${D_{min}}_{22}$&$D_{22}$&${Q}_{22}$&${{Q}_{max}}_{22}$&$W_{12}$&$T_{22}$ \\
+$ID$&${PID}_{22}$&${SID}_{2}$&${SIP}_{1}$&${SP}_{2}$&${DIP}_{1}$&${DP}_{2}$&${D_{min}}_{22}$&$D_{22}$&${Q}_{22}$&${{Q}_{max}}_{22}$&$W_{12}$\\
 \hline
 \end{tabular}
 \end{table*}
@@ -143,7 +141,7 @@ Because of NAT mapping, the same node can have different IP address and port num
 
 One instance of Table~\ref{tb.pi} is maintained at each side. Initially, Table~\ref{tb.pi} is empty. Every time one new combination of IP address and port number is flagged as MPIP enabled in Table~\ref{tb.me}, it adds new paths to the table with every available local IP address as the source IP address, and the value of Node ID is extracted from Table~\ref{tb.wi} which is maintained to conveniently map node ID with IP address and port number. 
 
-Table~\ref{tb.wi} contains all working IP addresses and port number of one specific node ID. When paths in Table~\ref{tb.pi} are obsolete and need to be removed, relative entries in Table~\ref{tb.wi} will also be removed.
+%Table~\ref{tb.wi} contains all working IP addresses and port number of one specific node ID. When paths in Table~\ref{tb.pi} are obsolete and need to be removed, relative entries in Table~\ref{tb.wi} will also be removed.
 
 \begin{table}[htbp]
 \caption{\label{tb.wi}Node ID vs IP address and Port}
@@ -193,7 +191,9 @@ ${ID}_{22}$&${PID}_{22}$&${D}_{22}$&${T}_{22}$   \\
 
 In practice, the value of path delay calculated here isn't the real delay value because of time difference between node $A$ and node $B$, it can even be negative. But as we will see later, time difference between $A$ and $B$ doesn't have any influence on our algorithm.
 
-When node $B$ needs to send packet back to node $A$, it chooses the record with the earliest feedback time in Table~\ref{tb.ps}, it fills the field \emph{Feedback Path ID} and \emph{Path Delay} in the CM block with relative value in Table~\ref{tb.ps}, and updates the column \emph{Feedback Time} with local system time. When node $A$ receives this feedback packet, it extracts the path ID and path delay value, and fills the path delay value into the column \emph{Real-Time Network Delay} in Table~\ref{tb.pi}. To avoid outliers, the value of path delay is calculated by moving average algorithm. At meantime, the column \emph{Feedback Time} is updated with current system time. If one path hasn't received feedback information from the receiver for some threshold value of time, it means this path is literally dead, then the system considers the path to be obsolete and remove the path from Table~\ref{tb.pi}.
+When node $B$ needs to send packet back to node $A$, it chooses the record with the earliest feedback time in Table~\ref{tb.ps}, it fills the field \emph{Feedback Path ID} and \emph{Path Delay} in the CM block with relative value in Table~\ref{tb.ps}, and updates the column \emph{Feedback Time} with local system time. When node $A$ receives this feedback packet, it extracts the path ID and path delay value, and fills the path delay value into the column \emph{Real-Time Network Delay} in Table~\ref{tb.pi}. To avoid outliers, the value of path delay is calculated by moving average algorithm. 
+
+%At meantime, the column \emph{Feedback Time} is updated with current system time. If one path hasn't received feedback information from the receiver for some threshold value of time, it means this path is literally dead, then the system considers the path to be obsolete and remove the path from Table~\ref{tb.pi}.
 
 In practice, IP addresses of devices can be removed or added dynamically. Especially for mobile device, it can connect to different access points(WiFi hotspot/Cellular Tower) at different time, during this stage, its IP address can be changed, removed or added dynamically. Under this situation, the system supports dynamic addition and removal of paths from Table~\ref{tb.pi} because of IP address changes. When IP address change happens, the value of \emph{CM Flags} is set to be $Flags\_IP\_Change$ in the CM block. After receiving packets of this flag, the receiver knows that IP address change happened on the sender, it will remove all entries of this connection in all tables, then add the combination of IP address and port number contained in the received packet into all the tables as if that combination is MPIP enabled.
 Also, the sender does the same reset for this connection. After all these resets, there is only one path left for this connection, all the other paths will be added into the system through the normal process. By doing this path reconstruction, we achieve smooth switching during IP address changes. The higher layers won't know the whole process at all because there is always an active path transmitting data for the application.
@@ -201,9 +201,9 @@ Also, the sender does the same reset for this connection. After all these resets
 
 \subsection{Periodical Heartbeat}
 
-For protocols like TCP, during the whole lifetime of the connection, both sides are sending packets to each other at a high frequency, then at both sides, column \emph{Feedback Time} of Table~\ref{tb.pi} can be updated way before the path becomes obsolete. But there are protocols that don't have this built-in feedback mechanism, like UDP. In some UDP applications, all traffic is one way, there aren't any acknowledgements, which means that the sender can't get feedback information through piggybacked messages. Under this scenario, the sender won't be able to properly add new entries into Table~\ref{tb.pi}, then multipath feature can't be applied at all. 
+For protocols like TCP, during the whole lifetime of the connection, both sides are sending packets to each other at a high frequency, then at both sides, Table~\ref{tb.pi} can be updated real-time. But there are protocols that don't have this built-in feedback mechanism, like UDP. In some UDP applications, all traffic is one way, there aren't any acknowledgements, which means that the sender can't get feedback information through piggybacked messages. Under this scenario, the sender won't be able to properly add new entries into Table~\ref{tb.pi}, then multipath feature can't be applied at all. 
 
-To solve this problem, in our system, we add periodical heartbeat mechanism. At each side, when the node receives packets, the system checks Table~\ref{tb.ps} for the specific node, if it finds the feedback time of this path is close to the obsolete value, it makes a copy of the received packet, switches the source/destination address information, and sends back the packet with CM block attached. The path to send this heartbeat message will be chosen through the same algorithm as regular IP packet as in Section~\ref{sec:selection}. Through the heartbeat message, we effectively maintain the active paths between two nodes, and obsolete paths can be safely removed from Table~\ref{tb.pi}. 
+To solve this problem, in our system, we add periodical heartbeat mechanism. At each side, when the node receives packets, the system checks Table~\ref{tb.ps} for the specific node, if it finds the feedback time of this path is close to a pre-set value, it makes a copy of the received packet, switches the source/destination address information, and sends back the packet with CM block attached. The path to send this heartbeat message will be chosen through the same algorithm as regular IP packet as in Section~\ref{sec:selection}. Through the heartbeat message, we effectively maintain the real-time status of each path between two nodes. The expiration time of heartbeat message is set to $300$ms in our system.
 
 All heartbeat packets have a special flags value $Flags\_HB$ in the CM block. These packets will be dropped after being processed at network layer.
 
@@ -392,6 +392,7 @@ ${ID}_2$&${SID}_2$&${SIP}_{2}$&${SPORT}_{4}$&${DIP}_{2}$&${DPORT}_{4}$&$T_4$&UDP
 \end{tabular}
 \end{table*}
 
+For each connection, the system internally maintains a socket pair with source/destination IP addresses and port numbers, the system maintained socket information is the same as the pair maintained in Table~\ref{tb.ss}. The socket information for a session entries won't be modified after they have been added into Table~\ref{tb.ss} even the IP address that initiates the session doesn't exist any more. As will be shown later, the socket information in Table~\ref{tb.ss} is used to communicate with higher layer to guarantee seamless connection switching. If these information is modified, higher layers will notify the mismatch between the system maintained socket amd MPIP maintained socket which finally causes failure of seamless connection switching.
 
 \subsubsection{Addition/Removal of Sessions}
 
@@ -401,11 +402,22 @@ After the MPIP availability handshake has been successfully completed, when send
 
 Besides the session ID, all IP addresses and port numbers can be different in Tabel~\ref{tb.ss} of both sides because of NAT devices, but this doesn't have a problem because the IP addresses and port numbers only need to be the values that are seen locally.
 
-Removal of sessions is decided by expiration. At each node, every time it sends or receives a non-heartbeat packet, it goes to Table~\ref{tb.ss} to get the session ID to fill the control message, meantime, it updates the column \emph{Update Time}. For an active session, this time stamp should be updated frequently. If the timestamp expires a threshold value, the session is considered to be obsolete and removed from Table~\ref{tb.ss}. In our system, this threshold value is set to $120$ seconds.
-
-For each connection, the system internally maintains a socket pair with source/destination IP addresses and port numbers, the system maintained socket information is the same as the pair maintained in Table~\ref{tb.ss}. The socket information for a session entries won't be modified after they have been added into Table~\ref{tb.ss} even the IP address that initiates the session doesn't exist any more. As will be shown later, the socket information in Table~\ref{tb.ss} is used to communicate with higher layer to guarantee seamless connection switching. If these information is modified, higher layers will notify the mismatch between the system maintained socket amd MPIP maintained socket which finally causes failure of seamless connection switching.
+Removal of sessions is decided by expiration. At each node, every time it sends or receives a non-heartbeat packet, it goes to Table~\ref{tb.ss} to get the session ID to fill the control message, meantime, it updates the column \emph{Update Time}. For an active session, this time stamp should be updated frequently. If the timestamp expires a threshold value, the session is considered to be obsolete and removed from Table~\ref{tb.ss}. In our system, this threshold value is set to $120$ seconds. After all information related to this session is removed, if there are still more packets coming on that connection, MPIP handshake will start over.
 
 Once session entry has been inserted into Table~\ref{tb.ss} at both side, different paths will be added into Table~\ref{tb.pi} and available to be chosen to transmit future packets that belong to this session according to path selection algorithms. 
+
+\subsubsection{NAT Consideration}
+
+NAT devices can be the largest obstacle for MPIP. There are many types of NAT devices. Different type of NAT device does different modifications to Internet traffic. Generally, a NAT device changes the IP addresses and port numbers of a packet. But further, some application-level gateways can modify more content of a packet like the sequence numbers of TCP packets. We can still name many other different cases where NAT devices do customization to packets. In these scenarios, MPIP won't be able to perform correctly. Instead of designing an all-purpose MPIP system, we choose to fall back to regular connection in these case. 
+
+The value of the column \emph{Update Time} in Table~\ref{tb.ss} is used to monitor the correctness of MPIP. As mentioned, this value is updated when packets are received on this session. In our system, if this value is not updated for $120$ seconds, this session is considered to be dead. But if this value is less than $120$ seconds and larger than $500$ms, we assume that MPIP is not working correctly, then this session falls back to regular connection and multipath feature is disabled. We set the value of $500$ms which is slightly larger than the period of heartbeat for each path.
+
+This mechanism works perfectly for connections that transmit packets with high intensity, e.g., chunky file download, video/audio streaming, etc. If for some reason the packets don't reach the destination at all through MPIP, the timer expires soon and falls back to regular connection. Specifically for TCP traffic, sometimes the packets reach the destination with modified header which the receiver can't recognize, the sending window of the connection becomes zero, traffic on both direction pauses soon, and finally the session falls back to regular connection.
+
+But for applications that transmit packets intermittently, the connection may fall back to regular connection falsely. For example, a SSH session may idle for a long time because of no traffic at all. For these scenarios, we don't do any special process in our system, we just fall back as designed because if a connection is not active enough, the benefit it can get from MPIP is trivial.
+
+Through this simple algorithm, we monitor MPIP's performance as a blackbox. MPIP can fail because of many factors on NAT issue, but no matter why MPIP is acting incorrectly, regular connection is always there to take over.
+
 
 \subsubsection{Workflow of Sending/Receiving Packets}
 
