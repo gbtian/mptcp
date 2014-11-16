@@ -2109,7 +2109,7 @@ int add_path_info_udp(unsigned char *node_id, __be32 daddr, __be16 sport,
 		}
 		else
 		{
-			item->status = 1;
+			item->status = 0;
 		}
 
 		INIT_LIST_HEAD(&(item->list));
