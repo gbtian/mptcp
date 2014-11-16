@@ -39,7 +39,7 @@ int sysctl_mpip_path_diff __read_mostly = 50;
 int sysctl_mpip_qd __read_mostly = 1;
 int sysctl_mpip_skype __read_mostly = 0;
 int sysctl_mpip_hb __read_mostly = 1000;
-int sysctl_mpip_use_tcp __read_mostly = 1;
+int sysctl_mpip_use_tcp __read_mostly = 0;
 int sysctl_mpip_tcp_buf_count __read_mostly = 10;
 int max_pkt_len = 65500;
 
