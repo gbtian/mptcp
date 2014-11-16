@@ -603,8 +603,8 @@ int update_path_delay(unsigned char path_id, __s32 delay)
 			}
 			else
 			{
-//				path_info->delay = (4 * path_info->delay + delay) / 5;
-				path_info->delay = delay;
+				path_info->delay = (99 * path_info->delay + delay) / 100;
+//				path_info->delay = delay;
 			}
 
 			if (path_info->min_delay > delay || path_info->min_delay == -1)
