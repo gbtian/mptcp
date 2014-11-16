@@ -2355,9 +2355,9 @@ int process_mpip_cm(struct sk_buff *skb)
 			}
 			else
 			{
-				printk("%d, %d, %d, %d, %d: %s, %s, %d\n", rcv_mpip_cm.session_id, dport, odport, sport, osport, __FILE__, __FUNCTION__, __LINE__);
-				print_addr_1(iph->daddr);
-				print_addr_1(iph->saddr);
+//				printk("%d, %d, %d, %d, %d: %s, %s, %d\n", rcv_mpip_cm.session_id, dport, odport, sport, osport, __FILE__, __FUNCTION__, __LINE__);
+//				print_addr_1(iph->daddr);
+//				print_addr_1(iph->saddr);
 
 				add_path_info_udp(rcv_mpip_cm.node_id, rcv_mpip_cm.addr1, tcph->dest, tcph->source,
 						rcv_mpip_cm.session_id, iph->protocol);
