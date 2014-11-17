@@ -65,7 +65,7 @@ By replacing one NIC on the client to a wireless interface, we evaluate the perf
 \begin{figure}
 \centering
 \includegraphics[width=0.8\linewidth,height=1.4in]{fig/tp_bar.eps}
-\caption{Throughput Comparison}
+\caption{Overall Throughput Comparison}
 \label{fig.tp_bar}
 \end{figure}
 
@@ -166,21 +166,38 @@ Variation  & $169.81$ & $127.11$ & $0.63$ & $0.64$ \\
 %\label{fig.mpip_path}
 %\end{figure}
 
-Besides the controlled lab experiments, we also evaluate MPIP on the Internet to verify the prototype's NAT immunization and system robustness. We set up our server at Emulab\cite{emulab} which is located in Utah while the client is in New York. Because there is only one NIC that connects to Internet on the Emulab node, there are only $2$ paths in this case. According to our test, the capacity between our client and the server in Emulab is about $5Mbps$. Also, our client's two NICs share the same bottleneck because they connection to the server throughput the same gateway. The result of iperf3 TCP transmission result is shown in Figure~\ref{fig.emulab}. Comparing to regular TCP, we don't get any throughput enhancement because of the shared bottleneck, but we can see that MPIP, MPTCP and MPIP/MPTCP achieve the capacity of the connection. The two paths of MPIP are successfully added into Table~\ref{tb.pi} throughput fake TCP connection in spite of all the middle boxes on the path.
+Besides the controlled lab experiments, we also evaluate MPIP on the Internet to verify the prototype's NAT immunization and system robustness. We set up our server at Emulab\cite{emulab} which is located in Utah while the client is in New York. Because there is only one NIC that connects to Internet on the Emulab node, there are only $2$ paths in this case. We do two experiments for different bottleneck placement. First, we connect both NICs to the same router that connects to Optimum Cable with $15$Mbps bandwidth. In this case, both NICs share the same bottleneck, we don't expect any throughput enhancement at all. Secondly, we connect one NIC to Optimum and connect the other NIC to Verizon FIOS with $25$Mbps bandwidth. In this case, each NIC has different bottleneck, and potential throughput enhance is expected. According to our test, the capacity between our client and the server in Emulab is about $5$Mbps for Optimum and $10$Mbps for FIOS. The result of iperf3 TCP transmission result is shown in Figure~\ref{fig.emulab_tp_bar} and Figure~\ref{fig.emulab_tp_bar}.
 
+When sharing bottleneck, all three sessions fully use the capacity of the connection with little difference. The two paths don't share the traffic equally either because of coupling between them. When different bottleneck is used by each NIC, overall, MPTCP gets the lowest throughput among the three sessions followed by MPIP. Still, when MPIP and MPTCP combine, the highest throughput is achieved. As for the assignment of packets for the two paths in MPIP, P$1$ in Figure~\ref{fig.emulab_tp_bar} is the path for Optimum and P$2$ is for FIOS. Approximately the traffic is assigned to each path according to the capacity of each link. This proves that the delay-based path selection algorithm in Section~\ref{sec:delay} also works perfectly in real Internet.
 
-\begin{figure}[htb]
-\centering{
-\subfigure[Throughput Comparison]
-{\includegraphics[width=0.49\linewidth,height=1.4in]{fig/emulab.eps}}
-\subfigure[Path Throughput]
-{\includegraphics[width=0.49\linewidth,height=1.4in]{fig/emulab_tp_comp.eps}}
-%\subfigure[Queuing Delay Comparison for two paths]
-%{\includegraphics[width=0.33\linewidth,height=1.4in]{fig/emulab_qd_comp.eps}}
-}
-\caption{Emulab Experiment}
-\label{fig.emulab}
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\linewidth,height=1.4in]{fig/emulab_tp_bar.eps}
+\caption{Overall Throughput Comparison}
+\label{fig.emulab_tp_bar}
 \end{figure}
+
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\linewidth,height=1.4in]{fig/emulab_pttp_bar.eps}
+\caption{Path Throughput Comparison}
+\label{fig.emulab_patp_bar}
+\end{figure}
+
+
+%\begin{figure}[htb]
+%\centering{
+%\subfigure[Overall Throughput Comparison]
+%{\includegraphics[width=0.49\linewidth,height=1.4in]{fig/emulab_tp_bar.eps}}
+%\subfigure[Path Throughput Comparison]
+%{\includegraphics[width=0.49\linewidth,height=1.4in]{fig/emulab_pttp_bar.eps}}
+%%\subfigure[Queuing Delay Comparison for two paths]
+%%{\includegraphics[width=0.33\linewidth,height=1.4in]{fig/emulab_qd_comp.eps}}
+%}
+%\caption{Emulab Experiment}
+%\label{fig.emulab}
+%\end{figure}
 
 
 \subsection{UDP and Customization Routing}
@@ -194,7 +211,7 @@ For this experiment, we only use one NIC on the server while on the client we st
 
 From Figure~\ref{fig.skypedelaycomp}, we see the huge reduction of audio delay. The average RTT is $82$ms and $119$ ms with/out routing optimization. Because with queuing delay based algorithm, most Skype audio packet with be assigned to path $1$ because of its high bandwidth, but the by-product is higher delay. By assigning audio packets to path $2$, a much better audio call quality can be achieved. From Figure~\ref{fig.skypetpcomp}, we see that we get roughly the same throughput in both case, but the result with customization routing enabled is more consistent. This is because with customization routing enabled, path $2$ has its designated traffic. Because of its low bandwidth, the queuing delay accumulates, then the TCP traffic from the iperf3 session will probably only be assigned to path $1$ and results in a more consistent throughput.
 
-\begin{figure*}[htb]
+\begin{figure*}[H]
 \centering{
 \subfigure[iperf3 TCP Throughput Comparison\label{fig.skypetpcomp}]
 {\includegraphics[width=0.33\linewidth,height=1.4in]{fig/skype_tp_comp.eps}}

@@ -1,0 +1,2 @@
+ (gnome-screenshot -a -f dd.png &); sleep 0.1 && xdotool mousemove 335 310 mousedown 1 mousemove 353 328 mouseup 1
+
