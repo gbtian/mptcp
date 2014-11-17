@@ -1,9 +1,3 @@
-M=1000000;
-K=1000;
-x=1:2:1190;
-wts = (repmat(1/5,5,1));
-
-%pair limit
 data1 = csvread('Z:\home\bill\gbtian\research\kernel\experiment\data\verizon\mpip.csv');
 data2 = csvread('Z:\home\bill\gbtian\research\kernel\experiment\data\verizon\mptcp.csv');
 data3 = csvread('Z:\home\bill\gbtian\research\kernel\experiment\data\verizon\together.csv');
@@ -38,10 +32,11 @@ tp = [mpip_emulab mptcp_emulab together_emulab;
         mpip_verizon mptcp_verizon together_verizon];
 
 figure;
+set(gcf,'outerposition',get(0,'screensize'));
 hold on;
 grid on;
 b=bar(tp);
-set(gca,'XTickLabel',{'', 'Optimum & Optimum', '', '', '', '', 'Optimum & Verizon','',''},'fontsize',10)
+set(gca,'XTickLabel',{'', 'Optimum & Optimum', '', '', '', '', 'Optimum & Verizon','',''},'fontsize',13)
 legend('MPIP', 'MPTCP', 'Together', 2);
 
 xlabel('','fontsize',15);
@@ -53,11 +48,12 @@ patp = [p1_emulab p2_emulab;
             p1_verizon p2_verizon];
 
 figure;
+set(gcf,'outerposition',get(0,'screensize'));
 hold on;
 grid on;
 b=bar(patp);
-set(gca,'XTickLabel',{'', 'Optimum & Optimum', '', '', '', '', 'Optimum & Verizon','',''},'fontsize',10)
-legend('P1', 'P2', 2);
+set(gca,'XTickLabel',{'', 'Optimum & Optimum', '', '', '', '', 'Optimum & Verizon','',''},'fontsize',13)
+legend('Path 1', 'Path 2', 2);
 xlabel('','fontsize',15);
 ylabel('Mbps','fontsize',15);
-print -dpsc2 Z:\home\bill\gbtian\research\kernel\mptcp\conext14\fig\emulab_pttp_bar.eps;
+print -dpsc2 Z:\home\bill\gbtian\research\kernel\mptcp\conext14\fig\emulab_patp_bar.eps;

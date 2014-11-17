@@ -180,7 +180,7 @@ When sharing bottleneck, all three sessions fully use the capacity of the connec
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.8\linewidth,height=1.4in]{fig/emulab_pttp_bar.eps}
+\includegraphics[width=0.8\linewidth,height=1.4in]{fig/emulab_patp_bar.eps}
 \caption{Path Throughput Comparison}
 \label{fig.emulab_patp_bar}
 \end{figure}
@@ -211,7 +211,7 @@ For this experiment, we only use one NIC on the server while on the client we st
 
 From Figure~\ref{fig.skypedelaycomp}, we see the huge reduction of audio delay. The average RTT is $82$ms and $119$ ms with/out routing optimization. Because with queuing delay based algorithm, most Skype audio packet with be assigned to path $1$ because of its high bandwidth, but the by-product is higher delay. By assigning audio packets to path $2$, a much better audio call quality can be achieved. From Figure~\ref{fig.skypetpcomp}, we see that we get roughly the same throughput in both case, but the result with customization routing enabled is more consistent. This is because with customization routing enabled, path $2$ has its designated traffic. Because of its low bandwidth, the queuing delay accumulates, then the TCP traffic from the iperf3 session will probably only be assigned to path $1$ and results in a more consistent throughput.
 
-\begin{figure*}[H]
+\begin{figure*}[h]
 \centering{
 \subfigure[iperf3 TCP Throughput Comparison\label{fig.skypetpcomp}]
 {\includegraphics[width=0.33\linewidth,height=1.4in]{fig/skype_tp_comp.eps}}

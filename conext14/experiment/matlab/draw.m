@@ -13,7 +13,7 @@ figure;
 hold on;
 H1 = plot(d1/M, '-r');
 H2 = plot(d2/M, '-b');
-legend([H1, H2],{'no';'yes'}, 4, 'fontsize',12);
+legend([H1, H2],{'without out-of-order process';'with out-of-order process'}, 4, 'fontsize',12);
 legend('boxoff');
 xlim([0 1200])
 xlabel('Seconds','fontsize',15);
@@ -22,7 +22,7 @@ get(gca,'XLabel');
 set(gca,'FontSize',15);
 get(gca,'YLabel');
 set(gca,'FontSize',15);
-title('out of order without sack');
+%title('out of order without sack');
 print -dpsc2 Z:\home\bill\gbtian\research\kernel\mptcp\conext14\fig\out_of_order_wo_sack.eps;
 
 
@@ -35,7 +35,7 @@ figure;
 hold on;
 H1 = plot(d1/M, '-r');
 H2 = plot(d2/M, '-b');
-legend([H1, H2],{'no';'yes'}, 4, 'fontsize',12);
+legend([H1, H2],{'without out-of-order process';'with out-of-order process'}, 4, 'fontsize',12);
 legend('boxoff');
 xlim([0 1200])
 xlabel('Seconds','fontsize',15);
@@ -44,7 +44,7 @@ get(gca,'XLabel');
 set(gca,'FontSize',15);
 get(gca,'YLabel');
 set(gca,'FontSize',15);
-title('out of order with sack');
+%title('out of order with sack');
 print -dpsc2 Z:\home\bill\gbtian\research\kernel\mptcp\conext14\fig\out_of_order_w_sack.eps;
 
 
@@ -64,7 +64,7 @@ get(gca,'XLabel');
 set(gca,'FontSize',15);
 get(gca,'YLabel');
 set(gca,'FontSize',15);
-title('clock');
+%title('clock');
 print -dpsc2 Z:\home\bill\gbtian\research\kernel\mptcp\conext14\fig\clock.eps;
 
 
@@ -93,7 +93,7 @@ get(gca,'XLabel');
 set(gca,'FontSize',15);
 get(gca,'YLabel');
 set(gca,'FontSize',15);
-title('implementation');
+%title('implementation');
 print -dpsc2 Z:\home\bill\gbtian\research\kernel\mptcp\conext14\fig\implementation.eps;
 
 
@@ -122,7 +122,7 @@ get(gca,'XLabel');
 set(gca,'FontSize',15);
 get(gca,'YLabel');
 set(gca,'FontSize',15);
-title('no limit');
+%title('no limit');
 print -dpsc2 Z:\home\bill\gbtian\research\kernel\mptcp\conext14\fig\no_limit.eps;
 
 
@@ -144,7 +144,7 @@ H2 = plot(x, d2*8000/M, '-b');
 H3 = plot(x, d3*8000/M, '-m');
 H4 = plot(x, d4*8000/M, '-k');
 H5 = plot(x, (d1+d2+d3+d4)*8000/M, '-k');
-legend([H1, H2, H3, H4, H5],{'1';'2';'3';'4';'total'}, 2, 'fontsize',12);
+legend([H1, H2, H3, H4, H5],{'Path 1';'Path 2';'Path 3';'Path 4';'total'}, 2, 'fontsize',12);
 legend('boxoff');
 xlim([0 1200]);
 xlabel('Seconds','fontsize',15);
@@ -153,7 +153,7 @@ get(gca,'XLabel');
 set(gca,'FontSize',15);
 get(gca,'YLabel');
 set(gca,'FontSize',15);
-title('no limit tp comparison');
+%title('no limit tp comparison');
 print -dpsc2 Z:\home\bill\gbtian\research\kernel\mptcp\conext14\fig\no_limit_tp_comp.eps;
 
 
@@ -169,7 +169,7 @@ H1 = plot(x, d1/K, '-r');
 H2 = plot(x, d2/K, '-b');
 H3 = plot(x, d3/K, '-m');
 H4 = plot(x, d4/K, '-k');
-legend([H1, H2, H3, H4],{'1';'2';'3';'4'}, 2, 'fontsize',12);
+legend([H1, H2, H3, H4],{'Path 1';'Path 2';'Path 3';'Path 4'}, 2, 'fontsize',12);
 legend('boxoff');
 xlim([0 1200]);
 xlabel('Seconds','fontsize',15);
@@ -178,7 +178,7 @@ get(gca,'XLabel');
 set(gca,'FontSize',15);
 get(gca,'YLabel');
 set(gca,'FontSize',15);
-title('no limit qd comparison');
+%title('no limit qd comparison');
 print -dpsc2 Z:\home\bill\gbtian\research\kernel\mptcp\conext14\fig\no_limit_qd_comp.eps;
 
 
@@ -207,7 +207,7 @@ get(gca,'XLabel');
 set(gca,'FontSize',15);
 get(gca,'YLabel');
 set(gca,'FontSize',15);
-title('limit');
+%title('limit');
 print -dpsc2 Z:\home\bill\gbtian\research\kernel\mptcp\conext14\fig\limit.eps;
 
 
@@ -228,7 +228,7 @@ H2 = plot(x, d2*8000/M, '-b');
 H3 = plot(x, d3*8000/M, '-m');
 H4 = plot(x, d4*8000/M, '-k');
 H5 = plot(x, (d1+d2+d3+d4)*8000/M, '-k');
-legend([H1, H2, H3, H4, H5],{'1';'2';'3';'4';'total'}, 2, 'fontsize',12);
+legend([H1, H2, H3, H4, H5],{'Path 1';'Path 2';'Path 3';'Path 4';'total'}, 2, 'fontsize',12);
 legend('boxoff');
 xlim([0 1200]);
 xlabel('Seconds','fontsize',15);
@@ -237,7 +237,7 @@ get(gca,'XLabel');
 set(gca,'FontSize',15);
 get(gca,'YLabel');
 set(gca,'FontSize',15);
-title('limit tp comparison');
+%title('limit tp comparison');
 print -dpsc2 Z:\home\bill\gbtian\research\kernel\mptcp\conext14\fig\limit_tp_comp.eps;
 
 
@@ -253,7 +253,7 @@ H1 = plot(x, d1/K, '-r');
 H2 = plot(x, d2/K, '-b');
 H3 = plot(x, d3/K, '-m');
 H4 = plot(x, d4/K, '-k');
-legend([H1, H2, H3, H4],{'1';'2';'3';'4'}, 2, 'fontsize',12);
+legend([H1, H2, H3, H4],{'Path 1';'Path 2';'Path 3';'Path 4'}, 2, 'fontsize',12);
 legend('boxoff');
 xlim([0 1200]);
 xlabel('Seconds','fontsize',15);
@@ -262,7 +262,7 @@ get(gca,'XLabel');
 set(gca,'FontSize',15);
 get(gca,'YLabel');
 set(gca,'FontSize',15);
-title('limit qd comparison');
+%title('limit qd comparison');
 print -dpsc2 Z:\home\bill\gbtian\research\kernel\mptcp\conext14\fig\limit_qd_comp.eps;
 
 
@@ -301,7 +301,7 @@ get(gca,'XLabel');
 set(gca,'FontSize',15);
 get(gca,'YLabel');
 set(gca,'FontSize',15);
-title('delay');
+%title('delay');
 print -dpsc2 Z:\home\bill\gbtian\research\kernel\mptcp\conext14\fig\delay_1.eps;
 
 
@@ -331,7 +331,7 @@ H2 = plot(x, d2*8000/M, '-b');
 H3 = plot(x, d3*8000/M, '-m');
 H4 = plot(x, d4*8000/M, '-k');
 H5 = plot(x, (d1+d2+d3+d4)*8000/M, '-k');
-legend([H1, H2, H3, H4, H5],{'1';'2';'3';'4';'total'}, 2, 'fontsize',12);
+legend([H1, H2, H3, H4, H5],{'Path 1';'Path 2';'Path 3';'Path 4';'total'}, 2, 'fontsize',12);
 legend('boxoff');
 xlim([0 1200]);
 xlabel('Seconds','fontsize',15);
@@ -340,7 +340,7 @@ get(gca,'XLabel');
 set(gca,'FontSize',15);
 get(gca,'YLabel');
 set(gca,'FontSize',15);
-title('delay tp comparison');
+%title('delay tp comparison');
 print -dpsc2 Z:\home\bill\gbtian\research\kernel\mptcp\conext14\fig\delay_tp_comp.eps;
 
 
@@ -356,7 +356,7 @@ H1 = plot(x, d1/K, '-r');
 H2 = plot(x, d2/K, '-b');
 H3 = plot(x, d3/K, '-m');
 H4 = plot(x, d4/K, '-k');
-legend([H1, H2, H3, H4],{'1';'2';'3';'4'}, 2, 'fontsize',12);
+legend([H1, H2, H3, H4],{'Path 1';'Path 2';'Path 3';'Path 4'}, 2, 'fontsize',12);
 legend('boxoff');
 xlim([0 1200]);
 xlabel('Seconds','fontsize',15);
@@ -365,7 +365,7 @@ get(gca,'XLabel');
 set(gca,'FontSize',15);
 get(gca,'YLabel');
 set(gca,'FontSize',15);
-title('delay qd comparison');
+%title('delay qd comparison');
 print -dpsc2 Z:\home\bill\gbtian\research\kernel\mptcp\conext14\fig\delay_qd_comp.eps;
 
 
@@ -392,7 +392,7 @@ get(gca,'XLabel');
 set(gca,'FontSize',15);
 get(gca,'YLabel');
 set(gca,'FontSize',15);
-title('wireless');
+%title('wireless');
 print -dpsc2 Z:\home\bill\gbtian\research\kernel\mptcp\conext14\fig\wireless.eps;
 
 
@@ -414,7 +414,7 @@ H2 = plot(x, d2*8000/M, '-b');
 H3 = plot(x, d3*8000/M, '-m');
 H4 = plot(x, d4*8000/M, '-k');
 H5 = plot(x, (d1+d2+d3+d4)*8000/M, '-k');
-legend([H1, H2, H3, H4, H5],{'1';'2';'3';'4';'total'}, 2, 'fontsize',12);
+legend([H1, H2, H3, H4, H5],{'Path 1';'Path 2';'Path 3';'Path 4';'total'}, 2, 'fontsize',12);
 legend('boxoff');
 xlim([0 1200]);
 xlabel('Seconds','fontsize',15);
@@ -423,7 +423,7 @@ get(gca,'XLabel');
 set(gca,'FontSize',15);
 get(gca,'YLabel');
 set(gca,'FontSize',15);
-title('wireless tp comparison');
+%title('wireless tp comparison');
 print -dpsc2 Z:\home\bill\gbtian\research\kernel\mptcp\conext14\fig\wireless_tp_comp.eps;
 
 
@@ -439,7 +439,7 @@ H1 = plot(x, d1/K, '-r');
 H2 = plot(x, d2/K, '-b');
 H3 = plot(x, d3/K, '-m');
 H4 = plot(x, d4/K, '-k');
-legend([H1, H2, H3, H4],{'1';'2';'3';'4'}, 2, 'fontsize',12);
+legend([H1, H2, H3, H4],{'Path 1';'Path 2';'Path 3';'Path 4'}, 1, 'fontsize',12);
 legend('boxoff');
 xlim([0 1200]);
 xlabel('Seconds','fontsize',15);
@@ -448,7 +448,7 @@ get(gca,'XLabel');
 set(gca,'FontSize',15);
 get(gca,'YLabel');
 set(gca,'FontSize',15);
-title('wireless qd comparison');
+%title('wireless qd comparison');
 print -dpsc2 Z:\home\bill\gbtian\research\kernel\mptcp\conext14\fig\wireless_qd_comp.eps;
 
 
@@ -480,7 +480,7 @@ get(gca,'XLabel');
 set(gca,'FontSize',15);
 get(gca,'YLabel');
 set(gca,'FontSize',15);
-title('w/o ack routing');
+%title('w/o ack routing');
 print -dpsc2 Z:\home\bill\gbtian\research\kernel\mptcp\conext14\fig\routing_ack.eps;
 
 
@@ -522,7 +522,7 @@ get(gca,'XLabel');
 set(gca,'FontSize',15);
 get(gca,'YLabel');
 set(gca,'FontSize',15);
-title('emulab');
+%title('emulab');
 print -dpsc2 Z:\home\bill\gbtian\research\kernel\mptcp\conext14\fig\emulab.eps;
 
 x=1:2:1190;
@@ -549,7 +549,7 @@ hold on;
 H1 = plot(x, d1*8000/M, '-r');
 H2 = plot(x, d2*8000/M, '-b');
 H3 = plot(x, (d1+d2)*8000/M, '-k');
-legend([H1, H2, H3],{'1';'2';'total'}, 2, 'fontsize',12);
+legend([H1, H2, H3],{'Path 1';'Path 2';'total'}, 2, 'fontsize',12);
 legend('boxoff');
 ylim([0 10]);
 xlim([0 1200]);
@@ -559,7 +559,7 @@ get(gca,'XLabel');
 set(gca,'FontSize',15);
 get(gca,'YLabel');
 set(gca,'FontSize',15);
-title('emulab tp comparison');
+%title('emulab tp comparison');
 print -dpsc2 Z:\home\bill\gbtian\research\kernel\mptcp\conext14\fig\emulab_tp_comp.eps;
 
 
@@ -570,17 +570,17 @@ figure;
 hold on;
 H1 = plot(x, d1/K, '-r');
 H2 = plot(x, d2/K, '-b');
-legend([H1, H2],{'1';'2'}, 2, 'fontsize',12);
+legend([H1, H2],{'Path 1';'Path 2'}, 2, 'fontsize',12);
 legend('boxoff');
 ylim([0 500]);
 xlim([0 1200]);
 xlabel('Seconds','fontsize',15);
-ylabel('ms','fontsize',15);
+ylabel('ms','fontsize',20);
 get(gca,'XLabel');
 set(gca,'FontSize',15);
 get(gca,'YLabel');
 set(gca,'FontSize',15);
-title('emulab qd comparison');
+%title('emulab qd comparison');
 print -dpsc2 Z:\home\bill\gbtian\research\kernel\mptcp\conext14\fig\emulab_qd_comp.eps;
 
 
@@ -614,7 +614,7 @@ get(gca,'XLabel');
 set(gca,'FontSize',15);
 get(gca,'YLabel');
 set(gca,'FontSize',15);
-title('pair limit');
+%title('pair limit');
 print -dpsc2 Z:\home\bill\gbtian\research\kernel\mptcp\conext14\fig\pair_limit.eps;
 
 
@@ -636,7 +636,7 @@ H2 = plot(x, d2*8000/M, '-b');
 H3 = plot(x, d3*8000/M, '-m');
 H4 = plot(x, d4*8000/M, '-k');
 H5 = plot(x, (d1+d2+d3+d4)*8000/M, '-k');
-legend([H1, H2, H3, H4, H5],{'1';'2';'3';'4';'total'}, 2, 'fontsize',12);
+legend([H1, H2, H3, H4, H5],{'Path 1';'Path 2';'Path 3';'Path 4';'total'}, 2, 'fontsize',12);
 legend('boxoff');
 xlim([0 1200]);
 xlabel('Seconds','fontsize',15);
@@ -645,7 +645,7 @@ get(gca,'XLabel');
 set(gca,'FontSize',15);
 get(gca,'YLabel');
 set(gca,'FontSize',15);
-title('pair limit tp comparison');
+%title('pair limit tp comparison');
 print -dpsc2 Z:\home\bill\gbtian\research\kernel\mptcp\conext14\fig\pair_limit_tp_comp.eps;
 
 
@@ -661,16 +661,16 @@ H1 = plot(x, d1/K, '-r');
 H2 = plot(x, d2/K, '-b');
 H3 = plot(x, d3/K, '-m');
 H4 = plot(x, d4/K, '-k');
-legend([H1, H2, H3, H4, H5],{'1';'2';'3';'4';'total'}, 2, 'fontsize',12);
+legend([H1, H2, H3, H4],{'Path 1';'Path 2';'Path 3';'Path 4'}, 2, 'fontsize',12);
 legend('boxoff');
 xlim([0 1200]);
 xlabel('Seconds','fontsize',15);
-ylabel('ms','fontsize',15);
+ylabel('ms','fontsize',20);
 get(gca,'XLabel');
 set(gca,'FontSize',15);
 get(gca,'YLabel');
 set(gca,'FontSize',15);
-title('pair limit qd comparison');
+%title('pair limit qd comparison');
 print -dpsc2 Z:\home\bill\gbtian\research\kernel\mptcp\conext14\fig\pair_limit_qd_comp.eps;
 
 
@@ -687,7 +687,7 @@ hold on;
 H1 = plot(x, d1*8000/M, '-r');
 H2 = plot(x, d2*8000/M, '-b');
 H3 = plot(x, (d1+d2)*8000/M, '-k');
-legend([H1, H2, H3],{'1';'2';'total'}, 3, 'fontsize',12);
+legend([H1, H2, H3],{'Path 1';'Path 2';'total'}, 3, 'fontsize',12);
 legend('boxoff');
 xlim([0 1200]);
 xlabel('Seconds','fontsize',15);
@@ -696,7 +696,7 @@ get(gca,'XLabel');
 set(gca,'FontSize',15);
 get(gca,'YLabel');
 set(gca,'FontSize',15);
-title('two paths tp comparison');
+%title('two paths tp comparison');
 print -dpsc2 Z:\home\bill\gbtian\research\kernel\mptcp\conext14\fig\twopaths_tp_comp.eps;
 
 d1 = conv(flipud(data1(:,7)), wts, 'valid');
@@ -707,16 +707,16 @@ figure;
 hold on;
 H1 = plot(x, d1/K, '-r');
 H2 = plot(x, d2/K, '-b');
-legend([H1, H2],{'1';'2'}, 2, 'fontsize',12);
+legend([H1, H2],{'Path 1';'Path 2'}, 2, 'fontsize',12);
 legend('boxoff');
 xlim([0 1200]);
 xlabel('Seconds','fontsize',15);
-ylabel('ms','fontsize',15);
+ylabel('ms','fontsize',20);
 get(gca,'XLabel');
 set(gca,'FontSize',15);
 get(gca,'YLabel');
 set(gca,'FontSize',15);
-title('two paths qd comparison');
+%title('two paths qd comparison');
 print -dpsc2 Z:\home\bill\gbtian\research\kernel\mptcp\conext14\fig\twopaths_qd_comp.eps
 
 %skype
@@ -730,7 +730,7 @@ figure;
 hold on;
 H1 = plot(d1/M, '-r');
 H2 = plot(d2/M, '-b');
-legend([H1, H2],{'no';'yes'}, 4, 'fontsize',12);
+legend([H1, H2],{'without cutomized routing';'with cutomized routing'}, 4, 'fontsize',12);
 legend('boxoff');
 xlim([0 400])
 ylim([0 3])
@@ -740,7 +740,7 @@ get(gca,'XLabel');
 set(gca,'FontSize',15);
 get(gca,'YLabel');
 set(gca,'FontSize',15);
-title('skype tp comparison');
+%title('skype tp comparison');
 print -dpsc2 Z:\home\bill\gbtian\research\kernel\mptcp\conext14\fig\skype_tp_comp.eps;
 
 
@@ -756,16 +756,16 @@ figure;
 hold on;
 H1 = plot(x, d1(1:200), '-r');
 H2 = plot(x, d2(1:200), '-b');
-legend([H1, H2],{'no';'yes'}, 4, 'fontsize',12);
+legend([H1, H2],{'without cutomized routing';'with cutomized routing'}, 4, 'fontsize',12);
 legend('boxoff');
 xlim([0 400])
 xlabel('Seconds','fontsize',15);
-ylabel('ms','fontsize',15);
+ylabel('ms','fontsize',20);
 get(gca,'XLabel');
 set(gca,'FontSize',15);
 get(gca,'YLabel');
 set(gca,'FontSize',15);
-title('skype delay comparison');
+%title('skype delay comparison');
 print -dpsc2 Z:\home\bill\gbtian\research\kernel\mptcp\conext14\fig\skype_delay_comp.eps
 
 
@@ -920,7 +920,7 @@ figure;
 hold on;
 grid on;
 b=bar(tp);
-set(gca,'XTickLabel',{'', 'No Limit', '', 'Bandwidth Limit', '', 'Added Delay', '', 'Wireless'},'fontsize',10)
+set(gca,'XTickLabel',{'', 'No Limit', '', 'Bandwidth Limit', '', 'Added Delay', '', 'Wireless'},'fontsize',15)
 legend('MPIP', 'MPTCP', 'Together');
 % xlabel('','fontsize',15);
 ylabel('Mbps','fontsize',15);
@@ -937,7 +937,7 @@ figure;
 hold on;
 grid on;
 b=bar(patp);
-set(gca,'XTickLabel',{'', 'No Limit', '', 'Bandwidth Limit', '', 'Added Delay', '', 'Wireless'},'fontsize',10)
+set(gca,'XTickLabel',{'', 'No Limit', '', 'Bandwidth Limit', '', 'Added Delay', '', 'Wireless'},'fontsize',15)
 legend('Path 1', 'Path 2', 'Path 3', 'Path 4');
 % xlabel('Seconds','fontsize',15);
 ylabel('Mbps','fontsize',15);
@@ -955,7 +955,7 @@ hold on;
 grid on;
 b=bar(q);
 ch = get(b,'children');
-set(gca,'XTickLabel',{'', 'No Limit', '', 'Bandwidth Limit', '', 'Added Delay', '', 'Wireless'},'fontsize',10)
+set(gca,'XTickLabel',{'', 'No Limit', '', 'Bandwidth Limit', '', 'Added Delay', '', 'Wireless'},'fontsize',15)
 legend('Path 1', 'Path 2', 'Path 3', 'Path 4');
 % xlabel('Seconds','fontsize',15);
 ylabel('ms','fontsize',15);
@@ -999,10 +999,11 @@ tp = [mpip_emulab mptcp_emulab together_emulab;
         mpip_verizon mptcp_verizon together_verizon];
 
 figure;
+set(gcf,'outerposition',get(0,'screensize'));
 hold on;
 grid on;
 b=bar(tp);
-set(gca,'XTickLabel',{'', 'Optimum & Optimum', '', '', '', '', 'Optimum & Verizon','',''},'fontsize',10)
+set(gca,'XTickLabel',{'', 'Optimum & Optimum', '', '', '', '', 'Optimum & Verizon','',''},'fontsize',13)
 legend('MPIP', 'MPTCP', 'Together', 2);
 
 xlabel('','fontsize',15);
@@ -1014,11 +1015,12 @@ patp = [p1_emulab p2_emulab;
             p1_verizon p2_verizon];
 
 figure;
+set(gcf,'outerposition',get(0,'screensize'));
 hold on;
 grid on;
 b=bar(patp);
-set(gca,'XTickLabel',{'', 'Optimum & Optimum', '', '', '', '', 'Optimum & Verizon','',''},'fontsize',10)
-legend('P1', 'P2', 2);
+set(gca,'XTickLabel',{'', 'Optimum & Optimum', '', '', '', '', 'Optimum & Verizon','',''},'fontsize',13)
+legend('Path 1', 'Path 2', 2);
 xlabel('','fontsize',15);
 ylabel('Mbps','fontsize',15);
-print -dpsc2 Z:\home\bill\gbtian\research\kernel\mptcp\conext14\fig\emulab_pttp_bar.eps;
+print -dpsc2 Z:\home\bill\gbtian\research\kernel\mptcp\conext14\fig\emulab_patp_bar.eps;
