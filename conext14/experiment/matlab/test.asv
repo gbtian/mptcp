@@ -1,6 +1,23 @@
-data1 = csvread('Z:\home\bill\gbtian\research\kernel\experiment\data\verizon\mpip.csv');
-data2 = csvread('Z:\home\bill\gbtian\research\kernel\experiment\data\verizon\mptcp.csv');
-data3 = csvread('Z:\home\bill\gbtian\research\kernel\experiment\data\verizon\together.csv');
+Y=rand(4,3);
+h=bar(Y);
+ybuff=2;
+for i=1:length(h)
+    XDATA=get(get(h(i),'Children'),'XData');
+    YDATA=get(get(h(i),'Children'),'YData');
+    for j=1:size(XDATA,2)
+        x=XDATA(1,j)+(XDATA(3,j)-XDATA(1,j))/2;
+        y=YDATA(2,j)+ybuff;
+        t=[num2str(YDATA(2,j),3) ,'%'];
+        text(x,y,t,'Color','k','HorizontalAlignment','left','Rotation',90)
+    end
+end
+ylim([0 100])
+
+
+
+data1 = csvread('Z:\home\bill\gbtian\research\kernel\mptcp\conext14\experiment\data\verizon\mpip.csv');
+data2 = csvread('Z:\home\bill\gbtian\research\kernel\mptcp\conext14\experiment\data\verizon\mptcp.csv');
+data3 = csvread('Z:\home\bill\gbtian\research\kernel\mptcp\conext14\experiment\data\verizon\together.csv');
 
 
 mpip_verizon = mean(data1(:,4))*8/M;
@@ -11,9 +28,21 @@ p1_verizon = mean(data1(:,2))*8/M;
 p2_verizon = mean(data1(:,3))*8/M;
 
 
-data1 = csvread('Z:\home\bill\gbtian\research\kernel\experiment\data\10\mpip.csv');
-data2 = csvread('Z:\home\bill\gbtian\research\kernel\experiment\data\10\mptcp.csv');
-data3 = csvread('Z:\home\bill\gbtian\research\kernel\experiment\data\10\together.csv');
+data1 = csvread('Z:\home\bill\gbtian\research\kernel\mptcp\conext14\experiment\data\4g\mpip.csv');
+data2 = csvread('Z:\home\bill\gbtian\research\kernel\mptcp\conext14\experiment\data\4g\mptcp.csv');
+data3 = csvread('Z:\home\bill\gbtian\research\kernel\mptcp\conext14\experiment\data\4g\together.csv');
+
+
+mpip_4g = mean(data1(:,4))*8/M;
+mptcp_4g = mean(data2(:,4))*8/M;
+together_4g = mean(data3(:,4))*8/M;
+
+p1_4g = mean(data1(:,2))*8/M;
+p2_4g = mean(data1(:,3))*8/M;
+
+data1 = csvread('Z:\home\bill\gbtian\research\kernel\mptcp\conext14\experiment\data\10\mpip.csv');
+data2 = csvread('Z:\home\bill\gbtian\research\kernel\mptcp\conext14\experiment\data\10\mptcp.csv');
+data3 = csvread('Z:\home\bill\gbtian\research\kernel\mptcp\conext14\experiment\data\10\together.csv');
 
 
 mpip_emulab = mean(data1(:,1))*8/M;
@@ -21,39 +50,55 @@ mptcp_emulab = mean(data2(:,1))*8/M;
 together_emulab = mean(data3(:,1))*8/M;
 
 
-data1 = csvread('Z:\home\bill\gbtian\research\kernel\experiment\data\10\1.csv');
-data2 = csvread('Z:\home\bill\gbtian\research\kernel\experiment\data\10\2.csv');
+data1 = csvread('Z:\home\bill\gbtian\research\kernel\mptcp\conext14\experiment\data\10\1.csv');
+data2 = csvread('Z:\home\bill\gbtian\research\kernel\mptcp\conext14\experiment\data\10\2.csv');
 
 p1_emulab = mean(data1(:,8))*8000/M;
 p2_emulab = mean(data2(:,8))*8000/M;
 
 
 tp = [mpip_emulab mptcp_emulab together_emulab;
-        mpip_verizon mptcp_verizon together_verizon];
+        mpip_verizon mptcp_verizon together_verizon;
+        mpip_4g mptcp_4g together_4g];
 
 figure;
 set(gcf,'outerposition',get(0,'screensize'));
 hold on;
 grid on;
-b=bar(tp);
-set(gca,'XTickLabel',{'', 'Optimum & Optimum', '', '', '', 'Optimum & Verizon','',''},'fontsize',15)
+h=bar(tp);
+
+for i=1:length(h)    
+    XDATA=get(get(h(i),'Children'),'XData');
+    YDATA=get(get(h(i),'Children'),'YData');
+
+    for j=1:size(XDATA,2)
+            x=XDATA(1,j)+(XDATA(3,j)-XDATA(1,j))/2;
+            y=YDATA(2,j)+0.5;
+            t=[num2str(YDATA(2,j),3) ];
+            text(x,y,t,'Color','k','fontsize',13)
+    end
+end
+    
+set(gca,'XTickLabel',{'', 'Optimum & Optimum', '', 'Optimum & Verizon','','Optimum & 4G'},'fontsize',13)
 legend('MPIP', 'MPTCP', 'Together', 2);
 
 xlabel('','fontsize',15);
 ylabel('Mbps','fontsize',15);
+ylim([0 20])
 print -dpsc2 Z:\home\bill\gbtian\research\kernel\mptcp\conext14\fig\emulab_tp_bar.eps;
 
 
 patp = [p1_emulab p2_emulab;
-            p1_verizon p2_verizon];
+            p1_verizon p2_verizon;
+            p1_4g p2_4g];
 
 figure;
 set(gcf,'outerposition',get(0,'screensize'));
 hold on;
 grid on;
 b=bar(patp);
-set(gca,'XTickLabel',{'', 'Optimum & Optimum', '', '', '', '', 'Optimum & Verizon','',''},'fontsize',15)
-legend('P1', 'P2', 2);
+set(gca,'XTickLabel',{'', 'Optimum & Optimum', '', 'Optimum & Verizon','','Optimum & 4G'},'fontsize',13)
+legend('Path 1', 'Path 2', 2);
 xlabel('','fontsize',15);
 ylabel('Mbps','fontsize',15);
-print -dpsc2 Z:\home\bill\gbtian\research\kernel\mptcp\conext14\fig\emulab_pttp_bar.eps;
+print -dpsc2 Z:\home\bill\gbtian\research\kernel\mptcp\conext14\fig\emulab_patp_bar.eps;
