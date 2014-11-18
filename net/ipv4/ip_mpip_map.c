@@ -1154,8 +1154,10 @@ int update_path_info(unsigned char session_id)
 		}
 		else
 		{
-			if (path_info->bw <= sysctl_mpip_bw_step)
-				path_info->bw = 1;
+//			if (path_info->bw <= sysctl_mpip_bw_step)
+//				path_info->bw = 1;
+			if (path_info->bw <= 100)
+				path_info->bw = 100;
 			else
 				path_info->bw -= sysctl_mpip_bw_step;
 		}
