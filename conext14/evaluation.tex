@@ -42,7 +42,7 @@ As the dominating traffic, TCP plays a critical role in today's Internet. We try
 In Section~\ref{sec:outoforder}, we explained why out-of-order is a problem that must be dealt with in multipath implementations, and we also proposed our solution to this problem. To verify our proposition, we replace one NIC card on the client with a wireless interface. In our experiment plat, the RTT of one path with two wired NICs is about $0.1$ms while paths with one the wireless NIC is about $0.5$ms which will generate enough out-of-order packets. Also, to make sure that there are heavy load of packets to be assigned to the wireless NIC card, instead of using the standard path selection algorithm in Section~\ref{sec:selection}, we fix the weight of all the four paths to be the same. Then we make sure that $50\%$ of outbound packets will be assigned to the wireless NIC.
 With this configuration, we do a regular TCP transmission that lasts for $20$ minutes with out-of-order process enabled and disabled respectively. The result is shown in Figure~\ref{fig.outoforder}.
 
-With the same configuration, Figure~\ref{fig.outoforder} shows the improvement brought by the out-of-order process. The average throughput is $XX$Mbps and $XX$Mbps with/out out-of-order process respectively. The improvement maybe trivial if the delay on all the paths is the same because most packets will arrive at the receiver in the order of being sent out. But for multipath connections, it can be very often that each path goes through a totally different route, that is where out-of-order happens most. In all following experiments, we enable out-of-order process by default.
+With the same configuration, Figure~\ref{fig.outoforder} shows the improvement brought by the out-of-order process. The average throughput is $28.2$Mbps and $19.4$Mbps with/out out-of-order process respectively. The improvement maybe trivial if the delay on all the paths is the same because most packets will arrive at the receiver in the order of being sent out. But for multipath connections, it can be very often that each path goes through a totally different route, that is where out-of-order happens most. In all following experiments, we enable out-of-order process by default.
 
 \subsubsection{Dynamic Addition/Removal of Path}
 \label{sec:switch}
@@ -76,6 +76,8 @@ By limiting the bandwidth from one NIC of the client to the two NICs on the serv
 In our experiment plat, with wired connection, the round trip time is trivial(about $0.1$ms). To emulate a connection with more delay, we manually add $5$ms delay to each NIC on the client and get result of the fourth bar group in Figure~\ref{fig.tp_bar}. The result is roughly the same as without limit.
 
 By replacing one NIC on the client to a wireless interface, we evaluate the performance of MPIP under wireless connection. In this case, MPTCP achieves higher throughput than MPIP, but still, when they work together, the highest throughput is achieved.
+
+The error bar on top of each bar is the standard deviation the related bar. For wired connection, the overall variation of one session is much smaller than independent paths' variation. This happens because the coupling among paths causes variations for one single path as shown in Figure~\ref{fig.nolimittpcomp}, but with every path compensating for each other, the overall variation is small. We don't see much difference in wireless connection because most traffic is assigned to the two wired paths equally during the experiment. If the assignment of traffic is not equal during the experiment, we still expect large difference between overall variation and paths' variation. The two wireless paths have small absolute variation value, but comparing to their small throughput, the value of variation is actually very large.
 
 \begin{figure}
 \centering
@@ -177,7 +179,8 @@ For paths that have wireless interface, the fluctuation is very large. Besides t
 Average &   &   &   & \\
 (ms) & $4.15$ & $3.84$ & $1.88$ & $2.09$ \\
 \hline
-Standard Deviation  & $13.03$ & $11.27$ & $0.79$ & $0.80$ \\
+Standard &   &   &   & \\
+Deviation  & $13.03$ & $11.27$ & $0.79$ & $0.80$ \\
 \hline
 \end{tabular}
 \end{table}
@@ -202,6 +205,8 @@ With this configuration, we do three experiments for different bottleneck placem
 When sharing bottleneck, all three sessions fully use the capacity of the connection with little difference. The two paths don't share the traffic equally either because of coupling between them. When Optimum and FIOS are used, overall, MPTCP gets the lowest throughput among the three sessions followed by MPIP. Still, when MPIP and MPTCP combine, the highest throughput is achieved. As for the assignment of packets for the two paths in MPIP, P$1$ in Figure~\ref{fig.emulab_tp_bar} is the path for Optimum and P$2$ is for FIOS. Approximately the traffic is assigned to each path according to the capacity of each link. This proves that the delay-based path selection algorithm in Section~\ref{sec:delay} also works perfectly in real Internet. 
 
 The result for $4$G connection is slightly different. In this case, MPTCP gets the highest throughput, the other two sessions get roughly this same throughput which is lower than MPTCP. According to our observation, comparing to Optimum and FIOS, the delay of $4$G connection is very unstable, this causes very high queuing delay. According to the delay-based path selection algorithm, for most of time, the weight of the $4$G path is very small. This can be shown in the traffic assignment for the $4$G path in Figure~\ref{fig.emulab_patp_bar}. When MPIP and MPTCP work together, both TCP sessions have two paths at IP level, neither makes good use of the $4$G path because of the unstable delay.
+
+When both paths share the same bottleneck, the two paths are assigned with different amount of traffic because of coupling between the two paths, that's why we see the same difference of variation as in Figure~\ref{fig.tp_bar} and \ref{fig.path_tp_bar}. Both overall variation and single path's variation get large value when the two paths have different bottlenecks.
 
 \begin{figure}[H]
 \centering

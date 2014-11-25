@@ -786,9 +786,9 @@ data1 = csvread('Z:\home\bill\gbtian\research\kernel\mptcp\conext14\experiment\d
 data2 = csvread('Z:\home\bill\gbtian\research\kernel\mptcp\conext14\experiment\data\4\mptcp.csv');
 data3 = csvread('Z:\home\bill\gbtian\research\kernel\mptcp\conext14\experiment\data\4\together.csv');
 
-mpip_no_limit = mean(data1(:,1))/M;
-mptcp_no_limit = mean(data2(:,1))/M;
-together_no_limit = mean(data3(:,1))/M;
+mpip_no_limit = mean(data1(:,1)/M);
+mptcp_no_limit = mean(data2(:,1)/M);
+together_no_limit = mean(data3(:,1)/M);
 
 error_mpip_no_limit = std(data1(:,1)/M);
 error_mptcp_no_limit = std(data2(:,1)/M);
@@ -994,7 +994,6 @@ set(gcf,'outerposition',get(0,'screensize'));
 hold on;
 grid on;
 h=bar(tp);
-errorbar(tp, error_tp);
 for i=1:length(h)    
     XDATA=get(get(h(i),'Children'),'XData');
     YDATA=get(get(h(i),'Children'),'YData');
@@ -1008,23 +1007,32 @@ for i=1:length(h)
 end
 set(gca,'XTickLabel',{'', 'No Limit', '', 'Bandwidth Limit', '', 'Added Delay', '', 'Wireless'},'fontsize',15)
 legend('MPIP', 'MPTCP', 'Together');
+
+numgroups = size(tp, 1); 
+numbars = size(tp, 2); 
+groupwidth = min(0.8, numbars/(numbars+1.5));
+for i = 1:numbars
+      % Based on barweb.m by Bolu Ajiboye from MATLAB File Exchange
+      x = (1:numgroups) - groupwidth/2 + (2*i-1) * groupwidth / (2*numbars);  % Aligning error bar with individual bar
+      errorbar(x, tp(:,i), error_tp(:,i), 'k', 'linestyle', 'none', 'Linewidth',2);      
+end
+
 % xlabel('','fontsize',15);
 ylabel('Mbps','fontsize',15);
 ylim([0 200])
 print -dpsc2 Z:\home\bill\gbtian\research\kernel\mptcp\conext14\fig\tp_bar.eps;
 
 
-patp = [tp1_no_limit tp2_no_limit tp3_no_limit tp3_no_limit; 
+patp = [tp1_no_limit tp2_no_limit tp3_no_limit tp4_no_limit; 
 %             tp1_limit tp2_limit tp3_limit tp4_limit;
             tp1_pair tp2_pair tp3_pair tp4_pair; 
             tp1_delay tp2_delay tp3_delay tp4_delay; 
             tp1_wireless tp2_wireless tp3_wireless tp4_wireless];
 
-error_patp = [error_tp1_no_limit error_tp2_no_limit error_tp3_no_limit error_tp3_no_limit; 
-%             tp1_limit tp2_limit tp3_limit tp4_limit;
+error_patp = [error_tp1_no_limit error_tp2_no_limit error_tp3_no_limit error_tp4_no_limit; 
             error_tp1_pair error_tp2_pair error_tp3_pair error_tp4_pair; 
             error_tp1_delay error_tp2_delay error_tp3_delay error_tp4_delay; 
-           error_ tp1_wireless error_tp2_wireless error_tp3_wireless error_tp4_wireless];
+           error_tp1_wireless error_tp2_wireless error_tp3_wireless error_tp4_wireless];
 
        
 figure;
@@ -1032,7 +1040,6 @@ set(gcf,'outerposition',get(0,'screensize'));
 hold on;
 grid on;
 h=bar(patp);
-errorbar(patp, error_patp);
 for i=1:length(h)    
     XDATA=get(get(h(i),'Children'),'XData');
     YDATA=get(get(h(i),'Children'),'YData');
@@ -1047,6 +1054,16 @@ end
 
 set(gca,'XTickLabel',{'', 'No Limit', '', 'Bandwidth Limit', '', 'Added Delay', '', 'Wireless'},'fontsize',15)
 legend('Path 1', 'Path 2', 'Path 3', 'Path 4');
+
+numgroups = size(patp, 1); 
+numbars = size(patp, 2); 
+groupwidth = min(0.8, numbars/(numbars+1.5));
+for i = 1:numbars
+      % Based on barweb.m by Bolu Ajiboye from MATLAB File Exchange
+      x = (1:numgroups) - groupwidth/2 + (2*i-1) * groupwidth / (2*numbars);  % Aligning error bar with individual bar
+      errorbar(x, patp(:,i), error_patp(:,i), 'k', 'linestyle', 'none', 'Linewidth',2);      
+end
+
 % xlabel('Seconds','fontsize',15);
 ylabel('Mbps','fontsize',15);
 ylim([0 100])
@@ -1071,7 +1088,7 @@ set(gcf,'outerposition',get(0,'screensize'));
 hold on;
 grid on;
 h=bar(q);
-errorbar(q, error_q);
+
 for i=1:length(h)    
     XDATA=get(get(h(i),'Children'),'XData');
     YDATA=get(get(h(i),'Children'),'YData');
@@ -1086,11 +1103,20 @@ end
 
 set(gca,'XTickLabel',{'', 'No Limit', '', 'Bandwidth Limit', '', 'Added Delay', '', 'Wireless'},'fontsize',15)
 legend('Path 1', 'Path 2', 'Path 3', 'Path 4');
+
+numgroups = size(q, 1); 
+numbars = size(q, 2); 
+groupwidth = min(0.8, numbars/(numbars+1.5));
+for i = 1:numbars
+      % Based on barweb.m by Bolu Ajiboye from MATLAB File Exchange
+      x = (1:numgroups) - groupwidth/2 + (2*i-1) * groupwidth / (2*numbars);  % Aligning error bar with individual bar
+      errorbar(x, q(:,i), error_q(:,i), 'k', 'linestyle', 'none', 'Linewidth',2);      
+end
+
 % xlabel('Seconds','fontsize',15);
 ylabel('ms','fontsize',15);
 ylim([0 20])
 print -dpsc2 Z:\home\bill\gbtian\research\kernel\mptcp\conext14\fig\path_qd_bar.eps;
-
 
 
 
@@ -1100,47 +1126,74 @@ data2 = csvread('Z:\home\bill\gbtian\research\kernel\mptcp\conext14\experiment\d
 data3 = csvread('Z:\home\bill\gbtian\research\kernel\mptcp\conext14\experiment\data\verizon\together.csv');
 
 
-mpip_verizon = mean(data1(:,4))*8/M;
-mptcp_verizon = mean(data2(:,4))*8/M;
-together_verizon = mean(data3(:,4))*8/M;
+mpip_verizon = mean(data1(:,4)*8/M);
+mptcp_verizon = mean(data2(:,4)*8/M);
+together_verizon = mean(data3(:,4)*8/M);
 
-p1_verizon = mean(data1(:,2))*8/M;
-p2_verizon = mean(data1(:,3))*8/M;
+error_mpip_verizon = std(data1(:,4)*8/M);
+error_mptcp_verizon = std(data2(:,4)*8/M);
+error_together_verizon = std(data3(:,4)*8/M);
 
+
+p1_verizon = mean(data1(:,2)*8/M);
+p2_verizon = mean(data1(:,3)*8/M);
+
+error_p1_verizon = std(data1(:,2)*8/M);
+error_p2_verizon = std(data1(:,3)*8/M);
 
 data1 = csvread('Z:\home\bill\gbtian\research\kernel\mptcp\conext14\experiment\data\4g\mpip.csv');
 data2 = csvread('Z:\home\bill\gbtian\research\kernel\mptcp\conext14\experiment\data\4g\mptcp.csv');
 data3 = csvread('Z:\home\bill\gbtian\research\kernel\mptcp\conext14\experiment\data\4g\together.csv');
 
 
-mpip_4g = mean(data1(:,4))*8/M;
-mptcp_4g = mean(data2(:,4))*8/M;
-together_4g = mean(data3(:,4))*8/M;
+mpip_4g = mean(data1(:,4)*8/M);
+mptcp_4g = mean(data2(:,4)*8/M);
+together_4g = mean(data3(:,4)*8/M);
 
-p1_4g = mean(data1(:,2))*8/M;
-p2_4g = mean(data1(:,3))*8/M;
+error_mpip_4g = std(data1(:,4)*8/M);
+error_mptcp_4g = std(data2(:,4)*8/M);
+error_together_4g = std(data3(:,4)*8/M);
+
+
+p1_4g = mean(data1(:,2)*8/M);
+p2_4g = mean(data1(:,3)*8/M);
+
+error_p1_4g = std(data1(:,2)*8/M);
+error_p2_4g = std(data1(:,3)*8/M);
+
 
 data1 = csvread('Z:\home\bill\gbtian\research\kernel\mptcp\conext14\experiment\data\10\mpip.csv');
 data2 = csvread('Z:\home\bill\gbtian\research\kernel\mptcp\conext14\experiment\data\10\mptcp.csv');
 data3 = csvread('Z:\home\bill\gbtian\research\kernel\mptcp\conext14\experiment\data\10\together.csv');
 
 
-mpip_emulab = mean(data1(:,1))*8/M;
-mptcp_emulab = mean(data2(:,1))*8/M;
-together_emulab = mean(data3(:,1))*8/M;
+mpip_emulab = mean(data1(:,1)*8/M);
+mptcp_emulab = mean(data2(:,1)*8/M);
+together_emulab = mean(data3(:,1)*8/M);
+
+error_mpip_emulab = std(data1(:,1)*8/M);
+error_mptcp_emulab = std(data2(:,1)*8/M);
+error_together_emulab = std(data3(:,1)*8/M);
 
 
 data1 = csvread('Z:\home\bill\gbtian\research\kernel\mptcp\conext14\experiment\data\10\1.csv');
 data2 = csvread('Z:\home\bill\gbtian\research\kernel\mptcp\conext14\experiment\data\10\2.csv');
 
-p1_emulab = mean(data1(:,8))*8000/M;
-p2_emulab = mean(data2(:,8))*8000/M;
+p1_emulab = mean(data1(:,8)*8000/M);
+p2_emulab = mean(data2(:,8)*8000/M);
 
+error_p1_emulab = std(data1(:,8)*8000/M);
+error_p2_emulab = std(data2(:,8)*8000/M);
 
 tp = [mpip_emulab mptcp_emulab together_emulab;
         mpip_verizon mptcp_verizon together_verizon;
         mpip_4g mptcp_4g together_4g];
 
+error_tp = [error_mpip_emulab error_mptcp_emulab error_together_emulab;
+        error_mpip_verizon error_mptcp_verizon error_together_verizon;
+        error_mpip_4g error_mptcp_4g error_together_4g];
+
+    
 figure;
 set(gcf,'outerposition',get(0,'screensize'));
 hold on;
@@ -1161,6 +1214,15 @@ end
     
 set(gca,'XTickLabel',{'', 'Optimum & Optimum', '', 'Optimum & Verizon','','Optimum & 4G'},'fontsize',13)
 legend('MPIP', 'MPTCP', 'Together', 2);
+
+numgroups = size(tp, 1); 
+numbars = size(tp, 2); 
+groupwidth = min(0.8, numbars/(numbars+1.5));
+for i = 1:numbars
+      % Based on barweb.m by Bolu Ajiboye from MATLAB File Exchange
+      x = (1:numgroups) - groupwidth/2 + (2*i-1) * groupwidth / (2*numbars);  % Aligning error bar with individual bar
+      errorbar(x, tp(:,i), error_tp(:,i), 'k', 'linestyle', 'none', 'Linewidth',2);      
+end
 
 xlabel('','fontsize',15);
 ylabel('Mbps','fontsize',15);
@@ -1192,6 +1254,17 @@ end
 
 set(gca,'XTickLabel',{'', 'Optimum & Optimum', '', 'Optimum & Verizon','','Optimum & 4G'},'fontsize',13)
 legend('Path 1', 'Path 2', 2);
+
+numgroups = size(patp, 1); 
+numbars = size(patp, 2); 
+groupwidth = min(0.8, numbars/(numbars+1.5));
+for i = 1:numbars
+      % Based on barweb.m by Bolu Ajiboye from MATLAB File Exchange
+      x = (1:numgroups) - groupwidth/2 + (2*i-1) * groupwidth / (2*numbars);  % Aligning error bar with individual bar
+      errorbar(x, patp(:,i), error_patp(:,i), 'k', 'linestyle', 'none', 'Linewidth',2);      
+end
+
+
 xlabel('','fontsize',15);
 ylabel('Mbps','fontsize',15);
 ylim([0 10])

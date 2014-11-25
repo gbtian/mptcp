@@ -984,12 +984,17 @@ tp = [mpip_no_limit mptcp_no_limit together_no_limit;
         mpip_delay mptcp_delay together_delay; 
         mpip_wireless mptcp_wireless together_wireless];
 
+error_tp = [error_mpip_no_limit error_mptcp_no_limit error_together_no_limit; 
+        error_mpip_pair error_mptcp_pair error_together_pair; 
+        error_mpip_delay error_mptcp_delay error_together_delay; 
+        error_mpip_wireless error_mptcp_wireless error_together_wireless];
+    
 figure;
 set(gcf,'outerposition',get(0,'screensize'));
 hold on;
 grid on;
 h=bar(tp);
-errorbar(tp, 
+errorbar(tp, error_tp);
 for i=1:length(h)    
     XDATA=get(get(h(i),'Children'),'XData');
     YDATA=get(get(h(i),'Children'),'YData');
@@ -1015,11 +1020,19 @@ patp = [tp1_no_limit tp2_no_limit tp3_no_limit tp3_no_limit;
             tp1_delay tp2_delay tp3_delay tp4_delay; 
             tp1_wireless tp2_wireless tp3_wireless tp4_wireless];
 
+error_patp = [error_tp1_no_limit error_tp2_no_limit error_tp3_no_limit error_tp3_no_limit; 
+%             tp1_limit tp2_limit tp3_limit tp4_limit;
+            error_tp1_pair error_tp2_pair error_tp3_pair error_tp4_pair; 
+            error_tp1_delay error_tp2_delay error_tp3_delay error_tp4_delay; 
+           error_ tp1_wireless error_tp2_wireless error_tp3_wireless error_tp4_wireless];
+
+       
 figure;
 set(gcf,'outerposition',get(0,'screensize'));
 hold on;
 grid on;
 h=bar(patp);
+errorbar(patp, error_patp);
 for i=1:length(h)    
     XDATA=get(get(h(i),'Children'),'XData');
     YDATA=get(get(h(i),'Children'),'YData');
@@ -1034,6 +1047,16 @@ end
 
 set(gca,'XTickLabel',{'', 'No Limit', '', 'Bandwidth Limit', '', 'Added Delay', '', 'Wireless'},'fontsize',15)
 legend('Path 1', 'Path 2', 'Path 3', 'Path 4');
+
+numgroups = size(patp, 1); 
+numbars = size(patp, 2); 
+groupwidth = min(0.8, numbars/(numbars+1.5));
+for i = 1:numbars
+      % Based on barweb.m by Bolu Ajiboye from MATLAB File Exchange
+      x = (1:numgroups) - groupwidth/2 + (2*i-1) * groupwidth / (2*numbars);  % Aligning error bar with individual bar
+      errorbar(x, q(:,i), error_q(:,i), 'k', 'linestyle', 'none', 'Linewidth',2);      
+end
+
 % xlabel('Seconds','fontsize',15);
 ylabel('Mbps','fontsize',15);
 ylim([0 100])
@@ -1046,6 +1069,13 @@ q = [q1_no_limit q2_no_limit q3_no_limit q3_no_limit;
         q1_delay q2_delay q3_delay q4_delay; 
         q1_wireless q2_wireless q3_wireless q4_wireless];
 
+    
+error_q = [error_q1_no_limit error_q2_no_limit error_q3_no_limit error_q3_no_limit; 
+%         q1_limit q2_limit q3_limit q4_limit;
+        error_q1_pair error_q2_pair error_q3_pair error_q4_pair; 
+        error_q1_delay error_q2_delay error_q3_delay error_q4_delay; 
+        error_q1_wireless error_q2_wireless error_q3_wireless error_q4_wireless];
+    
 figure;
 set(gcf,'outerposition',get(0,'screensize'));
 hold on;
@@ -1066,6 +1096,16 @@ end
 
 set(gca,'XTickLabel',{'', 'No Limit', '', 'Bandwidth Limit', '', 'Added Delay', '', 'Wireless'},'fontsize',15)
 legend('Path 1', 'Path 2', 'Path 3', 'Path 4');
+
+numgroups = size(q, 1); 
+numbars = size(q, 2); 
+groupwidth = min(0.8, numbars/(numbars+1.5));
+for i = 1:numbars
+      % Based on barweb.m by Bolu Ajiboye from MATLAB File Exchange
+      x = (1:numgroups) - groupwidth/2 + (2*i-1) * groupwidth / (2*numbars);  % Aligning error bar with individual bar
+      errorbar(x, q(:,i), error_q(:,i), 'k', 'linestyle', 'none', 'Linewidth',2);      
+end
+
 % xlabel('Seconds','fontsize',15);
 ylabel('ms','fontsize',15);
 ylim([0 20])
