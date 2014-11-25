@@ -195,8 +195,14 @@ When node $B$ needs to send packet back to node $A$, it chooses the record with 
 
 %At meantime, the column \emph{Feedback Time} is updated with current system time. If one path hasn't received feedback information from the receiver for some threshold value of time, it means this path is literally dead, then the system considers the path to be obsolete and remove the path from Table~\ref{tb.pi}.
 
-In practice, IP addresses of devices can be removed or added dynamically. Especially for mobile device, it can connect to different access points(WiFi hotspot/Cellular Tower) at different time, during this stage, its IP address can be changed, removed or added dynamically. Under this situation, the system supports dynamic addition and removal of paths from Table~\ref{tb.pi} because of IP address changes. When IP address change happens, the value of \emph{CM Flags} is set to be $Flags\_IP\_Change$ in the CM block. After receiving packets of this flag, the receiver knows that IP address change happened on the sender, it will remove all entries of this connection in all tables, then add the combination of IP address and port number contained in the received packet into all the tables as if that combination is MPIP enabled.
-Also, the sender does the same reset for this connection. After all these resets, there is only one path left for this connection, all the other paths will be added into the system through the normal process. By doing this path reconstruction, we achieve smooth switching during IP address changes. The higher layers won't know the whole process at all because there is always an active path transmitting data for the application.
+
+\subsubsection{Dynamic Addition/Removal of Paths}
+\label{sec:switch}
+
+As multipath feature enabled on a device, IP addresses of devices can be removed or added dynamically. Especially for mobile device, it can connect to different access points(WiFi hotspot/Cellular Tower) at different time, during this stage, its IP address can be changed, removed or added dynamically. Under this situation, the system supports dynamic addition and removal of paths from Table~\ref{tb.pi}.
+
+When IP address change happens, the value of \emph{CM Flags} is set to be $Flags\_IP\_Change$ in the CM block when sending out packets. After receiving packets of this flag, the receiver knows that IP address change happened on the sender, it will remove all entries of this connection in all tables, then add the combination of IP address and port number contained in the received packet into all the tables as if that combination is MPIP enabled.
+Also, the sender does the same reset for this connection. After all these resets, there is only one path left for this connection, all the other paths will be added into the system through the normal process. By doing this path reconstruction, we achieve smooth transmission during IP address changes which is transparent to higher layers.
 
 
 \subsection{Periodical Heartbeat}

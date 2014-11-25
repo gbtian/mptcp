@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2014.5.2)  18 NOV 2014 16:51
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2014.5.2)  24 NOV 2014 14:57
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -6,7 +6,7 @@ entering extended mode
 (./mpip.tex
 LaTeX2e <2011/06/27>
 Babel <3.9f> and hyphenation patterns for 78 languages loaded.
-(./sig-alternate.cls
+(./sig-alternate-10pt.cls
 (/usr/share/texlive/texmf-dist/tex/latex/graphics/epsfig.sty
 Package: epsfig 1999/02/16 v1.7a (e)psfig emulation (SPQR)
 
@@ -114,8 +114,8 @@ LaTeX Font Info:    Redeclaring font encoding OMS on input line 567.
 LaTeX Info: Redefining \[ on input line 2665.
 LaTeX Info: Redefining \] on input line 2666.
 )
-Document Class 'sig-alternate' <23rd. May '12>. Modified by G.K.M. Tobin/Gerry 
-Murray
+Document Class 'sig-alternate' <22nd. April '09>. Modified by G.K.M. Tobin/Gerr
+y Murray
 Based in part upon document Style `acmconf' <22 May 89>. Hacked 4/91 by
 shivers@cs.cmu.edu, 4/93 by theobald@cs.mcgill.ca
 Excerpts were taken from (Journal Style) 'esub2acm.cls'.
@@ -142,7 +142,11 @@ Questions on the style, SIGS policies, etc. to Adrienne Griscti griscti@acm.org
 \c@table=\count99
 \titleboxnotes=\toks23
 \titleboxnoteflag=\count100
-Document Class: sig-alternate 2012/05/23 - V2.5 - based on acmproc.cls V1.3 <No
+
+LaTeX Warning: You have requested document class `sig-alternate-10pt',
+               but the document class provides `sig-alternate'.
+
+Document Class: sig-alternate 2009/04/22 - V2.4 - based on acmproc.cls V1.3 <No
 v. 30 '99>
 (/usr/share/texlive/texmf-dist/tex/latex/base/latexsym.sty
 Package: latexsym 1998/08/17 v2.2e Standard LaTeX package (lasy symbols)
@@ -158,9 +162,8 @@ LaTeX Font Info:    Overwriting symbol font `lasy' in version `bold'
 \tntoksfour=\toks27
 \tntoksfive=\toks28
 \catcount=\count102
-\copyrightnotice=\toks29
-\conf=\toks30
-\confinfo=\toks31
+\conf=\toks29
+\confinfo=\toks30
 \c@part=\count103
 \c@section=\count104
 \c@subsection=\count105
@@ -168,14 +171,14 @@ LaTeX Font Info:    Overwriting symbol font `lasy' in version `bold'
 \c@paragraph=\count107
 
 Using 'Abbrev' bibliography style
-LaTeX Info: Redefining \cite on input line 1211.
+LaTeX Info: Redefining \cite on input line 1223.
 \bibindent=\dimen122
 \colcntr=\count108
 \saveb@x=\box29
-\copyrtyr=\toks32
-\acmcopyr=\toks33
-\boilerplate=\toks34
-\copyrightetc=\toks35
+\copyrtyr=\toks31
+\acmcopyr=\toks32
+\boilerplate=\toks33
+\copyrightetc=\toks34
 (/usr/share/texlive/texmf-dist/tex/latex/base/fontenc.sty
 Package: fontenc 2005/09/27 v1.99g Standard LaTeX package
 
@@ -215,15 +218,15 @@ nment
 (/usr/share/texlive/texmf-dist/tex/latex/float/float.sty
 Package: float 2001/11/08 v1.3d Float enhancements (AL)
 \c@float@type=\count113
-\float@exts=\toks36
+\float@exts=\toks35
 \float@box=\box30
-\@float@everytoks=\toks37
+\@float@everytoks=\toks36
 \@floatcapt=\box31
 )
 (/usr/share/texlive/texmf-dist/tex/latex/base/ifthen.sty
 Package: ifthen 2001/05/26 v1.1c Standard LaTeX ifthen package (DPC)
 )
-\@float@every@algorithm=\toks38
+\@float@every@algorithm=\toks37
 \c@algorithm=\count114
 )
 (/usr/share/texlive/texmf-dist/tex/latex/algorithms/algorithmic.sty
@@ -302,8 +305,8 @@ Package: psfrag 1998/04/11 v3.04 PSfrag (MCG)
 )
 (/usr/share/texlive/texmf-dist/tex/latex/tools/verbatim.sty
 Package: verbatim 2003/08/22 v1.5q LaTeX2e package for verbatim enhancements
-\every@verbatim=\toks39
-\verbatim@line=\toks40
+\every@verbatim=\toks38
+\verbatim@line=\toks39
 \verbatim@in@stream=\read1
 )
 (/usr/share/texlive/texmf-dist/tex/latex/graphics/color.sty
@@ -361,6 +364,9 @@ LaTeX Warning: Label `fig.outoforder' multiply defined.
 
 LaTeX Warning: Label `sec:tcp' multiply defined.
 
+
+LaTeX Warning: Label `sec:switch' multiply defined.
+
 )
 \openout1 = `mpip.aux'.
 
@@ -387,12 +393,12 @@ File: t1ptm.fd 2001/06/04 font definitions for T1/ptm.
 \scratchbox=\box32
 \nofMPsegments=\count128
 \nofMParguments=\count129
-\everyMPshowfont=\toks41
+\everyMPshowfont=\toks40
 \MPscratchCnt=\count130
 \MPscratchDim=\dimen133
 \MPnumerator=\count131
 \makeMPintoPDFobject=\count132
-\everyMPtoPDFconversion=\toks42
+\everyMPtoPDFconversion=\toks41
 )
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: End \AtBeginDocument code.
@@ -414,19 +420,7 @@ Overfull \hbox (10.79999pt too wide) in paragraph at lines 169--169
  [][][] 
  []
 
-
-Overfull \hbox (4.97694pt too wide) in paragraph at lines 174--175
-\T1/ptm/m/n/9 Multipath In-ter-net trans-mis-sion has be-come avail-able in re-
-cent years.
- []
-
 (./intro.tex
-Overfull \hbox (3.33897pt too wide) in paragraph at lines 12--13
-[]\T1/ptm/m/n/9 Based on all weak-nesses of MPTCP and fea-si-bil-ity study of M
-PIP,
- []
-
-
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [1
@@ -434,23 +428,16 @@ Non-PDF special ignored!{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}
 
 
 ]
-Overfull \hbox (2.95279pt too wide) in paragraph at lines 14--15
-[]\T1/ptm/m/n/9 By im-ple-ment-ing the pro-to-type of MPIP, our con-tri-bu-tion
- is three-
+Overfull \hbox (2.93822pt too wide) in paragraph at lines 16--17
+[]\T1/ptm/m/n/10 We pro-pose the over-all de-sign and ar-chi-tec-ture of MPIP.
  []
 
 ) (./related.tex) (./design.tex
-LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <9> not available
+LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <10> not available
 (Font)              Font shape `T1/ptm/b/n' tried instead on input line 39.
-
-Overfull \hbox (1.80086pt too wide) in paragraph at lines 76--85
+ [2]
+Overfull \hbox (23.86765pt too wide) in paragraph at lines 76--85
  [][] 
- []
-
-[2]
-Overfull \hbox (4.32928pt too wide) in paragraph at lines 94--95
-[]\T1/ptm/m/n/9 For TCP pro-to-col, we don't sim-ply pop-u-late a new TCP packe
-t
  []
 
 Package epstopdf Info: Source file: <fig/handshake.eps>
@@ -463,7 +450,7 @@ Package epstopdf Info: Source file: <fig/handshake.eps>
 d-to.pdf fig/handshake.eps>
 (epstopdf)             \includegraphics on input line 101.
 Package epstopdf Info: Output file is already uptodate.
-<fig/handshake-eps-converted-to.pdf, id=17, 525.965pt x 320.19624pt>
+<fig/handshake-eps-converted-to.pdf, id=16, 525.965pt x 320.19624pt>
 File: fig/handshake-eps-converted-to.pdf Graphic file (type pdf)
 
 <use fig/handshake-eps-converted-to.pdf>
@@ -471,6 +458,27 @@ Package pdftex.def Info: fig/handshake-eps-converted-to.pdf used on input line
 101.
 (pdftex.def)             Requested size: 192.00073pt x 116.88774pt.
  [3 <./fig/handshake-eps-converted-to.pdf>] [4]
+Overfull \hbox (3.87175pt too wide) in paragraph at lines 214--215
+[]\T1/ptm/m/n/10 All heart-beat pack-ets have a spe-cial flags value $\OML/cmm/
+m/it/10 Flags[]HB$
+ []
+
+
+Overfull \hbox (7.04807pt too wide) in paragraph at lines 223--224
+[]\T1/ptm/m/n/10 In the cur-rent In-ter-net, there are many high delay-bandwidt
+h
+ []
+
+
+Overfull \hbox (6.6177pt too wide) in paragraph at lines 239--240
+[]\T1/ptm/m/n/10 Processing de-lay. Time routers take to pro-cess the packet
+ []
+
+
+Overfull \hbox (7.28825pt too wide) in paragraph at lines 240--241
+[]\T1/ptm/m/n/10 Queuing de-lay. Time the packet spends in rout-ing queues 
+ []
+
 Package epstopdf Info: Source file: <fig/delay.eps>
 (epstopdf)                    date: 2014-05-15 00:50:55
 (epstopdf)                    size: 21016 bytes
@@ -479,32 +487,46 @@ Package epstopdf Info: Source file: <fig/delay.eps>
 (epstopdf)                    size: 18741 bytes
 (epstopdf)             Command: <repstopdf --outfile=fig/delay-eps-converted-to
 .pdf fig/delay.eps>
-(epstopdf)             \includegraphics on input line 243.
+(epstopdf)             \includegraphics on input line 249.
 Package epstopdf Info: Output file is already uptodate.
- <fig/delay-eps-converted-to.pdf, id=29, 1888.05376pt x 991.705pt>
+<fig/delay-eps-converted-to.pdf, id=27, 1888.05376pt x 991.705pt>
 File: fig/delay-eps-converted-to.pdf Graphic file (type pdf)
 
 <use fig/delay-eps-converted-to.pdf>
-Package pdftex.def Info: fig/delay-eps-converted-to.pdf used on input line 243.
+Package pdftex.def Info: fig/delay-eps-converted-to.pdf used on input line 249.
 
 (pdftex.def)             Requested size: 192.00073pt x 100.84085pt.
- [5 <./fig/delay-eps-converted-to.pdf>]
-Overfull \hbox (3.14084pt too wide) in paragraph at lines 401--402
-[]\T1/ptm/m/n/9 After the MPIP avail-abil-ity hand-shake has been suc-cess-full
-y com-
- []
-
-[6]
-Underfull \vbox (badness 2073) has occurred while \output is active []
-
- [7]
-Overfull \hbox (3.70923pt too wide) in paragraph at lines 479--480
-[]\T1/ptm/m/n/9 The over-all pro-cess of out-of-order packet is shown in Fig-ur
-e 4(b)[]. 
+ [5]
+Overfull \hbox (2.66655pt too wide) in paragraph at lines 259--260
+[]\T1/ptm/b/n/10 Minimum Net-work De-lay $\OML/cmm/m/it/10 D[]$\T1/ptm/m/n/10 .
+ Ev-ery time one node
  []
 
 
-LaTeX Warning: File `fig/outoforder.eps' not found on input line 483.
+Overfull \hbox (8.13182pt too wide) in paragraph at lines 304--316
+ [][] 
+ []
+
+[6 <./fig/delay-eps-converted-to.pdf>]
+Overfull \hbox (4.12701pt too wide) in paragraph at lines 322--323
+\T1/ptm/m/n/10 all con-ges-tion con-trol al-go-rithms in-herit from tra-di-tion
+al TCP,
+ []
+
+
+Overfull \hbox (4.40793pt too wide) in paragraph at lines 407--408
+\T1/ptm/m/n/10 fully com-pleted, when send-ing out a packet, the sender checks
+ []
+
+[7]
+Overfull \hbox (3.70746pt too wide) in paragraph at lines 421--422
+[]\T1/ptm/m/n/10 This mech-a-nism works per-fectly for con-nec-tions that trans
+-
+ []
+
+[8]
+
+LaTeX Warning: File `fig/outoforder.eps' not found on input line 489.
 
 Package epstopdf Info: Source file: <fig/outoforder.eps>
 (epstopdf)             Output file: <fig/outoforder-eps-converted-to.pdf>
@@ -512,19 +534,25 @@ Package epstopdf Info: Source file: <fig/outoforder.eps>
 (epstopdf)                    size: 33727 bytes
 (epstopdf)             Command: <repstopdf --outfile=fig/outoforder-eps-convert
 ed-to.pdf fig/outoforder.eps>
-(epstopdf)             \includegraphics on input line 483.
+(epstopdf)             \includegraphics on input line 489.
 Package epstopdf Info: Output file is already uptodate.
-<fig/outoforder-eps-converted-to.pdf, id=47, 1080.035pt x 1243.64626pt>
+<fig/outoforder-eps-converted-to.pdf, id=52, 1080.035pt x 1243.64626pt>
 File: fig/outoforder-eps-converted-to.pdf Graphic file (type pdf)
 
 <use fig/outoforder-eps-converted-to.pdf>
 Package pdftex.def Info: fig/outoforder-eps-converted-to.pdf used on input line
- 483.
+ 489.
 (pdftex.def)             Requested size: 192.00073pt x 221.0761pt.
 
-Underfull \vbox (badness 1558) has occurred while \output is active []
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [8 <./fig/outoforder-eps-converted-to.pdf>]) (./evaluation.tex
+ [9]
+Overfull \hbox (2.52791pt too wide) in paragraph at lines 505--506
+[]\T1/ptm/m/n/10 During our ex-per-i-ments, it hap-pens that one spe-cific pack
+et
+ []
+
+) (./evaluation.tex [10 <./fig/outoforder-eps-converted-to.pdf>]
 Package epstopdf Info: Source file: <fig/clock.eps>
 (epstopdf)                    date: 2014-11-16 21:27:49
 (epstopdf)                    size: 10461 bytes
@@ -536,7 +564,7 @@ Package epstopdf Info: Source file: <fig/clock.eps>
 (epstopdf)             \includegraphics on input line 23.
 Package epstopdf Info: Output file is already uptodate.
 
-<fig/clock-eps-converted-to.pdf, id=54, 507.8975pt x 404.51125pt>
+<fig/clock-eps-converted-to.pdf, id=62, 507.8975pt x 404.51125pt>
 File: fig/clock-eps-converted-to.pdf Graphic file (type pdf)
 
 <use fig/clock-eps-converted-to.pdf>
@@ -554,15 +582,53 @@ s-converted-to.pdf fig/out_of_order_w_sack.eps>
 (epstopdf)             \includegraphics on input line 25.
 Package epstopdf Info: Output file is already uptodate.
 
-<fig/out_of_order_w_sack-eps-converted-to.pdf, id=55, 512.91624pt x 404.51125pt
+<fig/out_of_order_w_sack-eps-converted-to.pdf, id=63, 512.91624pt x 404.51125pt
 >
 File: fig/out_of_order_w_sack-eps-converted-to.pdf Graphic file (type pdf)
  <use fig/out_of_order_w_sack-eps-converted-to.pdf>
 Package pdftex.def Info: fig/out_of_order_w_sack-eps-converted-to.pdf used on i
 nput line 25.
 (pdftex.def)             Requested size: 117.6004pt x 101.17694pt.
- [9 <./fig/clock-eps-converted-to.pdf> <./fig/out_of_order_w_sack-eps-converted
--to.pdf>]
+
+Overfull \hbox (14.56694pt too wide) in paragraph at lines 52--53
+[]\T1/ptm/m/n/10 In both case, MPIP and MPTCP adapt to the change smoothly.
+ []
+
+Package epstopdf Info: Source file: <fig/switch.eps>
+(epstopdf)                    date: 2014-11-20 17:30:53
+(epstopdf)                    size: 13539 bytes
+(epstopdf)             Output file: <fig/switch-eps-converted-to.pdf>
+(epstopdf)                    date: 2014-11-21 14:48:21
+(epstopdf)                    size: 9444 bytes
+(epstopdf)             Command: <repstopdf --outfile=fig/switch-eps-converted-t
+o.pdf fig/switch.eps>
+(epstopdf)             \includegraphics on input line 56.
+Package epstopdf Info: Output file is already uptodate.
+<fig/switch-eps-converted-to.pdf, id=64, 506.89375pt x 404.51125pt>
+File: fig/switch-eps-converted-to.pdf Graphic file (type pdf)
+
+<use fig/switch-eps-converted-to.pdf>
+Package pdftex.def Info: fig/switch-eps-converted-to.pdf used on input line 56.
+
+(pdftex.def)             Requested size: 191.99512pt x 101.17694pt.
+
+Overfull \hbox (3.15665pt too wide) in paragraph at lines 65--66
+\T1/ptm/m/n/10 NAT prob-lem which are fake TCP con-nec-tion and UDP wrap-
+ []
+
+
+Overfull \hbox (3.2478pt too wide) in paragraph at lines 68--69
+[]\T1/ptm/m/n/10 Now we start to do side-by-side com-par-i-son be-tween MPIP
+ []
+
+
+Overfull \hbox (18.6271pt too wide) in paragraph at lines 70--71
+\T1/ptm/m/n/10 see that MPIP achieves the high-est through-put which is $\OT1/c
+mr/m/n/10 171$\T1/ptm/m/n/10 Mbps,
+ []
+
+[11 <./fig/clock-eps-converted-to.pdf> <./fig/out_of_order_w_sack-eps-converted
+-to.pdf> <./fig/switch-eps-converted-to.pdf>]
 Package epstopdf Info: Source file: <fig/tp_bar.eps>
 (epstopdf)                    date: 2014-11-18 15:29:39
 (epstopdf)                    size: 12481 bytes
@@ -571,14 +637,14 @@ Package epstopdf Info: Source file: <fig/tp_bar.eps>
 (epstopdf)                    size: 8204 bytes
 (epstopdf)             Command: <repstopdf --outfile=fig/tp_bar-eps-converted-t
 o.pdf fig/tp_bar.eps>
-(epstopdf)             \includegraphics on input line 67.
+(epstopdf)             \includegraphics on input line 82.
 Package epstopdf Info: Output file is already uptodate.
 
-<fig/tp_bar-eps-converted-to.pdf, id=70, 506.89375pt x 386.44376pt>
+<fig/tp_bar-eps-converted-to.pdf, id=84, 506.89375pt x 386.44376pt>
 File: fig/tp_bar-eps-converted-to.pdf Graphic file (type pdf)
 
 <use fig/tp_bar-eps-converted-to.pdf>
-Package pdftex.def Info: fig/tp_bar-eps-converted-to.pdf used on input line 67.
+Package pdftex.def Info: fig/tp_bar-eps-converted-to.pdf used on input line 82.
 
 (pdftex.def)             Requested size: 191.99512pt x 101.1747pt.
 Package epstopdf Info: Source file: <fig/path_tp_bar.eps>
@@ -589,16 +655,48 @@ Package epstopdf Info: Source file: <fig/path_tp_bar.eps>
 (epstopdf)                    size: 9904 bytes
 (epstopdf)             Command: <repstopdf --outfile=fig/path_tp_bar-eps-conver
 ted-to.pdf fig/path_tp_bar.eps>
-(epstopdf)             \includegraphics on input line 74.
+(epstopdf)             \includegraphics on input line 89.
 Package epstopdf Info: Output file is already uptodate.
 
-<fig/path_tp_bar-eps-converted-to.pdf, id=71, 507.8975pt x 387.4475pt>
+<fig/path_tp_bar-eps-converted-to.pdf, id=85, 507.8975pt x 387.4475pt>
 File: fig/path_tp_bar-eps-converted-to.pdf Graphic file (type pdf)
 
 <use fig/path_tp_bar-eps-converted-to.pdf>
 Package pdftex.def Info: fig/path_tp_bar-eps-converted-to.pdf used on input lin
-e 74.
+e 89.
 (pdftex.def)             Requested size: 191.99557pt x 101.17737pt.
+
+Underfull \vbox (badness 1009) has occurred while \output is active []
+
+
+Overfull \hbox (3.70761pt too wide) in paragraph at lines 122--123
+\T1/ptm/m/n/10 Be-cause of the clock off-set is-sue we men-tioned in Sec-tion 4
+.1[],
+ []
+
+Package epstopdf Info: Source file: <fig/no_limit_tp_comp.eps>
+(epstopdf)                    date: 2014-11-16 21:27:51
+(epstopdf)                    size: 25164 bytes
+(epstopdf)             Output file: <fig/no_limit_tp_comp-eps-converted-to.pdf>
+
+(epstopdf)                    date: 2014-11-24 14:03:30
+(epstopdf)                    size: 19488 bytes
+(epstopdf)             Command: <repstopdf --outfile=fig/no_limit_tp_comp-eps-c
+onverted-to.pdf fig/no_limit_tp_comp.eps>
+(epstopdf)             \includegraphics on input line 129.
+Package epstopdf Info: Output file is already uptodate.
+<fig/no_limit_tp_comp-eps-converted-to.pdf, id=86, 520.94624pt x 404.51125pt>
+File: fig/no_limit_tp_comp-eps-converted-to.pdf Graphic file (type pdf)
+
+<use fig/no_limit_tp_comp-eps-converted-to.pdf>
+Package pdftex.def Info: fig/no_limit_tp_comp-eps-converted-to.pdf used on inpu
+t line 129.
+(pdftex.def)             Requested size: 117.59734pt x 101.17694pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 129--129
+[]\T1/ptm/m/n/9 (a) Through-put Com-par-i-son
+ []
+
 Package epstopdf Info: Source file: <fig/no_limit_qd_comp.eps>
 (epstopdf)                    date: 2014-11-16 21:27:52
 (epstopdf)                    size: 23383 bytes
@@ -608,77 +706,23 @@ Package epstopdf Info: Source file: <fig/no_limit_qd_comp.eps>
 (epstopdf)                    size: 17972 bytes
 (epstopdf)             Command: <repstopdf --outfile=fig/no_limit_qd_comp-eps-c
 onverted-to.pdf fig/no_limit_qd_comp.eps>
-(epstopdf)             \includegraphics on input line 114.
+(epstopdf)             \includegraphics on input line 131.
 Package epstopdf Info: Output file is already uptodate.
-
-<fig/no_limit_qd_comp-eps-converted-to.pdf, id=72, 516.93124pt x 404.51125pt>
+<fig/no_limit_qd_comp-eps-converted-to.pdf, id=87, 516.93124pt x 404.51125pt>
 File: fig/no_limit_qd_comp-eps-converted-to.pdf Graphic file (type pdf)
 
 <use fig/no_limit_qd_comp-eps-converted-to.pdf>
 Package pdftex.def Info: fig/no_limit_qd_comp-eps-converted-to.pdf used on inpu
-t line 114.
-(pdftex.def)             Requested size: 120.95827pt x 101.17694pt.
-Package epstopdf Info: Source file: <fig/pair_limit_qd_comp.eps>
-(epstopdf)                    date: 2014-11-16 21:28:08
-(epstopdf)                    size: 23463 bytes
-(epstopdf)             Output file: <fig/pair_limit_qd_comp-eps-converted-to.pd
-f>
-(epstopdf)                    date: 2014-11-16 21:29:14
-(epstopdf)                    size: 17976 bytes
-(epstopdf)             Command: <repstopdf --outfile=fig/pair_limit_qd_comp-eps
--converted-to.pdf fig/pair_limit_qd_comp.eps>
-(epstopdf)             \includegraphics on input line 122.
-Package epstopdf Info: Output file is already uptodate.
+t line 131.
+(pdftex.def)             Requested size: 117.5981pt x 101.17694pt.
 
-<fig/pair_limit_qd_comp-eps-converted-to.pdf, id=73, 522.95375pt x 404.51125pt>
-File: fig/pair_limit_qd_comp-eps-converted-to.pdf Graphic file (type pdf)
-<use fig/pair_limit_qd_comp-eps-converted-to.pdf>
-Package pdftex.def Info: fig/pair_limit_qd_comp-eps-converted-to.pdf used on in
-put line 122.
-(pdftex.def)             Requested size: 120.96307pt x 101.17694pt.
-Package epstopdf Info: Source file: <fig/delay_qd_comp.eps>
-(epstopdf)                    date: 2014-11-16 21:27:58
-(epstopdf)                    size: 24577 bytes
-(epstopdf)             Output file: <fig/delay_qd_comp-eps-converted-to.pdf>
-(epstopdf)                    date: 2014-11-16 21:29:14
-(epstopdf)                    size: 17845 bytes
-(epstopdf)             Command: <repstopdf --outfile=fig/delay_qd_comp-eps-conv
-erted-to.pdf fig/delay_qd_comp.eps>
-(epstopdf)             \includegraphics on input line 126.
-Package epstopdf Info: Output file is already uptodate.
-
-<fig/delay_qd_comp-eps-converted-to.pdf, id=74, 512.91624pt x 404.51125pt>
-File: fig/delay_qd_comp-eps-converted-to.pdf Graphic file (type pdf)
-
-<use fig/delay_qd_comp-eps-converted-to.pdf>
-Package pdftex.def Info: fig/delay_qd_comp-eps-converted-to.pdf used on input l
-ine 126.
-(pdftex.def)             Requested size: 120.95796pt x 101.17694pt.
-Package epstopdf Info: Source file: <fig/wireless_qd_comp.eps>
-(epstopdf)                    date: 2014-11-16 21:28:01
-(epstopdf)                    size: 21016 bytes
-(epstopdf)             Output file: <fig/wireless_qd_comp-eps-converted-to.pdf>
-
-(epstopdf)                    date: 2014-11-16 21:29:15
-(epstopdf)                    size: 15628 bytes
-(epstopdf)             Command: <repstopdf --outfile=fig/wireless_qd_comp-eps-c
-onverted-to.pdf fig/wireless_qd_comp.eps>
-(epstopdf)             \includegraphics on input line 130.
-Package epstopdf Info: Output file is already uptodate.
-
-<fig/wireless_qd_comp-eps-converted-to.pdf, id=75, 512.91624pt x 404.51125pt>
-File: fig/wireless_qd_comp-eps-converted-to.pdf Graphic file (type pdf)
-
-<use fig/wireless_qd_comp-eps-converted-to.pdf>
-Package pdftex.def Info: fig/wireless_qd_comp-eps-converted-to.pdf used on inpu
-t line 130.
-(pdftex.def)             Requested size: 120.95796pt x 101.17694pt.
-
-Overfull \hbox (8.12694pt too wide) in paragraph at lines 173--174
-\T1/ptm/m/n/9 when MPIP and MPTCP com-bine, the high-est through-put is achieve
-d.
+Overfull \hbox (36.23727pt too wide) in paragraph at lines 172--183
+ [][] 
  []
 
+[12 <./fig/tp_bar-eps-converted-to.pdf> <./fig/path_tp_bar-eps-converted-to.pdf
+> <./fig/no_limit_tp_comp-eps-converted-to.pdf> <./fig/no_limit_qd_comp-eps-con
+verted-to.pdf>]
 Package epstopdf Info: Source file: <fig/emulab_tp_bar.eps>
 (epstopdf)                    date: 2014-11-18 15:35:37
 (epstopdf)                    size: 11845 bytes
@@ -687,20 +731,16 @@ Package epstopdf Info: Source file: <fig/emulab_tp_bar.eps>
 (epstopdf)                    size: 7662 bytes
 (epstopdf)             Command: <repstopdf --outfile=fig/emulab_tp_bar-eps-conv
 erted-to.pdf fig/emulab_tp_bar.eps>
-(epstopdf)             \includegraphics on input line 179.
+(epstopdf)             \includegraphics on input line 208.
 Package epstopdf Info: Output file is already uptodate.
-<fig/emulab_tp_bar-eps-converted-to.pdf, id=76, 496.85625pt x 383.4325pt>
+
+<fig/emulab_tp_bar-eps-converted-to.pdf, id=114, 496.85625pt x 383.4325pt>
 File: fig/emulab_tp_bar-eps-converted-to.pdf Graphic file (type pdf)
 
 <use fig/emulab_tp_bar-eps-converted-to.pdf>
 Package pdftex.def Info: fig/emulab_tp_bar-eps-converted-to.pdf used on input l
-ine 179.
+ine 208.
 (pdftex.def)             Requested size: 191.9991pt x 101.17618pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [10 <./fig/tp_bar-eps-converted-to.pdf> <./fig/path_tp_bar-eps-converted-to.pd
-f>]
 Package epstopdf Info: Source file: <fig/emulab_patp_bar.eps>
 (epstopdf)                    date: 2014-11-18 15:35:38
 (epstopdf)                    size: 11235 bytes
@@ -709,15 +749,15 @@ Package epstopdf Info: Source file: <fig/emulab_patp_bar.eps>
 (epstopdf)                    size: 7492 bytes
 (epstopdf)             Command: <repstopdf --outfile=fig/emulab_patp_bar-eps-co
 nverted-to.pdf fig/emulab_patp_bar.eps>
-(epstopdf)             \includegraphics on input line 187.
+(epstopdf)             \includegraphics on input line 216.
 Package epstopdf Info: Output file is already uptodate.
 
-<fig/emulab_patp_bar-eps-converted-to.pdf, id=93, 496.85625pt x 383.4325pt>
+<fig/emulab_patp_bar-eps-converted-to.pdf, id=115, 496.85625pt x 383.4325pt>
 File: fig/emulab_patp_bar-eps-converted-to.pdf Graphic file (type pdf)
 
 <use fig/emulab_patp_bar-eps-converted-to.pdf>
 Package pdftex.def Info: fig/emulab_patp_bar-eps-converted-to.pdf used on input
- line 187.
+ line 216.
 (pdftex.def)             Requested size: 191.9991pt x 101.17618pt.
 Package epstopdf Info: Source file: <fig/skype_tp_comp.eps>
 (epstopdf)                    date: 2014-11-16 21:28:11
@@ -727,15 +767,15 @@ Package epstopdf Info: Source file: <fig/skype_tp_comp.eps>
 (epstopdf)                    size: 10290 bytes
 (epstopdf)             Command: <repstopdf --outfile=fig/skype_tp_comp-eps-conv
 erted-to.pdf fig/skype_tp_comp.eps>
-(epstopdf)             \includegraphics on input line 221.
+(epstopdf)             \includegraphics on input line 250.
 Package epstopdf Info: Output file is already uptodate.
 
-<fig/skype_tp_comp-eps-converted-to.pdf, id=94, 511.9125pt x 404.51125pt>
+<fig/skype_tp_comp-eps-converted-to.pdf, id=116, 511.9125pt x 404.51125pt>
 File: fig/skype_tp_comp-eps-converted-to.pdf Graphic file (type pdf)
 
 <use fig/skype_tp_comp-eps-converted-to.pdf>
 Package pdftex.def Info: fig/skype_tp_comp-eps-converted-to.pdf used on input l
-ine 221.
+ine 250.
 (pdftex.def)             Requested size: 166.31491pt x 101.17694pt.
 Package epstopdf Info: Source file: <fig/skype_delay_comp.eps>
 (epstopdf)                    date: 2014-11-16 21:28:12
@@ -746,15 +786,15 @@ Package epstopdf Info: Source file: <fig/skype_delay_comp.eps>
 (epstopdf)                    size: 8637 bytes
 (epstopdf)             Command: <repstopdf --outfile=fig/skype_delay_comp-eps-c
 onverted-to.pdf fig/skype_delay_comp.eps>
-(epstopdf)             \includegraphics on input line 223.
+(epstopdf)             \includegraphics on input line 252.
 Package epstopdf Info: Output file is already uptodate.
 
-<fig/skype_delay_comp-eps-converted-to.pdf, id=95, 521.95pt x 404.51125pt>
+<fig/skype_delay_comp-eps-converted-to.pdf, id=117, 521.95pt x 404.51125pt>
 File: fig/skype_delay_comp-eps-converted-to.pdf Graphic file (type pdf)
 
 <use fig/skype_delay_comp-eps-converted-to.pdf>
 Package pdftex.def Info: fig/skype_delay_comp-eps-converted-to.pdf used on inpu
-t line 223.
+t line 252.
 (pdftex.def)             Requested size: 166.31859pt x 101.17694pt.
 Package epstopdf Info: Source file: <fig/routing_ack.eps>
 (epstopdf)                    date: 2014-11-16 21:28:02
@@ -764,60 +804,57 @@ Package epstopdf Info: Source file: <fig/routing_ack.eps>
 (epstopdf)                    size: 18624 bytes
 (epstopdf)             Command: <repstopdf --outfile=fig/routing_ack-eps-conver
 ted-to.pdf fig/routing_ack.eps>
-(epstopdf)             \includegraphics on input line 225.
+(epstopdf)             \includegraphics on input line 254.
 Package epstopdf Info: Output file is already uptodate.
 
-<fig/routing_ack-eps-converted-to.pdf, id=96, 512.91624pt x 404.51125pt>
+<fig/routing_ack-eps-converted-to.pdf, id=118, 512.91624pt x 404.51125pt>
 File: fig/routing_ack-eps-converted-to.pdf Graphic file (type pdf)
 
 <use fig/routing_ack-eps-converted-to.pdf>
 Package pdftex.def Info: fig/routing_ack-eps-converted-to.pdf used on input lin
-e 225.
+e 254.
 (pdftex.def)             Requested size: 166.32013pt x 101.17694pt.
 
-Overfull \hbox (6.42651pt too wide) in paragraph at lines 236--237
-[]\T1/ptm/m/n/9 As we men-tioned, this cus-tomiza-tion rout-ing only con-sid-er
-s packet
- []
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
-) (./mpip.bbl [11 <./fig/no_limit_qd_comp-eps-converted-to.pdf> <./fig/pair_lim
-it_qd_comp-eps-converted-to.pdf> <./fig/delay_qd_comp-eps-converted-to.pdf> <./
-fig/wireless_qd_comp-eps-converted-to.pdf> <./fig/emulab_tp_bar-eps-converted-t
-o.pdf> <./fig/emulab_patp_bar-eps-converted-to.pdf>]) [12
+ [13 <./fig/emulab_tp_bar-eps-converted-to.pdf> <./fig/emulab_patp_bar-eps-conv
+erted-to.pdf>]) (./mpip.bbl) [14
 
-] [13 <./fig/skype_tp_comp-eps-converted-to.pdf> <./fig/skype_delay_comp-eps-co
-nverted-to.pdf> <./fig/routing_ack-eps-converted-to.pdf>] (./mpip.aux)
+] [15 <./fig/skype_tp_comp-eps-converted-to.pdf> <./fig/skype_delay_comp-eps-co
+nverted-to.pdf> <./fig/routing_ack-eps-converted-to.pdf>]
+(./mpip.aux)
 
 LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 4781 strings out of 493307
- 67791 string characters out of 6139906
- 143710 words of memory out of 5000000
- 8093 multiletter control sequences out of 15000+600000
- 54911 words of font info for 69 fonts, out of 8000000 for 9000
+ 4764 strings out of 493307
+ 67397 string characters out of 6139906
+ 145469 words of memory out of 5000000
+ 8080 multiletter control sequences out of 15000+600000
+ 57248 words of font info for 71 fonts, out of 8000000 for 9000
  957 hyphenation exceptions out of 8191
- 42i,12n,38p,1387b,591s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 42i,12n,38p,1387b,596s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texliv
-e/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmex7.pfb></usr/share/texlive/
-texmf-dist/fonts/type1/public/amsfonts/cmextra/cmex9.pfb></usr/share/texlive/te
-xmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/share/texlive/texmf-dis
-t/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/share/texlive/texmf-dist/fonts
-/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texlive/texmf-dist/fonts/type1/
-public/amsfonts/cm/cmmi9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/
-amsfonts/cm/cmr5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts
-/cm/cmr6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9
-.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb></
-usr/share/texlive/texmf-dist/fonts/type1/urw/helvetic/uhvb8a.pfb></usr/share/te
-xlive/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb></usr/share/texlive/texmf-
-dist/fonts/type1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type
-1/urw/times/utmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utm
-ri8a.pfb>
-Output written on mpip.pdf (13 pages, 426580 bytes).
+e/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texm
+f-dist/fonts/type1/public/amsfonts/cmextra/cmex7.pfb></usr/share/texlive/texmf-
+dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/f
+onts/type1/public/amsfonts/cm/cmmi5.pfb></usr/share/texlive/texmf-dist/fonts/ty
+pe1/public/amsfonts/cm/cmmi6.pfb></usr/share/texlive/texmf-dist/fonts/type1/pub
+lic/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/ams
+fonts/cm/cmmi8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/c
+m/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.
+pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></us
+r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/
+texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texliv
+e/texmf-dist/fonts/type1/urw/helvetic/uhvb8a.pfb></usr/share/texlive/texmf-dist
+/fonts/type1/urw/helvetic/uhvr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1
+/urw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmr
+8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
+Output written on mpip.pdf (15 pages, 425731 bytes).
 PDF statistics:
- 202 PDF objects out of 1000 (max. 8388607)
- 138 compressed objects within 2 object streams
+ 210 PDF objects out of 1000 (max. 8388607)
+ 144 compressed objects within 2 object streams
  0 named destinations out of 1000 (max. 500000)
- 81 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 76 words of extra memory for PDF output out of 10000 (max. 10000000)
 

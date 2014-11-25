@@ -790,31 +790,48 @@ mpip_no_limit = mean(data1(:,1))/M;
 mptcp_no_limit = mean(data2(:,1))/M;
 together_no_limit = mean(data3(:,1))/M;
 
+error_mpip_no_limit = std(data1(:,1)/M);
+error_mptcp_no_limit = std(data2(:,1)/M);
+error_together_no_limit = std(data3(:,1)/M);
+
 
 data1 = csvread('Z:\home\bill\gbtian\research\kernel\mptcp\conext14\experiment\data\4\1.csv');
 data2 = csvread('Z:\home\bill\gbtian\research\kernel\mptcp\conext14\experiment\data\4\2.csv');
 data3 = csvread('Z:\home\bill\gbtian\research\kernel\mptcp\conext14\experiment\data\4\3.csv');
 data4 = csvread('Z:\home\bill\gbtian\research\kernel\mptcp\conext14\experiment\data\4\4.csv');
 
-tp1_no_limit = mean(data1(:,8))*8000/M;
-tp2_no_limit = mean(data2(:,8))*8000/M;
-tp3_no_limit = mean(data3(:,8))*8000/M;
-tp4_no_limit = mean(data4(:,8))*8000/M;
+tp1_no_limit = mean(data1(:,8)*8000/M);
+tp2_no_limit = mean(data2(:,8)*8000/M);
+tp3_no_limit = mean(data3(:,8)*8000/M);
+tp4_no_limit = mean(data4(:,8)*8000/M);
 
-q1_no_limit = mean(data1(:,7))/K;
-q2_no_limit = mean(data2(:,7))/K;
-q3_no_limit = mean(data3(:,7))/K;
-q4_no_limit = mean(data4(:,7))/K;
+error_tp1_no_limit = std(data1(:,8)*8000/M);
+error_tp2_no_limit = std(data2(:,8)*8000/M);
+error_tp3_no_limit = std(data3(:,8)*8000/M);
+error_tp4_no_limit = std(data4(:,8)*8000/M);
 
+q1_no_limit = mean(data1(:,7)/K);
+q2_no_limit = mean(data2(:,7)/K);
+q3_no_limit = mean(data3(:,7)/K);
+q4_no_limit = mean(data4(:,7)/K);
+
+error_q1_no_limit = std(data1(:,7)/K);
+error_q2_no_limit = std(data2(:,7)/K);
+error_q3_no_limit = std(data3(:,7)/K);
+error_q4_no_limit = std(data4(:,7)/K);
 
 %limit bw
 data1 = csvread('Z:\home\bill\gbtian\research\kernel\mptcp\conext14\experiment\data\5\mpip.csv');
 data2 = csvread('Z:\home\bill\gbtian\research\kernel\mptcp\conext14\experiment\data\5\mptcp.csv');
 data3 = csvread('Z:\home\bill\gbtian\research\kernel\mptcp\conext14\experiment\data\5\together.csv');
 
-mpip_limit = mean(data1(:,1))/M;
-mptcp_limit = mean(data2(:,1))/M;
-together_limit = mean(data3(:,1))/M;
+mpip_limit = mean(data1(:,1)/M);
+mptcp_limit = mean(data2(:,1)/M);
+together_limit = mean(data3(:,1)/M);
+
+error_mpip_limit = std(data1(:,1)/M);
+error_mptcp_limit = std(data2(:,1)/M);
+error_together_limit = std(data3(:,1)/M);
 
 data1 = csvread('Z:\home\bill\gbtian\research\kernel\mptcp\conext14\experiment\data\5\1.csv');
 data2 = csvread('Z:\home\bill\gbtian\research\kernel\mptcp\conext14\experiment\data\5\2.csv');
@@ -822,15 +839,26 @@ data3 = csvread('Z:\home\bill\gbtian\research\kernel\mptcp\conext14\experiment\d
 data4 = csvread('Z:\home\bill\gbtian\research\kernel\mptcp\conext14\experiment\data\5\4.csv');
 
 
-tp1_limit = mean(data1(:,8))*8000/M;
-tp2_limit = mean(data2(:,8))*8000/M;
-tp3_limit = mean(data3(:,8))*8000/M;
-tp4_limit = mean(data4(:,8))*8000/M;
+tp1_limit = mean(data1(:,8)*8000/M);
+tp2_limit = mean(data2(:,8)*8000/M);
+tp3_limit = mean(data3(:,8)*8000/M);
+tp4_limit = mean(data4(:,8)*8000/M);
 
-q1_limit = mean(data1(:,7))/K;
-q2_limit = mean(data2(:,7))/K;
-q3_limit = mean(data3(:,7))/K;
-q4_limit = mean(data4(:,7))/K;
+error_tp1_limit = std(data1(:,8)*8000/M);
+error_tp2_limit = std(data2(:,8)*8000/M);
+error_tp3_limit = std(data3(:,8)*8000/M);
+error_tp4_limit = std(data4(:,8)*8000/M);
+
+
+q1_limit = mean(data1(:,7)/K);
+q2_limit = mean(data2(:,7)/K);
+q3_limit = mean(data3(:,7)/K);
+q4_limit = mean(data4(:,7)/K);
+
+error_q1_limit = std(data1(:,7)/K);
+error_q2_limit = std(data2(:,7)/K);
+error_q3_limit = std(data3(:,7)/K);
+error_q4_limit = std(data4(:,7)/K);
 
 
 %delay
@@ -838,35 +866,51 @@ data1 = csvread('Z:\home\bill\gbtian\research\kernel\mptcp\conext14\experiment\d
 data2 = csvread('Z:\home\bill\gbtian\research\kernel\mptcp\conext14\experiment\data\6\mptcp.csv');
 data3 = csvread('Z:\home\bill\gbtian\research\kernel\mptcp\conext14\experiment\data\6\together.csv');
 
-mpip_delay = mean(data1(:,1))/M;
-mptcp_delay = mean(data2(:,1))/M;
-together_delay = mean(data3(:,1))/M;
+mpip_delay = mean(data1(:,1)/M);
+mptcp_delay = mean(data2(:,1)/M);
+together_delay = mean(data3(:,1)/M);
 
+error_mpip_delay = std(data1(:,1)/M);
+error_mptcp_delay = std(data2(:,1)/M);
+error_together_delay = std(data3(:,1)/M);
 
 data1 = csvread('Z:\home\bill\gbtian\research\kernel\mptcp\conext14\experiment\data\6\1.csv');
 data2 = csvread('Z:\home\bill\gbtian\research\kernel\mptcp\conext14\experiment\data\6\2.csv');
 data3 = csvread('Z:\home\bill\gbtian\research\kernel\mptcp\conext14\experiment\data\6\3.csv');
 data4 = csvread('Z:\home\bill\gbtian\research\kernel\mptcp\conext14\experiment\data\6\4.csv');
 
-tp1_delay = mean(data1(:,8))*8000/M;
-tp2_delay = mean(data2(:,8))*8000/M;
-tp3_delay = mean(data3(:,8))*8000/M;
-tp4_delay = mean(data4(:,8))*8000/M;
+tp1_delay = mean(data1(:,8)*8000/M);
+tp2_delay = mean(data2(:,8)*8000/M);
+tp3_delay = mean(data3(:,8)*8000/M);
+tp4_delay = mean(data4(:,8)*8000/M);
 
-q1_delay = mean(data1(:,7))/K;
-q2_delay = mean(data2(:,7))/K;
-q3_delay = mean(data3(:,7))/K;
-q4_delay = mean(data4(:,7))/K;
+error_tp1_delay = std(data1(:,8)*8000/M);
+error_tp2_delay = std(data2(:,8)*8000/M);
+error_tp3_delay = std(data3(:,8)*8000/M);
+error_tp4_delay = std(data4(:,8)*8000/M);
 
+q1_delay = mean(data1(:,7)/K);
+q2_delay = mean(data2(:,7)/K);
+q3_delay = mean(data3(:,7)/K);
+q4_delay = mean(data4(:,7)/K);
+
+error_q1_delay = std(data1(:,7)/K);
+error_q2_delay = std(data2(:,7)/K);
+error_q3_delay = std(data3(:,7)/K);
+error_q4_delay = std(data4(:,7)/K);
 
 %wireless
 data1 = csvread('Z:\home\bill\gbtian\research\kernel\mptcp\conext14\experiment\data\7\mpip.csv');
 data2 = csvread('Z:\home\bill\gbtian\research\kernel\mptcp\conext14\experiment\data\7\mptcp.csv');
 data3 = csvread('Z:\home\bill\gbtian\research\kernel\mptcp\conext14\experiment\data\7\together.csv');
 
-mpip_wireless = mean(data1(:,1))/M;
-mptcp_wireless = mean(data2(:,1))/M;
-together_wireless = mean(data3(:,1))/M;
+mpip_wireless = mean(data1(:,1)/M);
+mptcp_wireless = mean(data2(:,1)/M);
+together_wireless = mean(data3(:,1)/M);
+
+error_mpip_wireless = std(data1(:,1)/M);
+error_mptcp_wireless = std(data2(:,1)/M);
+error_together_wireless = std(data3(:,1)/M);
 
 
 data1 = csvread('Z:\home\bill\gbtian\research\kernel\mptcp\conext14\experiment\data\7\1.csv');
@@ -874,41 +918,65 @@ data2 = csvread('Z:\home\bill\gbtian\research\kernel\mptcp\conext14\experiment\d
 data3 = csvread('Z:\home\bill\gbtian\research\kernel\mptcp\conext14\experiment\data\7\3.csv');
 data4 = csvread('Z:\home\bill\gbtian\research\kernel\mptcp\conext14\experiment\data\7\4.csv');
 
-tp1_wireless = mean(data1(:,8))*8000/M;
-tp2_wireless = mean(data2(:,8))*8000/M;
-tp3_wireless = mean(data3(:,8))*8000/M;
-tp4_wireless = mean(data4(:,8))*8000/M;
+tp1_wireless = mean(data1(:,8)*8000/M);
+tp2_wireless = mean(data2(:,8)*8000/M);
+tp3_wireless = mean(data3(:,8)*8000/M);
+tp4_wireless = mean(data4(:,8)*8000/M);
 
-q1_wireless = mean(data1(:,7))/K;
-q2_wireless = mean(data2(:,7))/K;
-q3_wireless = mean(data3(:,7))/K;
-q4_wireless = mean(data4(:,7))/K;
+error_tp1_wireless = std(data1(:,8)*8000/M);
+error_tp2_wireless = std(data2(:,8)*8000/M);
+error_tp3_wireless = std(data3(:,8)*8000/M);
+error_tp4_wireless = std(data4(:,8)*8000/M);
 
+
+q1_wireless = mean(data1(:,7)/K);
+q2_wireless = mean(data2(:,7)/K);
+q3_wireless = mean(data3(:,7)/K);
+q4_wireless = mean(data4(:,7)/K);
+
+error_q1_wireless = std(data1(:,7)/K);
+error_q2_wireless = std(data2(:,7)/K);
+error_q3_wireless = std(data3(:,7)/K);
+error_q4_wireless = std(data4(:,7)/K);
 
 %pair limit
 data1 = csvread('Z:\home\bill\gbtian\research\kernel\mptcp\conext14\experiment\data\11\mpip.csv');
 data2 = csvread('Z:\home\bill\gbtian\research\kernel\mptcp\conext14\experiment\data\11\mptcp.csv');
 data3 = csvread('Z:\home\bill\gbtian\research\kernel\mptcp\conext14\experiment\data\11\together.csv');
 
-mpip_pair = mean(data1(:,1))/M;
-mptcp_pair = mean(data2(:,1))/M;
-together_pair = mean(data3(:,1))/M;
+mpip_pair = mean(data1(:,1)/M);
+mptcp_pair = mean(data2(:,1)/M);
+together_pair = mean(data3(:,1)/M);
+
+error_mpip_pair = std(data1(:,1)/M);
+error_mptcp_pair = std(data2(:,1)/M);
+error_together_pair = std(data3(:,1)/M);
 
 data1 = csvread('Z:\home\bill\gbtian\research\kernel\mptcp\conext14\experiment\data\11\1.csv');
 data2 = csvread('Z:\home\bill\gbtian\research\kernel\mptcp\conext14\experiment\data\11\2.csv');
 data3 = csvread('Z:\home\bill\gbtian\research\kernel\mptcp\conext14\experiment\data\11\3.csv');
 data4 = csvread('Z:\home\bill\gbtian\research\kernel\mptcp\conext14\experiment\data\11\4.csv');
 
-tp1_pair = mean(data1(:,8))*8000/M;
-tp2_pair = mean(data2(:,8))*8000/M;
-tp3_pair = mean(data3(:,8))*8000/M;
-tp4_pair = mean(data4(:,8))*8000/M;
+tp1_pair = mean(data1(:,8)*8000/M);
+tp2_pair = mean(data2(:,8)*8000/M);
+tp3_pair = mean(data3(:,8)*8000/M);
+tp4_pair = mean(data4(:,8)*8000/M);
 
-q1_pair = mean(data1(:,7))/K;
-q2_pair = mean(data2(:,7))/K;
-q3_pair = mean(data3(:,7))/K;
-q4_pair = mean(data4(:,7))/K;
+error_tp1_pair = std(data1(:,8)*8000/M);
+error_tp2_pair = std(data2(:,8)*8000/M);
+error_tp3_pair = std(data3(:,8)*8000/M);
+error_tp4_pair = std(data4(:,8)*8000/M);
 
+q1_pair = mean(data1(:,7)/K);
+q2_pair = mean(data2(:,7)/K);
+q3_pair = mean(data3(:,7)/K);
+q4_pair = mean(data4(:,7)/K);
+
+
+error_q1_pair = std(data1(:,7)/K);
+error_q2_pair = std(data2(:,7)/K);
+error_q3_pair = std(data3(:,7)/K);
+error_q4_pair = std(data4(:,7)/K);
 
 tp = [mpip_no_limit mptcp_no_limit together_no_limit; 
 %         mpip_limit mptcp_limit together_limit;
@@ -916,11 +984,17 @@ tp = [mpip_no_limit mptcp_no_limit together_no_limit;
         mpip_delay mptcp_delay together_delay; 
         mpip_wireless mptcp_wireless together_wireless];
 
+error_tp = [error_mpip_no_limit error_mptcp_no_limit error_together_no_limit; 
+        error_mpip_pair error_mptcp_pair error_together_pair; 
+        error_mpip_delay error_mptcp_delay error_together_delay; 
+        error_mpip_wireless error_mptcp_wireless error_together_wireless];
+    
 figure;
 set(gcf,'outerposition',get(0,'screensize'));
 hold on;
 grid on;
 h=bar(tp);
+errorbar(tp, error_tp);
 for i=1:length(h)    
     XDATA=get(get(h(i),'Children'),'XData');
     YDATA=get(get(h(i),'Children'),'YData');
@@ -946,11 +1020,19 @@ patp = [tp1_no_limit tp2_no_limit tp3_no_limit tp3_no_limit;
             tp1_delay tp2_delay tp3_delay tp4_delay; 
             tp1_wireless tp2_wireless tp3_wireless tp4_wireless];
 
+error_patp = [error_tp1_no_limit error_tp2_no_limit error_tp3_no_limit error_tp3_no_limit; 
+%             tp1_limit tp2_limit tp3_limit tp4_limit;
+            error_tp1_pair error_tp2_pair error_tp3_pair error_tp4_pair; 
+            error_tp1_delay error_tp2_delay error_tp3_delay error_tp4_delay; 
+           error_ tp1_wireless error_tp2_wireless error_tp3_wireless error_tp4_wireless];
+
+       
 figure;
 set(gcf,'outerposition',get(0,'screensize'));
 hold on;
 grid on;
 h=bar(patp);
+errorbar(patp, error_patp);
 for i=1:length(h)    
     XDATA=get(get(h(i),'Children'),'XData');
     YDATA=get(get(h(i),'Children'),'YData');
@@ -977,12 +1059,19 @@ q = [q1_no_limit q2_no_limit q3_no_limit q3_no_limit;
         q1_delay q2_delay q3_delay q4_delay; 
         q1_wireless q2_wireless q3_wireless q4_wireless];
 
+    
+error_q = [error_q1_no_limit error_q2_no_limit error_q3_no_limit error_q3_no_limit; 
+%         q1_limit q2_limit q3_limit q4_limit;
+        error_q1_pair error_q2_pair error_q3_pair error_q4_pair; 
+        error_q1_delay error_q2_delay error_q3_delay error_q4_delay; 
+        error_q1_wireless error_q2_wireless error_q3_wireless error_q4_wireless];
+    
 figure;
 set(gcf,'outerposition',get(0,'screensize'));
 hold on;
 grid on;
 h=bar(q);
-
+errorbar(q, error_q);
 for i=1:length(h)    
     XDATA=get(get(h(i),'Children'),'XData');
     YDATA=get(get(h(i),'Children'),'YData');
@@ -1107,3 +1196,124 @@ xlabel('','fontsize',15);
 ylabel('Mbps','fontsize',15);
 ylim([0 10])
 print -dpsc2 Z:\home\bill\gbtian\research\kernel\mptcp\conext14\fig\emulab_patp_bar.eps;
+
+
+
+data1 = csvread('Z:\home\bill\gbtian\research\kernel\mptcp\conext14\experiment\data\switch\mpip_switch.csv');
+data2 = csvread('Z:\home\bill\gbtian\research\kernel\mptcp\conext14\experiment\data\switch\mptcp_switch.csv');
+d1=conv(data1(:,1), wts, 'valid');
+d2=conv(data2(:,1), wts, 'valid');
+
+figure;
+hold on;
+H1 = plot(d1/M, '-r');
+H2 = plot(d2/M, '-b');
+legend([H1, H2],{'MPIP';'MPTCP'}, 4, 'fontsize',12);
+legend('boxoff');
+xlim([0 360])
+xlabel('Seconds','fontsize',15);
+ylabel('Mbps','fontsize',15);
+get(gca,'XLabel');
+set(gca,'FontSize',15);
+get(gca,'YLabel');
+set(gca,'FontSize',15);
+%title('out of order without sack');
+print -dpsc2 Z:\home\bill\gbtian\research\kernel\mptcp\conext14\fig\switch.eps;
+
+
+
+
+data1 = csvread('Z:\home\bill\gbtian\research\kernel\mptcp\conext14\experiment\data\4g\mpip.csv');
+data2 = csvread('Z:\home\bill\gbtian\research\kernel\mptcp\conext14\experiment\data\4g\mptcp.csv');
+data3 = csvread('Z:\home\bill\gbtian\research\kernel\mptcp\conext14\experiment\data\4g\together.csv');
+
+ip=conv(data1(:,4), wts, 'valid');
+ip_op = conv(data1(:,2), wts, 'valid');
+ip_4g = conv(data1(:,3), wts, 'valid');
+
+tcp=conv(data2(:,4), wts, 'valid');
+tcp_op = conv(data2(:,2), wts, 'valid');
+tcp_4g = conv(data2(:,3), wts, 'valid');
+
+tog=conv(data3(:,4), wts, 'valid');
+tog_op = conv(data3(:,2), wts, 'valid');
+tog_4g = conv(data3(:,3), wts, 'valid');
+
+
+
+figure;
+hold on;
+H1 = plot(ip*8/M, '-r');
+H2 = plot(tcp*8/M, '-b');
+H3 = plot(tog*8/M, '-m');
+legend([H1, H2, H3],{'mpip';'mptcp';'together'}, 4, 'fontsize',12);
+legend('boxoff');
+% ylim([0 200]);
+% xlim([0 1200]);
+xlabel('Seconds','fontsize',15);
+ylabel('Mbps','fontsize',15);
+get(gca,'XLabel');
+set(gca,'FontSize',15);
+get(gca,'YLabel');
+set(gca,'FontSize',15);
+title('overall');
+% print -dpsc2 Z:\home\bill\gbtian\research\kernel\mptcp\conext14\fig\pair_limit.eps;
+
+
+figure;
+hold on;
+H1 = plot(ip_op*8/M, '-r');
+H2 = plot(ip_4g*8/M, '-b');
+H3 = plot(ip*8/M, '-m');
+legend([H1, H2, H3],{'optimum';'4g';'total'}, 4, 'fontsize',12);
+legend('boxoff');
+% ylim([0 200]);
+% xlim([0 1200]);
+xlabel('Seconds','fontsize',15);
+ylabel('Mbps','fontsize',15);
+get(gca,'XLabel');
+set(gca,'FontSize',15);
+get(gca,'YLabel');
+set(gca,'FontSize',15);
+title('mpip');
+% print -dpsc2 Z:\home\bill\gbtian\research\kernel\mptcp\conext14\fig\pair_limit.eps;
+
+
+
+figure;
+hold on;
+H1 = plot(tcp_op*8/M, '-r');
+H2 = plot(tcp_4g*8/M, '-b');
+H3 = plot(tcp*8/M, '-m');
+legend([H1, H2, H3],{'optimum';'4g';'total'}, 4, 'fontsize',12);
+legend('boxoff');
+% ylim([0 200]);
+% xlim([0 1200]);
+xlabel('Seconds','fontsize',15);
+ylabel('Mbps','fontsize',15);
+get(gca,'XLabel');
+set(gca,'FontSize',15);
+get(gca,'YLabel');
+set(gca,'FontSize',15);
+title('mptcp');
+% print -dpsc2 Z:\home\bill\gbtian\research\kernel\mptcp\conext14\fig\pair_limit.eps;
+
+
+
+figure;
+hold on;
+H1 = plot(tog_op*8/M, '-r');
+H2 = plot(tog_4g*8/M, '-b');
+H3 = plot(tog*8/M, '-m');
+legend([H1, H2, H3],{'optimum';'4g';'total'}, 4, 'fontsize',12);
+legend('boxoff');
+% ylim([0 200]);
+% xlim([0 1200]);
+xlabel('Seconds','fontsize',15);
+ylabel('Mbps','fontsize',15);
+get(gca,'XLabel');
+set(gca,'FontSize',15);
+get(gca,'YLabel');
+set(gca,'FontSize',15);
+title('together');
+% print -dpsc2 Z:\home\bill\gbtian\research\kernel\mptcp\conext14\fig\pair_limit.eps;
