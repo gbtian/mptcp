@@ -994,17 +994,17 @@ set(gcf,'outerposition',get(0,'screensize'));
 hold on;
 grid on;
 h=bar(tp);
-for i=1:length(h)    
-    XDATA=get(get(h(i),'Children'),'XData');
-    YDATA=get(get(h(i),'Children'),'YData');
-
-    for j=1:size(XDATA,2)
-            x=XDATA(1,j)+(XDATA(3,j)-XDATA(1,j))/2-0.07;
-            y=YDATA(2,j)+5;
-            t=[num2str(YDATA(2,j),3) ];
-            text(x,y,t,'Color','k','fontsize',10)
-    end
-end
+% for i=1:length(h)    
+%     XDATA=get(get(h(i),'Children'),'XData');
+%     YDATA=get(get(h(i),'Children'),'YData');
+% 
+%     for j=1:size(XDATA,2)
+%             x=XDATA(1,j)+(XDATA(3,j)-XDATA(1,j))/2-0.07;
+%             y=YDATA(2,j)+5;
+%             t=[num2str(YDATA(2,j),3) ];
+%             text(x,y,t,'Color','k','fontsize',10)
+%     end
+% end
 set(gca,'XTickLabel',{'', 'No Limit', '', 'Bandwidth Limit', '', 'Added Delay', '', 'Wireless'},'fontsize',15)
 legend('MPIP', 'MPTCP', 'Together');
 
@@ -1020,6 +1020,8 @@ end
 % xlabel('','fontsize',15);
 ylabel('Mbps','fontsize',15);
 ylim([0 200])
+applyhatch_pluscolor(gcf,'\-\',1);
+
 print -dpsc2 Z:\home\bill\gbtian\research\kernel\mptcp\conext14\fig\tp_bar.eps;
 
 
@@ -1040,17 +1042,18 @@ set(gcf,'outerposition',get(0,'screensize'));
 hold on;
 grid on;
 h=bar(patp);
-for i=1:length(h)    
-    XDATA=get(get(h(i),'Children'),'XData');
-    YDATA=get(get(h(i),'Children'),'YData');
 
-    for j=1:size(XDATA,2)
-            x=XDATA(1,j)+(XDATA(3,j)-XDATA(1,j))/2-0.07;
-            y=YDATA(2,j)+2;
-            t=[num2str(YDATA(2,j),2) ];
-            text(x,y,t,'Color','k','fontsize',10)
-    end
-end
+% for i=1:length(h)    
+%     XDATA=get(get(h(i),'Children'),'XData');
+%     YDATA=get(get(h(i),'Children'),'YData');
+% 
+%     for j=1:size(XDATA,2)
+%             x=XDATA(1,j)+(XDATA(3,j)-XDATA(1,j))/2-0.07;
+%             y=YDATA(2,j)+2;
+%             t=[num2str(YDATA(2,j),2) ];
+%             text(x,y,t,'Color','k','fontsize',10)
+%     end
+% end
 
 set(gca,'XTickLabel',{'', 'No Limit', '', 'Bandwidth Limit', '', 'Added Delay', '', 'Wireless'},'fontsize',15)
 legend('Path 1', 'Path 2', 'Path 3', 'Path 4');
@@ -1066,7 +1069,9 @@ end
 
 % xlabel('Seconds','fontsize',15);
 ylabel('Mbps','fontsize',15);
-ylim([0 100])
+ylim([-10 100])
+applyhatch_pluscolor(gcf,'\-\',1);
+
 print -dpsc2 Z:\home\bill\gbtian\research\kernel\mptcp\conext14\fig\path_tp_bar.eps;
 
 
@@ -1089,17 +1094,17 @@ hold on;
 grid on;
 h=bar(q);
 
-for i=1:length(h)    
-    XDATA=get(get(h(i),'Children'),'XData');
-    YDATA=get(get(h(i),'Children'),'YData');
-
-    for j=1:size(XDATA,2)
-            x=XDATA(1,j)+(XDATA(3,j)-XDATA(1,j))/2-0.07;
-            y=YDATA(2,j)+0.4;
-            t=[num2str(YDATA(2,j),1) ];
-            text(x,y,t,'Color','k','fontsize',10)
-    end
-end
+% for i=1:length(h)    
+%     XDATA=get(get(h(i),'Children'),'XData');
+%     YDATA=get(get(h(i),'Children'),'YData');
+% 
+%     for j=1:size(XDATA,2)
+%             x=XDATA(1,j)+(XDATA(3,j)-XDATA(1,j))/2-0.07;
+%             y=YDATA(2,j)+0.4;
+% %             t=[num2str(YDATA(2,j),1) ];
+%             text(x,y,t,'Color','k','fontsize',10)
+%     end
+% end
 
 set(gca,'XTickLabel',{'', 'No Limit', '', 'Bandwidth Limit', '', 'Added Delay', '', 'Wireless'},'fontsize',15)
 legend('Path 1', 'Path 2', 'Path 3', 'Path 4');
@@ -1115,7 +1120,9 @@ end
 
 % xlabel('Seconds','fontsize',15);
 ylabel('ms','fontsize',15);
-ylim([0 20])
+ylim([-10 20])
+applyhatch_pluscolor(gcf,'\-\',1);
+
 print -dpsc2 Z:\home\bill\gbtian\research\kernel\mptcp\conext14\fig\path_qd_bar.eps;
 
 
@@ -1200,17 +1207,17 @@ hold on;
 grid on;
 h=bar(tp);
 
-for i=1:length(h)    
-    XDATA=get(get(h(i),'Children'),'XData');
-    YDATA=get(get(h(i),'Children'),'YData');
-
-    for j=1:size(XDATA,2)
-            x=XDATA(1,j)+(XDATA(3,j)-XDATA(1,j))/2-0.07;
-            y=YDATA(2,j)+0.5;
-            t=[num2str(YDATA(2,j),3) ];
-            text(x,y,t,'Color','k','fontsize',13)
-    end
-end
+% for i=1:length(h)    
+%     XDATA=get(get(h(i),'Children'),'XData');
+%     YDATA=get(get(h(i),'Children'),'YData');
+% 
+%     for j=1:size(XDATA,2)
+%             x=XDATA(1,j)+(XDATA(3,j)-XDATA(1,j))/2-0.07;
+%             y=YDATA(2,j)+0.5;
+%             t=[num2str(YDATA(2,j),3) ];
+%             text(x,y,t,'Color','k','fontsize',13)
+%     end
+% end
     
 set(gca,'XTickLabel',{'', 'Optimum & Optimum', '', 'Optimum & Verizon','','Optimum & 4G'},'fontsize',13)
 legend('MPIP', 'MPTCP', 'Together', 2);
@@ -1227,6 +1234,8 @@ end
 xlabel('','fontsize',15);
 ylabel('Mbps','fontsize',15);
 ylim([0 20])
+applyhatch_pluscolor(gcf,'\-\',1);
+
 print -dpsc2 Z:\home\bill\gbtian\research\kernel\mptcp\conext14\fig\emulab_tp_bar.eps;
 
 
@@ -1234,23 +1243,27 @@ patp = [p1_emulab p2_emulab;
             p1_verizon p2_verizon;
             p1_4g p2_4g];
 
+error_patp = [error_p1_emulab error_p2_emulab;
+                    error_p1_verizon error_p2_verizon;
+                    error_p1_4g error_p2_4g];
+
 figure;
 set(gcf,'outerposition',get(0,'screensize'));
 hold on;
 grid on;
 h=bar(patp);
 
-for i=1:length(h)    
-    XDATA=get(get(h(i),'Children'),'XData');
-    YDATA=get(get(h(i),'Children'),'YData');
-
-    for j=1:size(XDATA,2)
-            x=XDATA(1,j)+(XDATA(3,j)-XDATA(1,j))/2-0.07;
-            y=YDATA(2,j)+0.2;
-            t=[num2str(YDATA(2,j),3) ];
-            text(x,y,t,'Color','k','fontsize',13)
-    end
-end
+% for i=1:length(h)    
+%     XDATA=get(get(h(i),'Children'),'XData');
+%     YDATA=get(get(h(i),'Children'),'YData');
+% 
+%     for j=1:size(XDATA,2)
+%             x=XDATA(1,j)+(XDATA(3,j)-XDATA(1,j))/2-0.07;
+%             y=YDATA(2,j)+0.2;
+%             t=[num2str(YDATA(2,j),3) ];
+%             text(x,y,t,'Color','k','fontsize',13)
+%     end
+% end
 
 set(gca,'XTickLabel',{'', 'Optimum & Optimum', '', 'Optimum & Verizon','','Optimum & 4G'},'fontsize',13)
 legend('Path 1', 'Path 2', 2);
@@ -1267,7 +1280,9 @@ end
 
 xlabel('','fontsize',15);
 ylabel('Mbps','fontsize',15);
-ylim([0 10])
+ylim([-1 15])
+applyhatch_pluscolor(gcf,'\-\',1);
+
 print -dpsc2 Z:\home\bill\gbtian\research\kernel\mptcp\conext14\fig\emulab_patp_bar.eps;
 
 
