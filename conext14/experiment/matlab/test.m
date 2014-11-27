@@ -4,9 +4,9 @@ x=1:2:1190;
 wts = (repmat(1/5,5,1));
 
 
-data1 = csvread('Z:\home\bill\gbtian\research\kernel\mptcp\conext14\experiment\data\verizon\mpip.csv');
-data2 = csvread('Z:\home\bill\gbtian\research\kernel\mptcp\conext14\experiment\data\verizon\mptcp.csv');
-data3 = csvread('Z:\home\bill\gbtian\research\kernel\mptcp\conext14\experiment\data\verizon\together.csv');
+data1 = csvread('D:\research\mpip\mptcp\conext14\experiment\data\verizon\mpip.csv');
+data2 = csvread('D:\research\mpip\mptcp\conext14\experiment\data\verizon\mptcp.csv');
+data3 = csvread('D:\research\mpip\mptcp\conext14\experiment\data\verizon\together.csv');
 
 
 ip=conv(data1(:,4), wts, 'valid');
@@ -39,7 +39,7 @@ set(gca,'FontSize',15);
 get(gca,'YLabel');
 set(gca,'FontSize',15);
 title('overall');
-% print -dpsc2 Z:\home\bill\gbtian\research\kernel\mptcp\conext14\fig\pair_limit.eps;
+% print -dpsc2 D:\research\mpip\mptcp\conext14\fig\pair_limit.eps;
 
 
 figure;
@@ -58,7 +58,7 @@ set(gca,'FontSize',15);
 get(gca,'YLabel');
 set(gca,'FontSize',15);
 title('mpip');
-% print -dpsc2 Z:\home\bill\gbtian\research\kernel\mptcp\conext14\fig\pair_limit.eps;
+% print -dpsc2 D:\research\mpip\mptcp\conext14\fig\pair_limit.eps;
 
 
 
@@ -78,7 +78,7 @@ set(gca,'FontSize',15);
 get(gca,'YLabel');
 set(gca,'FontSize',15);
 title('mptcp');
-% print -dpsc2 Z:\home\bill\gbtian\research\kernel\mptcp\conext14\fig\pair_limit.eps;
+% print -dpsc2 D:\research\mpip\mptcp\conext14\fig\pair_limit.eps;
 
 
 
@@ -98,4 +98,4 @@ set(gca,'FontSize',15);
 get(gca,'YLabel');
 set(gca,'FontSize',15);
 title('together');
-% print -dpsc2 Z:\home\bill\gbtian\research\kernel\mptcp\conext14\fig\pair_limit.eps;
+% print -dpsc2 D:\research\mpip\mptcp\conext14\fig\pair_limit.eps;
