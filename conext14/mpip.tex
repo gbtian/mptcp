@@ -191,6 +191,12 @@ In this paper, we introduce multipath communication at network layer instead of 
 \section{Conclusions and Future Work}
 \label{sec:conclusion}
 
+Given the popular support of multiple network interfaces on modern devices, MPIP is designed to make full of each interface to achieve optimal performance. Besides higher throughput than single path transmission, customized routing for specific application's requirement is also in the consideration of MPIP when designing the system. Instead of sole support of TCP traffic, MPIP works with any upper protocol that use regular IP as the transmission method, i.e. TCP and UDP.
+
+In the work, we prove that multipath can be implemented at network layer with less effort and better maintainability because of the simplicity of network layer. According to our evaluation, besides higher throughput than regular TCP, customized routing capability can greatly benefit applications that have different requirement of high throughput and high responsiveness. By combing MPTCP and MPIP together, with the support of MPTCP's unique two-layer sequence number management and independent TCP subflow mechanism, we surprisingly achieved the best throughput result.
+
+We can see that with unstable connections like $4$G, MPIP's performance is yet satisfactory. We use a simple delay-based path selection algorithm in this prototype, a more complete and efficient module can be designed for this functionality in the future. Also, customized routing now only supports packet length based decision, a smarter decision mechanism like flow-table in SDN is under consideration. As future works, Android implementation is next step to directly use $4$G interface instead of hotspot access. IPv6 support is also another feature that is underway.
+
 \bibliographystyle{./bib/IEEEtran}
 \bibliography{./bib/IEEEfull}
 \end{document}

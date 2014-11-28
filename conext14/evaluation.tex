@@ -17,7 +17,7 @@ Certainly, nowadays, most computers have NTP enabled and the system's local time
 
 On our experiment plat, we turn off NTP on both nodes, do a TCP transmission with iperf3 for one day with consistent traffic. Inside MPIP, we record the one-way delay of each packet from the client to server. Because the traffic load is consistent, queuing delay roughly remains the same. But as shown in Figure~\ref{fig.clock}, because of the clock offset between the two nodes, the trend of queuing delay exposes an linearly increasing curve even the trend is very slow. In Figure~\ref{fig.clock}, we record the queuing delay every one minute. For the whole day($1400$ minutes), we can see that the clock offset is about $350$ milliseconds which means that the server's clock runs one millisecond fast than the client for each four minutes. We will be able to see this trend again in following results.
 
-\begin{figure}
+\begin{figure}[htb]
 \centering{
 \subfigure[Clock offset
 \label{fig.clock}]{\includegraphics[width=0.49\linewidth,height=1.4in]{fig/clock.eps}}
@@ -45,13 +45,13 @@ With this configuration, we do a regular TCP transmission that lasts for $20$ mi
 With the same configuration, Figure~\ref{fig.outoforder} shows the improvement brought by the out-of-order process. The average throughput is $28.2$Mbps and $19.4$Mbps with/out out-of-order process respectively. The improvement maybe trivial if the delay on all the paths is the same because most packets will arrive at the receiver in the order of being sent out. But for multipath connections, it can be very often that each path goes through a totally different route, that is where out-of-order happens most. In all following experiments, we enable out-of-order process by default.
 
 \subsubsection{Dynamic Addition/Removal of Path}
-\label{sec:switch}
+\label{sec:switch_evaluation}
 
 In Figure~\ref{fig.switch}, a $6$ minutes experiment is done for MPIP and MPTCP respectively. The experiment consists of three stages. We start the experiment with $4$ paths fully functional. After two minutes, we unplug the wire of one NIC at the client to reduce the number of path to $2$. The wire is plugged back for the last two minutes to add back the number of path to $4$.
 
 In both case, MPIP and MPTCP adapt to the change smoothly. The transmission of iperf3 doesn't pause except the change of throughput. Because of the overhead to close and open new TCP connections, when IP address changes happen, MPTCP has longer delay than MPIP, especially when adding paths.
 
-\begin{figure}
+\begin{figure}[htb]
 \centering
 \includegraphics[width=0.8\linewidth,height=1.4in]{fig/switch.eps}
 \caption{Dynamic Addition/Removal of Path}
@@ -79,14 +79,14 @@ By replacing one NIC on the client to a wireless interface, we evaluate the perf
 
 The error bar on top of each bar is the standard deviation the related bar. For wired connection, the overall variation of one session is much smaller than independent paths' variation. This happens because the coupling among paths causes variations for one single path, but with every path compensating for each other, the overall variation is small. We don't see much difference in wireless connection because most traffic is assigned to the two wired paths equally during the experiment. If the assignment of traffic is not equal during the experiment, we still expect large difference between overall variation and paths' variation. The two wireless paths have small absolute variation value, but comparing to their small throughput, the value of variation is actually very large.
 
-\begin{figure}
+\begin{figure}[htb]
 \centering
 \includegraphics[width=0.8\linewidth,height=1.4in]{fig/tp_bar.eps}
 \caption{Overall Throughput Comparison}
 \label{fig.tp_bar}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[htb]
 \centering
 \includegraphics[width=0.8\linewidth,height=1.4in]{fig/path_tp_bar.eps}
 \caption{Path Throughput Comparison}
@@ -219,18 +219,18 @@ The result for $4$G connection is slightly different. In this case, MPTCP gets t
 
 When both paths share the same bottleneck, the two paths are assigned with different amount of traffic because of coupling between the two paths, that's why we see the same difference of variation as in Figure~\ref{fig.tp_bar} and \ref{fig.path_tp_bar}. Both overall variation and single path's variation get large value when the two paths have different bottlenecks.
 
-\begin{figure}[H]
+\begin{figure}[htb]
 \centering
 \includegraphics[width=0.8\linewidth,height=1.4in]{fig/emulab_tp_bar.eps}
-\caption{Overall Throughput Comparison}
+\caption{Overall Throughput Comparison in Internet}
 \label{fig.emulab_tp_bar}
 \end{figure}
 
 
-\begin{figure}[H]
+\begin{figure}[htb]
 \centering
 \includegraphics[width=0.8\linewidth,height=1.4in]{fig/emulab_patp_bar.eps}
-\caption{Path Throughput Comparison}
+\caption{Path Throughput Comparison in Internet}
 \label{fig.emulab_patp_bar}
 \end{figure}
 
@@ -254,13 +254,7 @@ When both paths share the same bottleneck, the two paths are assigned with diffe
 
 In this section we try to evaluate the usage of UDP and customization routing in our MPIP system. We won't include any throughput enhancement here because the result is straightforward that we get nearly double throughput by applying multipath for UDP traffic in our experiment plat. Instead, we use Skype\cite{skype} as an experiment application to show how UDP works in our system. Meantime, we will show how our customization routing mechanism help improve Skype audio call quality and TCP throughput.
 
-Skype uses direct connection for two parties calls. All the video and audio packets are transmitted between two ends of the call directly through UDP protocol. Comparing to video streaming, Skype calls generally have higher requirement on the responsiveness of audio packets. According to our experiments, almost all Skype audio packets are less than $200$ bytes while video packets are generally larger than $1000$ bytes. To make optimization to audio packets, we add one entry to Table~\ref{tb.route}. For packets that is smaller than $200$ bytes, responsiveness consideration will be the first priority. Besides a Skype audio call, we also run an iperf3 TCP session between the two nodes.
-
-For this experiment, we only use one NIC on the server while on the client we still have two NICs working. For path $1$, we set the bandwidth to $2$Mbps and the delay to $50$ms. For path $2$, we set the bandwidth to $300$Kbps and the delay to $20$ms. Then we have one high bandwidth-delay product path and one low bandwidth-delay product path. By enabling and disabling customization routing, we get the result in Figure~\ref{fig.skype}. Figure~\ref{fig.skypetpcomp} shows the throughput of iperf3 TCP connection with/out customization, Figure~\ref{fig.skypedelaycomp} shows Skype's audio round trip time during the whole experiment with/out customization. This round trip time information is extracted from Skype's own real-time technical report, it shows the amount of delay the user experience during the audio call.
-
-From Figure~\ref{fig.skypedelaycomp}, we see the huge reduction of audio delay. The average RTT is $82$ms and $119$ ms with/out routing optimization. Because with queuing delay based algorithm, most Skype audio packet with be assigned to path $1$ because of its high bandwidth, but the by-product is higher delay. By assigning audio packets to path $2$, a much better audio call quality can be achieved. From Figure~\ref{fig.skypetpcomp}, we see that we get roughly the same throughput in both case, but the result with customization routing enabled is more consistent. This is because with customization routing enabled, path $2$ has its designated traffic. Because of its low bandwidth, the queuing delay accumulates, then the TCP traffic from the iperf3 session will probably only be assigned to path $1$ and results in a more consistent throughput.
-
-\begin{figure*}[h]
+\begin{figure*}[htp]
 \centering{
 \subfigure[iperf3 TCP Throughput Comparison\label{fig.skypetpcomp}]
 {\includegraphics[width=0.33\linewidth,height=1.4in]{fig/skype_tp_comp.eps}}
@@ -272,6 +266,12 @@ From Figure~\ref{fig.skypedelaycomp}, we see the huge reduction of audio delay. 
 \caption{UDP and Customized Routing with Skype and ACK Optimization}
 \label{fig.skype}
 \end{figure*}
+
+Skype uses direct connection for two parties calls. All the video and audio packets are transmitted between two ends of the call directly through UDP protocol. Comparing to video streaming, Skype calls generally have higher requirement on the responsiveness of audio packets. According to our experiments, almost all Skype audio packets are less than $200$ bytes while video packets are generally larger than $1000$ bytes. To make optimization to audio packets, we add one entry to Table~\ref{tb.route}. For packets that is smaller than $200$ bytes, responsiveness consideration will be the first priority. Besides a Skype audio call, we also run an iperf3 TCP session between the two nodes.
+
+For this experiment, we only use one NIC on the server while on the client we still have two NICs working. For path $1$, we set the bandwidth to $2$Mbps and the delay to $50$ms. For path $2$, we set the bandwidth to $300$Kbps and the delay to $20$ms. Then we have one high bandwidth-delay product path and one low bandwidth-delay product path. By enabling and disabling customization routing, we get the result in Figure~\ref{fig.skype}. Figure~\ref{fig.skypetpcomp} shows the throughput of iperf3 TCP connection with/out customization, Figure~\ref{fig.skypedelaycomp} shows Skype's audio round trip time during the whole experiment with/out customization. This round trip time information is extracted from Skype's own real-time technical report, it shows the amount of delay the user experience during the audio call.
+
+From Figure~\ref{fig.skypedelaycomp}, we see the huge reduction of audio delay. The average RTT is $82$ms and $119$ ms with/out routing optimization. Because with queuing delay based algorithm, most Skype audio packet with be assigned to path $1$ because of its high bandwidth, but the by-product is higher delay. By assigning audio packets to path $2$, a much better audio call quality can be achieved. From Figure~\ref{fig.skypetpcomp}, we see that we get roughly the same throughput in both case, but the result with customization routing enabled is more consistent. This is because with customization routing enabled, path $2$ has its designated traffic. Because of its low bandwidth, the queuing delay accumulates, then the TCP traffic from the iperf3 session will probably only be assigned to path $1$ and results in a more consistent throughput.
 
 
 In Figure~\ref{fig.routingack}, by applying customization routing, we prove that this mechanism can improve TCP throughput also. TCP ACK packets are generally very small. If these packets are assigned to a high delay path, probably, TCP congestion control will be trigger and pull down the overall performance of TCP.
