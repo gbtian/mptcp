@@ -2,9 +2,9 @@ This is BibTeX, Version 0.99dThe top-level auxiliary file: mpip.aux
 The style file: ./bib/IEEEtran.bst
 Database file #1: ./bib/IEEEfull.bib
 Warning--entry type for "ecmp" isn't style-file defined
---line 111 of file ./bib/IEEEfull.bib
-Warning--entry type for "sctp" isn't style-file defined
 --line 120 of file ./bib/IEEEfull.bib
+Warning--entry type for "sctp" isn't style-file defined
+--line 129 of file ./bib/IEEEfull.bib
 -- IEEEtran.bst version 1.12 (2007/01/11) by Michael Shell.
 -- http://www.michaelshell.org/tex/ieeetran/bibtex/
 -- See the "IEEEtran_bst_HOWTO.pdf" manual for usage information.

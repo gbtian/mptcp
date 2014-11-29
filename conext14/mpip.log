@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=pdflatex 2014.11.26)  28 NOV 2014 18:36
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=pdflatex 2014.11.26)  28 NOV 2014 19:11
 entering extended mode
 **D:/research/mpip/mptcp/conext14/mpip.tex
 (D:/research/mpip/mptcp/conext14/mpip.tex
@@ -362,10 +362,10 @@ LaTeX Warning: Unused global option(s):
 
 (D:\research\mpip\mptcp\conext14\mpip.aux
 
-LaTeX Warning: Label `sec:tcp' multiply defined.
-
-
 LaTeX Warning: Label `fig.outoforder' multiply defined.
+
+
+LaTeX Warning: Label `sec:tcp' multiply defined.
 
 )
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 151.
@@ -433,6 +433,7 @@ Overfull \hbox (2.93822pt too wide) in paragraph at lines 16--17
 (D:\research\mpip\mptcp\conext14\design.tex [2]
 LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <10> not available
 (Font)              Font shape `T1/ptm/b/n' tried instead on input line 39.
+ [3]
 Package epstopdf Info: Source file: <fig/handshake.eps>
 (epstopdf)                    date: 2014-11-26 21:30:15
 (epstopdf)                    size: 88303 bytes
@@ -444,14 +445,14 @@ Package epstopdf Info: Source file: <fig/handshake.eps>
 (epstopdf)             \includegraphics on input line 102.
 Package epstopdf Info: Output file is already uptodate.
 
-<fig/handshake-eps-converted-to.pdf, id=13, 525.965pt x 320.19624pt>
+<fig/handshake-eps-converted-to.pdf, id=18, 525.965pt x 320.19624pt>
 File: fig/handshake-eps-converted-to.pdf Graphic file (type pdf)
 
 <use fig/handshake-eps-converted-to.pdf>
 Package pdftex.def Info: fig/handshake-eps-converted-to.pdf used on input line 
 102.
 (pdftex.def)             Requested size: 192.00073pt x 116.88774pt.
- [3] [4 <D:/research/mpip/mptcp/conext14/fig/handshake-eps-converted-to.pdf>]
+ [4 <D:/research/mpip/mptcp/conext14/fig/handshake-eps-converted-to.pdf>]
 Overfull \hbox (3.87175pt too wide) in paragraph at lines 215--216
 []\T1/ptm/m/n/10 All heart-beat pack-ets have a spe-cial flags value $\OML/cmm/
 m/it/10 Flags[]HB$
@@ -802,21 +803,21 @@ e 264.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-)
-(D:\research\mpip\mptcp\conext14\mpip.bbl [14 <D:/research/mpip/mptcp/conext14/
-fig/emulab_patp_bar-eps-converted-to.pdf>]) [15 <D:/research/mpip/mptcp/conext1
-4/fig/skype_tp_comp-eps-converted-to.pdf> <D:/research/mpip/mptcp/conext14/fig/
-skype_delay_comp-eps-converted-to.pdf> <D:/research/mpip/mptcp/conext14/fig/rou
-ting_ack-eps-converted-to.pdf>] (D:\research\mpip\mptcp\conext14\mpip.aux)
+) [14 <D:/research/mpip/mptcp/conext14/fig/emulab_patp_bar-eps-converted-to.pdf
+>]
+(D:\research\mpip\mptcp\conext14\mpip.bbl) [15 <D:/research/mpip/mptcp/conext14
+/fig/skype_tp_comp-eps-converted-to.pdf> <D:/research/mpip/mptcp/conext14/fig/s
+kype_delay_comp-eps-converted-to.pdf> <D:/research/mpip/mptcp/conext14/fig/rout
+ing_ack-eps-converted-to.pdf>] (D:\research\mpip\mptcp\conext14\mpip.aux)
 
 LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 4769 strings out of 493921
- 67562 string characters out of 3147257
- 138840 words of memory out of 3000000
- 7925 multiletter control sequences out of 15000+200000
+ 4771 strings out of 493921
+ 67579 string characters out of 3147257
+ 137840 words of memory out of 3000000
+ 7927 multiletter control sequences out of 15000+200000
  54940 words of font info for 69 fonts, out of 3000000 for 9000
  841 hyphenation exceptions out of 8191
  42i,12n,38p,1420b,596s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -835,7 +836,7 @@ ts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1
 /urw/helvetic/uhvb8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/times/utm
 b8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/times/utmr8a.pfb><C:/Progr
 am Files/MiKTeX 2.9/fonts/type1/urw/times/utmri8a.pfb>
-Output written on mpip.pdf (15 pages, 482520 bytes).
+Output written on mpip.pdf (15 pages, 483143 bytes).
 PDF statistics:
  176 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)

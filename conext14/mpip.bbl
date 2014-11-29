@@ -26,6 +26,10 @@ C.~Raiciu, C.~Paasch, S.~Barre, A.~Ford, M.~Honda, F.~Duchene, O.~Bonaventure,
   and M.~Handley, ``How hard can it be? designing and implementing a deployable
   multipath tcp,'' in \emph{NSDI}, 2012.
 
+\bibitem{hsieh01}
+H.-Y. Hsieh and R.~Sivakumar, ``A transport layer approach for achieving
+  aggregate bandwidths on multi-homed mobile hosts,'' in \emph{MobiCom}, 2002.
+
 \bibitem{key01}
 P.~Key, L.~Massouli{\'e}, and D.~Towsley, ``Path selection and multipath
   congestion control,'' \emph{Commun. ACM}, vol.~54, no.~1, Jan. 2011.
@@ -57,6 +61,11 @@ G.~Detal, C.~Paasch, S.~van~der Linden, P.~Merindol, G.~Avoine, and
 \bibitem{PKB13}
 C.~Paasch, R.~Khalili, and O.~Bonaventure, ``On the benefits of applying
   experimental design to improve multipath tcp,'' in \emph{CoNEXT}, 2013.
+
+\bibitem{PFAB14}
+C.~Paasch, S.~Ferlin, O.~Alay, and O.~Bonaventure, ``Experimental evaluation of
+  multipath tcp schedulers,'' in \emph{ACM SIGCOMM Capacity Sharing Workshop
+  (CSWS)}.\hskip 1em plus 0.5em minus 0.4em\relax ACM, 2014.
 
 \bibitem{chen01}
 Y.-C. Chen, Y.-s. Lim, R.~J. Gibbens, E.~M. Nahum, R.~Khalili, and D.~Towsley,
