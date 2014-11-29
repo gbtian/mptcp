@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=pdflatex 2014.11.26)  27 NOV 2014 00:50
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=pdflatex 2014.11.26)  28 NOV 2014 22:32
 entering extended mode
 **D:/research/mpip/mptcp/conext14/mpip.tex
 (D:/research/mpip/mptcp/conext14/mpip.tex
@@ -362,10 +362,10 @@ LaTeX Warning: Unused global option(s):
 
 (D:\research\mpip\mptcp\conext14\mpip.aux
 
-LaTeX Warning: Label `fig.outoforder' multiply defined.
-
-
 LaTeX Warning: Label `sec:tcp' multiply defined.
+
+
+LaTeX Warning: Label `fig.outoforder' multiply defined.
 
 
 LaTeX Warning: Label `sec:switch' multiply defined.
@@ -433,10 +433,9 @@ Overfull \hbox (2.93822pt too wide) in paragraph at lines 16--17
  []
 
 ) (D:\research\mpip\mptcp\conext14\related.tex)
-(D:\research\mpip\mptcp\conext14\design.tex
+(D:\research\mpip\mptcp\conext14\design.tex [2]
 LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <10> not available
 (Font)              Font shape `T1/ptm/b/n' tried instead on input line 39.
- [2]
 Package epstopdf Info: Source file: <fig/handshake.eps>
 (epstopdf)                    date: 2014-11-26 21:30:15
 (epstopdf)                    size: 88303 bytes
@@ -448,14 +447,14 @@ Package epstopdf Info: Source file: <fig/handshake.eps>
 (epstopdf)             \includegraphics on input line 102.
 Package epstopdf Info: Output file is already uptodate.
 
-<fig/handshake-eps-converted-to.pdf, id=14, 525.965pt x 320.19624pt>
+<fig/handshake-eps-converted-to.pdf, id=13, 525.965pt x 320.19624pt>
 File: fig/handshake-eps-converted-to.pdf Graphic file (type pdf)
 
 <use fig/handshake-eps-converted-to.pdf>
 Package pdftex.def Info: fig/handshake-eps-converted-to.pdf used on input line 
 102.
 (pdftex.def)             Requested size: 192.00073pt x 116.88774pt.
- [3 <D:/research/mpip/mptcp/conext14/fig/handshake-eps-converted-to.pdf>] [4]
+ [3] [4 <D:/research/mpip/mptcp/conext14/fig/handshake-eps-converted-to.pdf>]
 Overfull \hbox (3.87175pt too wide) in paragraph at lines 215--216
 []\T1/ptm/m/n/10 All heart-beat pack-ets have a spe-cial flags value $\OML/cmm/
 m/it/10 Flags[]HB$
@@ -467,7 +466,7 @@ Overfull \hbox (7.04807pt too wide) in paragraph at lines 224--225
 h
  []
 
-
+[5]
 Overfull \hbox (6.6177pt too wide) in paragraph at lines 240--241
 []\T1/ptm/m/n/10 Processing de-lay. Time routers take to pro-cess the packet
  []
@@ -487,42 +486,42 @@ Package epstopdf Info: Source file: <fig/delay.eps>
 pdf fig/delay.eps>
 (epstopdf)             \includegraphics on input line 250.
 Package epstopdf Info: Output file is already uptodate.
-<fig/delay-eps-converted-to.pdf, id=25, 1888.05376pt x 991.705pt>
+<fig/delay-eps-converted-to.pdf, id=31, 1888.05376pt x 991.705pt>
 File: fig/delay-eps-converted-to.pdf Graphic file (type pdf)
 
 <use fig/delay-eps-converted-to.pdf>
 Package pdftex.def Info: fig/delay-eps-converted-to.pdf used on input line 250.
 
 (pdftex.def)             Requested size: 192.00073pt x 100.84085pt.
- [5]
+
 Overfull \hbox (2.66655pt too wide) in paragraph at lines 260--261
 []\T1/ptm/b/n/10 Minimum Net-work De-lay $\OML/cmm/m/it/10 D[]$\T1/ptm/m/n/10 .
  Ev-ery time one node
  []
 
-
+[6 <D:/research/mpip/mptcp/conext14/fig/delay-eps-converted-to.pdf>]
 Overfull \hbox (8.13182pt too wide) in paragraph at lines 305--317
  [][] 
  []
 
-[6 <D:/research/mpip/mptcp/conext14/fig/delay-eps-converted-to.pdf>]
+
 Overfull \hbox (4.12701pt too wide) in paragraph at lines 323--324
 \T1/ptm/m/n/10 all con-ges-tion con-trol al-go-rithms in-herit from tra-di-tion
 al TCP,
  []
 
-
+[7]
 Overfull \hbox (4.40793pt too wide) in paragraph at lines 408--409
 \T1/ptm/m/n/10 fully com-pleted, when send-ing out a packet, the sender checks
  []
 
-[7]
+
 Overfull \hbox (3.70746pt too wide) in paragraph at lines 422--423
 []\T1/ptm/m/n/10 This mech-a-nism works per-fectly for con-nec-tions that trans
 -
  []
 
-[8]
+[8] [9]
 
 LaTeX Warning: File `fig/outoforder.eps' not found on input line 490.
 
@@ -534,7 +533,7 @@ Package epstopdf Info: Source file: <fig/outoforder.eps>
 d-to.pdf fig/outoforder.eps>
 (epstopdf)             \includegraphics on input line 490.
 Package epstopdf Info: Output file is already uptodate.
-<fig/outoforder-eps-converted-to.pdf, id=50, 1080.035pt x 1243.64626pt>
+<fig/outoforder-eps-converted-to.pdf, id=53, 1080.035pt x 1243.64626pt>
 File: fig/outoforder-eps-converted-to.pdf Graphic file (type pdf)
 
 <use fig/outoforder-eps-converted-to.pdf>
@@ -544,7 +543,7 @@ Package pdftex.def Info: fig/outoforder-eps-converted-to.pdf used on input line
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [9]
+
 Overfull \hbox (2.52791pt too wide) in paragraph at lines 506--507
 []\T1/ptm/m/n/10 During our ex-per-i-ments, it hap-pens that one spe-cific pack
 et
@@ -593,6 +592,8 @@ Overfull \hbox (14.56694pt too wide) in paragraph at lines 52--53
 []\T1/ptm/m/n/10 In both case, MPIP and MPTCP adapt to the change smoothly.
  []
 
+[11 <D:/research/mpip/mptcp/conext14/fig/clock-eps-converted-to.pdf> <D:/resear
+ch/mpip/mptcp/conext14/fig/out_of_order_w_sack-eps-converted-to.pdf>]
 Package epstopdf Info: Source file: <fig/switch.eps>
 (epstopdf)                    date: 2014-11-27 00:16:37
 (epstopdf)                    size: 13523 bytes
@@ -603,7 +604,8 @@ Package epstopdf Info: Source file: <fig/switch.eps>
 .pdf fig/switch.eps>
 (epstopdf)             \includegraphics on input line 56.
 Package epstopdf Info: Output file is already uptodate.
-<fig/switch-eps-converted-to.pdf, id=62, 506.89375pt x 404.51125pt>
+
+<fig/switch-eps-converted-to.pdf, id=72, 506.89375pt x 404.51125pt>
 File: fig/switch-eps-converted-to.pdf Graphic file (type pdf)
 
 <use fig/switch-eps-converted-to.pdf>
@@ -626,12 +628,8 @@ Overfull \hbox (18.6271pt too wide) in paragraph at lines 70--71
 mr/m/n/10 171$\T1/ptm/m/n/10 Mbps,
  []
 
-[11 <D:/research/mpip/mptcp/conext14/fig/clock-eps-converted-to.pdf> <D:/resear
-ch/mpip/mptcp/conext14/fig/out_of_order_w_sack-eps-converted-to.pdf> <D:/resear
-ch/mpip/mptcp/conext14/fig/switch-eps-converted-to.pdf>]
 
-LaTeX Warning: Reference `fig.nolimittpcomp' on page 12 undefined on input line
- 80.
+Underfull \vbox (badness 1975) has occurred while \output is active []
 
 Package epstopdf Info: Source file: <fig/tp_bar.eps>
 (epstopdf)                    date: 2014-11-27 00:48:51
@@ -643,7 +641,8 @@ Package epstopdf Info: Source file: <fig/tp_bar.eps>
 .pdf fig/tp_bar.eps>
 (epstopdf)             \includegraphics on input line 84.
 Package epstopdf Info: Output file is already uptodate.
-<fig/tp_bar-eps-converted-to.pdf, id=76, 581.17125pt x 296.10625pt>
+
+<fig/tp_bar-eps-converted-to.pdf, id=73, 581.17125pt x 296.10625pt>
 File: fig/tp_bar-eps-converted-to.pdf Graphic file (type pdf)
 
 <use fig/tp_bar-eps-converted-to.pdf>
@@ -661,7 +660,7 @@ ed-to.pdf fig/path_tp_bar.eps>
 (epstopdf)             \includegraphics on input line 91.
 Package epstopdf Info: Output file is already uptodate.
 
-<fig/path_tp_bar-eps-converted-to.pdf, id=77, 581.17125pt x 296.10625pt>
+<fig/path_tp_bar-eps-converted-to.pdf, id=74, 581.17125pt x 296.10625pt>
 File: fig/path_tp_bar-eps-converted-to.pdf Graphic file (type pdf)
 
 <use fig/path_tp_bar-eps-converted-to.pdf>
@@ -671,6 +670,9 @@ e 91.
 
 Underfull \vbox (badness 1009) has occurred while \output is active []
 
+ [12 <D:/research/mpip/mptcp/conext14/fig/switch-eps-converted-to.pdf> <D:/rese
+arch/mpip/mptcp/conext14/fig/tp_bar-eps-converted-to.pdf> <D:/research/mpip/mpt
+cp/conext14/fig/path_tp_bar-eps-converted-to.pdf>]
 Package epstopdf Info: Source file: <fig/twopaths_tp_comp.eps>
 (epstopdf)                    date: 2014-11-27 00:16:17
 (epstopdf)                    size: 19557 bytes
@@ -683,7 +685,7 @@ nverted-to.pdf fig/twopaths_tp_comp.eps>
 (epstopdf)             \includegraphics on input line 130.
 Package epstopdf Info: Output file is already uptodate.
 
-<fig/twopaths_tp_comp-eps-converted-to.pdf, id=78, 520.94624pt x 404.51125pt>
+<fig/twopaths_tp_comp-eps-converted-to.pdf, id=87, 520.94624pt x 404.51125pt>
 File: fig/twopaths_tp_comp-eps-converted-to.pdf Graphic file (type pdf)
 
 <use fig/twopaths_tp_comp-eps-converted-to.pdf>
@@ -706,17 +708,13 @@ Package epstopdf Info: Source file: <fig/twopaths_qd_comp.eps>
 nverted-to.pdf fig/twopaths_qd_comp.eps>
 (epstopdf)             \includegraphics on input line 132.
 Package epstopdf Info: Output file is already uptodate.
-<fig/twopaths_qd_comp-eps-converted-to.pdf, id=79, 522.95375pt x 404.51125pt>
+<fig/twopaths_qd_comp-eps-converted-to.pdf, id=88, 522.95375pt x 404.51125pt>
 File: fig/twopaths_qd_comp-eps-converted-to.pdf Graphic file (type pdf)
 
 <use fig/twopaths_qd_comp-eps-converted-to.pdf>
 Package pdftex.def Info: fig/twopaths_qd_comp-eps-converted-to.pdf used on inpu
 t line 132.
 (pdftex.def)             Requested size: 117.59567pt x 101.17694pt.
- [12 <D:/research/mpip/mptcp/conext14/fig/tp_bar-eps-converted-to.pdf> <D:/rese
-arch/mpip/mptcp/conext14/fig/path_tp_bar-eps-converted-to.pdf> <D:/research/mpi
-p/mptcp/conext14/fig/twopaths_tp_comp-eps-converted-to.pdf> <D:/research/mpip/m
-ptcp/conext14/fig/twopaths_qd_comp-eps-converted-to.pdf>]
 Package epstopdf Info: Source file: <fig/emulab_tp_bar.eps>
 (epstopdf)                    date: 2014-11-27 00:49:01
 (epstopdf)                    size: 5577742 bytes
@@ -728,16 +726,13 @@ rted-to.pdf fig/emulab_tp_bar.eps>
 (epstopdf)             \includegraphics on input line 224.
 Package epstopdf Info: Output file is already uptodate.
 
-<fig/emulab_tp_bar-eps-converted-to.pdf, id=95, 581.17125pt x 296.10625pt>
+<fig/emulab_tp_bar-eps-converted-to.pdf, id=89, 581.17125pt x 296.10625pt>
 File: fig/emulab_tp_bar-eps-converted-to.pdf Graphic file (type pdf)
 
 <use fig/emulab_tp_bar-eps-converted-to.pdf>
 Package pdftex.def Info: fig/emulab_tp_bar-eps-converted-to.pdf used on input l
 ine 224.
 (pdftex.def)             Requested size: 191.99992pt x 101.1763pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
 Package epstopdf Info: Source file: <fig/emulab_patp_bar.eps>
 (epstopdf)                    date: 2014-11-27 00:49:05
 (epstopdf)                    size: 5577744 bytes
@@ -749,15 +744,19 @@ verted-to.pdf fig/emulab_patp_bar.eps>
 (epstopdf)             \includegraphics on input line 232.
 Package epstopdf Info: Output file is already uptodate.
 
-<fig/emulab_patp_bar-eps-converted-to.pdf, id=96, 581.17125pt x 296.10625pt>
+<fig/emulab_patp_bar-eps-converted-to.pdf, id=90, 581.17125pt x 296.10625pt>
 File: fig/emulab_patp_bar-eps-converted-to.pdf Graphic file (type pdf)
 
 <use fig/emulab_patp_bar-eps-converted-to.pdf>
 Package pdftex.def Info: fig/emulab_patp_bar-eps-converted-to.pdf used on input
  line 232.
 (pdftex.def)             Requested size: 191.99992pt x 101.1763pt.
- [13 <D:/research/mpip/mptcp/conext14/fig/emulab_tp_bar-eps-converted-to.pdf> <
-D:/research/mpip/mptcp/conext14/fig/emulab_patp_bar-eps-converted-to.pdf>]
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [13 <D:/research/mpip/mptcp/conext14/fig/twopaths_tp_comp-eps-converted-to.pdf
+> <D:/research/mpip/mptcp/conext14/fig/twopaths_qd_comp-eps-converted-to.pdf> <
+D:/research/mpip/mptcp/conext14/fig/emulab_tp_bar-eps-converted-to.pdf>]
 Package epstopdf Info: Source file: <fig/skype_tp_comp.eps>
 (epstopdf)                    date: 2014-11-27 00:16:19
 (epstopdf)                    size: 14686 bytes
@@ -769,7 +768,7 @@ rted-to.pdf fig/skype_tp_comp.eps>
 (epstopdf)             \includegraphics on input line 266.
 Package epstopdf Info: Output file is already uptodate.
 
-<fig/skype_tp_comp-eps-converted-to.pdf, id=107, 511.9125pt x 404.51125pt>
+<fig/skype_tp_comp-eps-converted-to.pdf, id=104, 511.9125pt x 404.51125pt>
 File: fig/skype_tp_comp-eps-converted-to.pdf Graphic file (type pdf)
 
 <use fig/skype_tp_comp-eps-converted-to.pdf>
@@ -788,7 +787,7 @@ nverted-to.pdf fig/skype_delay_comp.eps>
 (epstopdf)             \includegraphics on input line 268.
 Package epstopdf Info: Output file is already uptodate.
 
-<fig/skype_delay_comp-eps-converted-to.pdf, id=108, 521.95pt x 404.51125pt>
+<fig/skype_delay_comp-eps-converted-to.pdf, id=105, 521.95pt x 404.51125pt>
 File: fig/skype_delay_comp-eps-converted-to.pdf Graphic file (type pdf)
 
 <use fig/skype_delay_comp-eps-converted-to.pdf>
@@ -806,7 +805,7 @@ ed-to.pdf fig/routing_ack.eps>
 (epstopdf)             \includegraphics on input line 270.
 Package epstopdf Info: Output file is already uptodate.
 
-<fig/routing_ack-eps-converted-to.pdf, id=109, 512.91624pt x 404.51125pt>
+<fig/routing_ack-eps-converted-to.pdf, id=106, 512.91624pt x 404.51125pt>
 File: fig/routing_ack-eps-converted-to.pdf Graphic file (type pdf)
 
 <use fig/routing_ack-eps-converted-to.pdf>
@@ -814,24 +813,22 @@ Package pdftex.def Info: fig/routing_ack-eps-converted-to.pdf used on input lin
 e 270.
 (pdftex.def)             Requested size: 166.32013pt x 101.17694pt.
 )
-(D:\research\mpip\mptcp\conext14\mpip.bbl) [14
+(D:\research\mpip\mptcp\conext14\mpip.bbl [14 <D:/research/mpip/mptcp/conext14/
+fig/emulab_patp_bar-eps-converted-to.pdf>]) [15
 
-] [15 <D:/research/mpip/mptcp/conext14/fig/skype_tp_comp-eps-converted-to.pdf> 
+] [16 <D:/research/mpip/mptcp/conext14/fig/skype_tp_comp-eps-converted-to.pdf> 
 <D:/research/mpip/mptcp/conext14/fig/skype_delay_comp-eps-converted-to.pdf> <D:
 /research/mpip/mptcp/conext14/fig/routing_ack-eps-converted-to.pdf>] (D:\resear
 ch\mpip\mptcp\conext14\mpip.aux)
-
-LaTeX Warning: There were undefined references.
-
 
 LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 4758 strings out of 493921
- 67479 string characters out of 3147257
- 141840 words of memory out of 3000000
- 7914 multiletter control sequences out of 15000+200000
+ 4769 strings out of 493921
+ 67549 string characters out of 3147257
+ 138840 words of memory out of 3000000
+ 7925 multiletter control sequences out of 15000+200000
  54940 words of font info for 69 fonts, out of 3000000 for 9000
  841 hyphenation exceptions out of 8191
  42i,12n,38p,1420b,596s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -850,9 +847,9 @@ ts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1
 /urw/helvetic/uhvb8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/times/utm
 b8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/times/utmr8a.pfb><C:/Progr
 am Files/MiKTeX 2.9/fonts/type1/urw/times/utmri8a.pfb>
-Output written on mpip.pdf (15 pages, 478182 bytes).
+Output written on mpip.pdf (16 pages, 481842 bytes).
 PDF statistics:
- 176 PDF objects out of 1000 (max. 8388607)
+ 179 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  76 words of extra memory for PDF output out of 10000 (max. 10000000)
 

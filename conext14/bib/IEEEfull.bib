@@ -14,13 +14,123 @@
 @STRING{networking={Proceedings of IFIP Networking} }
 @STRING{sig	= {Proceedings of ACM SIGCOMM} }
 @STRING{sigm	= {ACM SIGMETRICS} }
-@STRING{mmsys	= {ACM Multimedia Systems } } 
+@STRING{mmsys	= {ACM Multimedia Systems } }
 
-@inproceedings {mptcp, 
+@inproceedings {mptcp,
 	title = {How Hard Can It Be? Designing and Implementing a Deployable Multipath TCP},
-	author = {Costin Raiciu and Christoph Paasch and Sébastien Barré and Alan Ford and Michio Honda and Fabien Duchene and Olivier Bonaventure and Mark Handley},
+	author = {Costin Raiciu and Christoph Paasch and Sebastien Barre and Alan Ford and Michio Honda and Fabien Duchene and Olivier Bonaventure and Mark Handley},
 	year = {2012},
-	booktitle = {USENIX Symposium of Networked Systems Design and Implementation (NSDI'12), San Jose (CA)},
+	booktitle = {NSDI},
+}
+
+
+@inproceedings{chen01,
+ author = {Chen, Yung-Chih and Lim, Yeon-sup and Gibbens, Richard J. and Nahum, Erich M. and Khalili, Ramin and Towsley, Don},
+ title = {A Measurement-based Study of MultiPath TCP Performance over Wireless Networks},
+ booktitle = {IMC},
+ year = {2013},
+}
+
+@article{chen02,
+  title={Characterizing 4G and 3G networks: Supporting mobility with multipath TCP},
+  author={Chen, Yung-Chih and Towsley, Don and Nahum, Erich M and Gibbens, Richard J and Lim, Yeon-sup},
+  journal={School of Computer Science, University of Massachusetts Amherst, Tech. Rep},
+  volume={22},
+  year={2012}
+}
+
+@inproceedings {BRBH10,
+	title = {Experimenting with Multipath TCP},
+	author = {Sebastien Barre and Costin Raiciu and Olivier Bonaventure and Mark Handley},
+	year = {2010},
+	month = {September},
+	booktitle = {SIGCOMM 2010 Demo},
+}
+
+@inproceedings {PKB13,
+	title = {On the Benefits of Applying Experimental Design to Improve Multipath TCP},
+	author = {Christoph Paasch and Ramin Khalili and Olivier Bonaventure},	
+	year = {2013},
+	booktitle = {CoNEXT},
+}
+
+
+@article {DPLMAB13,
+	title = {Revisiting Flow-Based Load Balancing: Stateless Path Selection in Data Center Networks},
+	author = {Gregory Detal and Christoph Paasch and Simon van der Linden and Pascal Merindol and Gildas Avoine and Olivier Bonaventure},
+	journal = {Computer Networks},
+	year = {2013},
+	volume = {57},
+	number = {5},
+	month = {April},	
+}
+
+
+@inproceedings {PDDRB12,
+	title = {Exploring Mobile/WiFi Handover with Multipath TCP},
+	author = {Christoph Paasch and Gregory Detal and Fabien Duchene and Costin Raiciu and Olivier Bonaventure},
+	year = {2012},
+	booktitle = {Cellnet},
+}
+
+@inproceedings{cao01,
+ author = {Yu Cao and Mingwei Xu and Xiaoming Fu},
+ title = {Delay-based Congestion Control for Multipath TCP},
+ booktitle = {ICNP},
+ year = {2012},
+}
+
+@inproceedings{vegas,
+ author = {Brakmo, Lawrence S. and O'Malley, Sean W. and Peterson, Larry L.},
+ title = {TCP Vegas: New Techniques for Congestion Detection and Avoidance},
+ booktitle = {SIGCOMM},
+ year = {1994},
+}
+
+
+@article{key01,
+ author = {Key, Peter and Massouli{\'e}, Laurent and Towsley, Don},
+ title = {Path Selection and Multipath Congestion Control},
+ journal = {Commun. ACM},
+ issue_date = {January 2011},
+ volume = {54},
+ number = {1},
+ month = jan,
+ year = {2011},
+}
+
+@INPROCEEDINGS{dong01,
+author={Yu Dong and Dingding Wang and Pissinou, N. and Jian Wang},
+booktitle={Next Generation Internet Networks, 3rd EuroNGI Conference on},
+title={Multi-Path Load Balancing in Transport Layer},
+year={2007},
+month={May},
+}
+
+
+@rfc{ecmp,
+ author = {Thaler, D. and Hopps, C.},
+ title = {Multipath Issues in Unicast and Multicast Next-Hop Selection},
+ year = {2000},
+ publisher = {RFC Editor},
+ address = {RFC 2991},
+}
+
+
+@rfc{sctp,
+ author = {L, Ong and Ciena, Corporation and J, Yoakum},
+ title = {An Introduction to the Stream Control Transmission Protocol (SCTP)},
+ year = {2002},
+ publisher = {RFC Editor},
+ address = {RFC 3286},
+}
+
+@INPROCEEDINGS{joe01,
+author={Inwhee Joe and Sijia Yan},
+booktitle={INC, IMS and IDC, 2009. NCM '09. Fifth International Joint Conference on},
+title={SCTP Throughput Improvement with Best Load Sharing Based on Multihoming},
+year={2009},
+month={Aug},
 }
 
 @article{SVR_Paper,
@@ -33,7 +143,7 @@
  month = aug,
  year = {2004},
  pages = {199--222},
-} 
+}
 
 
 
@@ -48,6 +158,12 @@
   author	= {Constantine Dovrolis and Manish Jain and Ravi Prasad},
   title		= {{Measurement tools for the capacity and load of Internet paths}},
   note	= "\url{http://www.cc.gatech.edu/fac/Constantinos.Dovrolis/bw-est/}"
+}
+
+@Misc{apple,
+  author	= {Apple},
+  title		= {{Apple}},
+  note	= "\url{http://www.apple.com/}"
 }
 
 @Misc{skype,
@@ -81,7 +197,7 @@
  year = {2012},
  edition = {sixth},
  publisher = {Addison-Wesley},
-} 
+}
 
 @InProceedings{vijay01,
 author="Vijay Kumar Adhikari and Yang Guo and Fang Hao and Matteo Varvello and Volker Hilt and Moritz Steiner and Zhi-Li Zhang",
@@ -161,7 +277,7 @@ year={2012}
 
 @InProceedings{lederer01,
 title={Dynamic Adaptive Streaming over HTTP Dataset},
-author={S. Lederer, C. Müller and C. Timmerer},
+author={S. Lederer, C. Mé»®ler and C. Timmerer},
 booktitle=mmsys,
 year={2012}
 }

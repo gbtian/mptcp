@@ -1,4 +1,12 @@
 %!TEX root =mpip.tex
 \section{Related Work}
 \label{sec:related}
-todo...
+Multipath transmission has been attracting research interest for quite some time while most of them focuss on TCP. Back to $2007$, in \cite{key01}, the authors investigated the potential benefits of coordinated congestion control for multipath data transfers as well as relative path selection algorithm when multipath is available. In \cite{dong01}, Dong et al implemented concurrent TCP(cTCP) in FreeBSD  to improve throughput of connections through balancing traffic load on multiple end-to-end paths. The Stream Control Transmission Protocol (SCTP)\cite{sctp} is designed with multihoming to support failover instead of parallel transmission. In \cite{joe01}, Joe et al extends SCTP to support simultaneous transmission with best load-sharing and achieve throughput improvement.
+
+In $2010$, Barre et al published an experimental result of using multiple paths simultaneously in TCP transmission. After two years, the same team released the first public implementation of multipath TCP in \cite{mptcp}. In \cite{mptcp}, according to RFC $6182$ released by IETF specifically for multipath TCP in $2011$, the authors implemented a complete prototype of multipath TCP in Linux and Android system. They also explored many other aspects of MPTCP in \cite{PDDRB12}, \cite{DPLMAB13}, \cite{PKB13}.
+
+Base on this prototype, many researches that focus on measurement and improvement of MPTCP join the research of multipath. In \cite{chen01}, based on WiFi and cellular network Chen et al did a thorough measurement of MPTCP over wireless environment. They considered multiple cellular network providers to do complete side-by-side comparison. In \cite{cao01}, a delay-based congestion control algorithm which is a transformation of Vegas\cite{vegas} was proposed for multipath TCP.
+
+In industry, Apple\cite{apple} implements multipath TCP in iOS $7.0$ for its siri, cloud-based natural language voice command and navigation service which is the first large-scale deployment of multipath TCP. 
+
+At router level, ECMP\cite{ecmp} supports load balancing of general IP packets among different paths between two routers. But ECMP need router's support and doesn't work on end hosts. 
