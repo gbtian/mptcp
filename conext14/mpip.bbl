@@ -48,6 +48,10 @@ I.~Joe and S.~Yan, ``Sctp throughput improvement with best load sharing based
   on multihoming,'' in \emph{INC, IMS and IDC, 2009. NCM '09. Fifth
   International Joint Conference on}, Aug 2009.
 
+\bibitem{BRBH10}
+S.~Barre, C.~Raiciu, O.~Bonaventure, and M.~Handley, ``Experimenting with
+  multipath tcp,'' in \emph{SIGCOMM 2010 Demo}, September 2010.
+
 \bibitem{PDDRB12}
 C.~Paasch, G.~Detal, F.~Duchene, C.~Raiciu, and O.~Bonaventure, ``Exploring
   mobile/wifi handover with multipath tcp,'' in \emph{Cellnet}, 2012.
@@ -65,7 +69,7 @@ C.~Paasch, R.~Khalili, and O.~Bonaventure, ``On the benefits of applying
 \bibitem{PFAB14}
 C.~Paasch, S.~Ferlin, O.~Alay, and O.~Bonaventure, ``Experimental evaluation of
   multipath tcp schedulers,'' in \emph{ACM SIGCOMM Capacity Sharing Workshop
-  (CSWS)}.\hskip 1em plus 0.5em minus 0.4em\relax ACM, 2014.
+  (CSWS)}, 2014.
 
 \bibitem{chen01}
 Y.-C. Chen, Y.-s. Lim, R.~J. Gibbens, E.~M. Nahum, R.~Khalili, and D.~Towsley,
@@ -80,12 +84,12 @@ Y.~Cao, M.~Xu, and X.~Fu, ``Delay-based congestion control for multipath tcp,''
 L.~S. Brakmo, S.~W. O'Malley, and L.~L. Peterson, ``Tcp vegas: New techniques
   for congestion detection and avoidance,'' in \emph{SIGCOMM}, 1994.
 
-\bibitem{apple}
-Apple, ``{Apple},'' \url{http://www.apple.com/}.
-
 \bibitem{ecmp}
 D.~Thaler and C.~Hopps, ``Multipath issues in unicast and multicast next-hop
   selection,'' RFC 2991, 2000.
+
+\bibitem{apple}
+Apple, ``{Apple},'' \url{http://www.apple.com/}.
 
 \bibitem{skype}
 Skype, ``{Skype},'' \url{http://www.skype.com/}.

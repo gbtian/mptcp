@@ -1,21 +1,23 @@
 %!TEX root=mpip.tex
 \section{Performance Evaluation}
 \label{sec:evaluation}
-
-To evaluate the performance of our proposed system, we implemented our multipath IP in Linux kernel $3.12.1$ under Ubuntu system and install the prototype on two desktops. Both desktops are connected directly to one router without any middle-box. Each desktop has two $100Mbps$ NICs which means that there are totally $4$ paths and the capacity is $200MBps$ between the two nodes. We use Netem tool in Linux to throttle the connection to evaluate our prototype under multiple scenarios. Wireless connection is also considered in our evaluation.
+To evaluate the performance of our proposed system, we implemented our multipath IP in Linux kernel $3.12.1$ under Ubuntu system. We evaluate the performance of the system in both controlled lab environment and Internet. Also, we verify our customized routing framework with UDP traffic in controlled lab environment.
 
 In all experiments, we try to keep the configuration of each node unchanged after installation. We don't do any special configuration to the system, neither we do any optimization to squeeze out all possible throughput. Except specific experiments that can only be applied to MPIP like UDP experiment and customization MPIP routing, we try to do side-by-side comparison with MPTCP for TCP connections. We will figure out how these two features work independently and together as stated in Section~\ref{sec:together};
 
 For all throughput related experiments, we use iperf3 to generate traffic between the client to the server.
 
+\subsection{Controlled Lab Environment}
+\label{sec:lab}
+In the lab, we install the prototype on two desktops. Both desktops are connected directly to one router without any middle-box. Each desktop has two $100Mbps$ NICs which means that there are totally $4$ paths and the capacity is $200MBps$ between the two nodes. We use Netem tool in Linux to throttle the connection to evaluate our prototype under multiple scenarios. Wireless connection is also considered in our evaluation.
 
-\subsection{Clock Offset}
+\subsubsection{Clock Offset}
 \label{sec:clock}
 
-During our experiments, we found that the clock of each node has some small difference. In our experiment configuration, the clock of the server is slightly faster than the client. Even this error is very small, we still see the difference in a long experiment.
-Certainly, nowadays, most computers have NTP enabled and the system's local time synchronize with time server periodically, but we still think that this difference is worth to be shown here.
+During experiments, we found that the clock of each node has some small difference. In our configuration, the clock of the server is slightly faster than the client. Even this error is very small, we still see the difference in a long experiment.
+Given most computers have NTP enabled and the system's local time synchronize with time server periodically, but we still think that this difference is worth to be shown here.
 
-On our experiment plat, we turn off NTP on both nodes, do a TCP transmission with iperf3 for one day with consistent traffic. Inside MPIP, we record the one-way delay of each packet from the client to server. Because the traffic load is consistent, queuing delay roughly remains the same. But as shown in Figure~\ref{fig.clock}, because of the clock offset between the two nodes, the trend of queuing delay exposes an linearly increasing curve even the trend is very slow. In Figure~\ref{fig.clock}, we record the queuing delay every one minute. For the whole day($1400$ minutes), we can see that the clock offset is about $350$ milliseconds which means that the server's clock runs one millisecond fast than the client for each four minutes. We will be able to see this trend again in following results.
+We turn off NTP on both nodes, do a TCP transmission for one day with consistent traffic and record the one-way delay of each packet from the client to server. Because the traffic load is consistent, queuing delay roughly remains the same. But as shown in Figure~\ref{fig.clock}, because of the clock offset between the two nodes, the trend of queuing delay exposes an linearly increasing curve even the trend is very slow. In Figure~\ref{fig.clock}, we record the queuing delay every one minute. For the whole day($1400$ minutes), we can see that the clock offset is about $350$ milliseconds which means that the server's clock runs one millisecond fast than the client for each four minutes. We will be able to see this trend again in following results.
 
 \begin{figure}[htb]
 \centering{
@@ -31,11 +33,6 @@ On our experiment plat, we turn off NTP on both nodes, do a TCP transmission wit
 \end{figure}
 
 
-\subsection{TCP Evaluation}
-\label{sec:tcp}
-
-As the dominating traffic, TCP plays a critical role in today's Internet. We try to evaluate the performance of MPIP over TCP connections in multiple network configurations.
-
 \subsubsection{TCP Out-of-order Process}
 \label{sec:outoforder}
 
@@ -49,7 +46,7 @@ With the same configuration, Figure~\ref{fig.outoforder} shows the improvement b
 
 In Figure~\ref{fig.switch}, a $6$ minutes experiment is done for MPIP and MPTCP respectively. The experiment consists of three stages. We start the experiment with $4$ paths fully functional. After two minutes, we unplug the wire of one NIC at the client to reduce the number of path to $2$. The wire is plugged back for the last two minutes to add back the number of path to $4$.
 
-In both case, MPIP and MPTCP adapt to the change smoothly. The transmission of iperf3 doesn't pause except the change of throughput. Because of the overhead to close and open new TCP connections, when IP address changes happen, MPTCP has longer delay than MPIP, especially when adding paths.
+In both case, MPIP and MPTCP adapt to the change smoothly. The transmission of iperf3 doesn't pause besides the change of throughput. Because of the overhead to close and open new TCP connections, when IP address changes happen, MPTCP has longer delay than MPIP, especially when adding paths.
 
 \begin{figure}[htb]
 \centering
@@ -77,7 +74,7 @@ In our experiment plat, with wired connection, the round trip time is trivial(ab
 
 By replacing one NIC on the client to a wireless interface, we evaluate the performance of MPIP under wireless connection. In this case, MPTCP achieves higher throughput than MPIP, but still, when they work together, the highest throughput is achieved.
 
-The error bar on top of each bar is the standard deviation the related bar. For wired connection, the overall variation of one session is much smaller than independent paths' variation. This happens because the coupling among paths causes variations for one single path, but with every path compensating for each other, the overall variation is small. We don't see much difference in wireless connection because most traffic is assigned to the two wired paths equally during the experiment. If the assignment of traffic is not equal during the experiment, we still expect large difference between overall variation and paths' variation. The two wireless paths have small absolute variation value, but comparing to their small throughput, the value of variation is actually very large.
+The error bar on top of each bar is the standard deviation the related bar. To avoid unnecessary errors, we neglect all data of the first $100$ seconds to wait the traffic of each path stabilizes. The overall variation of one session is smaller than independent paths' variation. This happens because the coupling among paths causes variations for one single path, but with every path compensating for each other, the overall variation is small. The two wireless paths have small absolute variation value, but comparing to their small throughput, the value of variation is actually very large.
 
 \begin{figure}[htb]
 \centering
@@ -118,9 +115,9 @@ The error bar on top of each bar is the standard deviation the related bar. For 
 
 In Figure~\ref{fig.path_tp_bar}, we do a analysis among different paths for MPIP transmission to clarify how all packets are assigned to each path.
 
-From the throughput comparison results, we can see that even the characters of a path is almost the same, because the coupling of different paths, there can be huge difference in their throughput. In our experiment set-up, in the case of no limit and adding delay, all four paths literally have the same characters, but results show that most traffic is taken by two paths. This happens because the four paths are not independent while one NIC is shared by two paths. The queuing delay generated by one path may also affect the queuing delay on the other path. When limiting bandwidth, we can see that the two limited paths($1$ and $2$) don't use all their bandwidth, neither the unlimited two paths($3$ and $4$), this results in the low throughput for MPIP in this scenario shown in Figure~\ref{fig.tp_bar}. When wireless is applied to the connection, the two paths that contains the wireless interface almost get nothing assigned. This is because the high queuing delay of these two paths.
+From the throughput comparison results, we can see that even the characters of a path is almost the same, because the coupling of different paths, there can be huge difference in their throughput. In our experiment set-up, in the case of no limit and adding delay, all four paths literally have the same characters, but results show that most traffic is taken by two paths. This happens because the four paths are not independent while one NIC is shared by two paths. The queuing delay generated by one path may also affect the queuing delay on the other path. When limiting bandwidth, we can see that the two limited paths($1$ and $2$) don't use all their bandwidth, neither the unlimited two paths($3$ and $4$), this causes the low throughput for MPIP in this scenario shown in Figure~\ref{fig.tp_bar}. When wireless is applied to the connection, the two paths that contains the wireless interface almost get nothing assigned. This is because the high and unstable delay of these two paths.
 
-In Figure~\ref{fig.mpip_path}, we limit the number of path to $2$. The two paths don't share any NIC to prevent coupling among paths. Also, we limit the bandwidth of path $1$ to $80$Mbps and path $2$ to $40$Mbps. From the throughput trend in Figure~\ref{fig.twopathstpcomp}, both paths converge to their own configured bandwidth and stay stable for the whole experiment. Figure~\ref{fig.twopathsqdcomp} shows the queuing delay information trend. Because of the clock offset issue we mentioned in Section~\ref{sec:clock}, we see an increasing trend in all results. According to calculation, the amount of offset during the whole experiment is consistent with the result shown in Figure~\ref{fig.clock}. Generally the queuing delay keeps stable once the TCP connection passes slow-start.
+In Figure~\ref{fig.mpip_path}, we limit the number of path to $2$. The two paths don't share any NIC to prevent coupling among paths. Also, we limit the bandwidth of path $1$ to $80$Mbps and path $2$ to $40$Mbps. From the throughput trend in Figure~\ref{fig.twopathstpcomp}, both paths converge to their own configured bandwidth and stay stable for the whole experiment. Figure~\ref{fig.twopathsqdcomp} shows the queuing delay information trend, the influence of clock offset is still straightforward. According to calculation, the amount of offset during the whole experiment is consistent with the result shown in Figure~\ref{fig.clock}. Generally the queuing delay keeps stable once the TCP connection passes slow-start.
 
 %In Figure~\ref{fig.delayqdcomp}, we manually add $5$ms delay to each NIC, and also get large but systematic fluctuation, this is cause by Netem tool that is used to add the delay.
 
@@ -176,7 +173,7 @@ In Figure~\ref{fig.mpip_path}, we limit the number of path to $2$. The two paths
 %\end{figure*}
 
 
-For paths that have wireless interface, the fluctuation is very large. Besides their average value is almost two times of wired connection, their variation is even larger as shown in Table~\ref{tb.wireless}. In Figure~\ref{fig.path_tp_bar}, we can see that the two wireless paths get little traffic because the large queuing delay values results very small value of path weight.
+For paths that have wireless interface, the fluctuation is very large. Besides their average value is almost two times of wired connection, their variation is even larger as shown in Table~\ref{tb.wireless}. In Figure~\ref{fig.path_tp_bar}, we can see that the two wireless paths get little traffic because the large queuing delay values generate small value of path weight.
 
 
 \begin{table}
@@ -209,13 +206,15 @@ Deviation  & $13.03$ & $11.27$ & $0.79$ & $0.80$ \\
 %\label{fig.mpip_path}
 %\end{figure}
 
+\subsection{On the Internet and $4$G}
+\label{sec:lab}
 Besides the controlled lab experiments, we also evaluate MPIP on the Internet to verify the prototype's NAT immunization and system robustness. We set up our server at Emulab\cite{emulab} which is located in Utah while the client is in New York. Because there is only one NIC that connects to Internet on the Emulab node, there are only $2$ paths in this case.
 
 With this configuration, we do three experiments for different bottleneck placement. First, we connect both NICs to the same router that connects to Optimum Cable with $15$Mbps bandwidth. In this case, both NICs share the same bottleneck, we don't expect any throughput enhancement at all. Secondly, we connect one NIC to Optimum and connect the other NIC to Verizon FIOS with $25$Mbps bandwidth. Finally, we connect one NIC to Optimum and connect the other wireless NIC to TMobile $4$G network through an iPhone 6 plus's hotspot. In the latter two cases, each NIC has different bottleneck, and potential throughput enhance is expected. According to our test, the capacity between our client and the server in Emulab is about $5$Mbps for Optimum, $10$Mbps for FIOS and $900$Kbps for TMobile $4$G. The result of iperf3 TCP transmission result is shown in Figure~\ref{fig.emulab_tp_bar} and Figure~\ref{fig.emulab_tp_bar}.
 
-When sharing bottleneck, all three sessions fully use the capacity of the connection with little difference. The two paths don't share the traffic equally either because of coupling between them. When Optimum and FIOS are used, overall, MPTCP gets the lowest throughput among the three sessions followed by MPIP. Still, when MPIP and MPTCP combine, the highest throughput is achieved. As for the assignment of packets for the two paths in MPIP, P$1$ in Figure~\ref{fig.emulab_tp_bar} is the path for Optimum and P$2$ is for FIOS. Approximately the traffic is assigned to each path according to the capacity of each link. This proves that the delay-based path selection algorithm in Section~\ref{sec:delay} also works perfectly in real Internet.
+When sharing bottleneck, all three sessions fully use the capacity of the connection with little difference. The two paths don't share the traffic equally either because of coupling between them. When Optimum and FIOS are used, overall, MPTCP gets the lowest throughput among the three sessions followed by MPIP. Still, when MPIP and MPTCP combine, the highest throughput is achieved. As for the assignment of packets for the two paths in MPIP, Path $1$ in Figure~\ref{fig.emulab_tp_bar} is the path for Optimum and path $2$ is for FIOS. Approximately the traffic is assigned to each path according to the capacity of each link. This proves that the delay-based path selection algorithm in Section~\ref{sec:delay} also works perfectly in real Internet.
 
-The result for $4$G connection is slightly different. In this case, MPTCP gets the highest throughput, the other two sessions get roughly this same throughput which is lower than MPTCP. According to our observation, comparing to Optimum and FIOS, the delay of $4$G connection is very unstable, this causes very high queuing delay. According to the delay-based path selection algorithm, for most of time, the weight of the $4$G path is very small. This can be shown in the traffic assignment for the $4$G path in Figure~\ref{fig.emulab_patp_bar}. When MPIP and MPTCP work together, both TCP sessions have two paths at IP level, neither makes good use of the $4$G path because of the unstable delay.
+The result for $4$G connection is slightly different. In this case, MPTCP gets the highest throughput, the other two sessions get roughly this same throughput which is lower than MPTCP. According to our observation, comparing to Optimum and FIOS, the delay of $4$G connection is very unstable, this causes very high queuing delay on the $4$G path. According to the delay-based path selection algorithm, for most of time, the weight of the $4$G path is very small. This can be shown in the traffic assignment for the $4$G path in Figure~\ref{fig.emulab_patp_bar}. When MPIP and MPTCP work together, both TCP sessions have two paths at IP level, neither makes good use of the $4$G path because of the unstable delay.
 
 When both paths share the same bottleneck, the two paths are assigned with different amount of traffic because of coupling between the two paths, that's why we see the same difference of variation as in Figure~\ref{fig.tp_bar} and \ref{fig.path_tp_bar}. Both overall variation and single path's variation get large value when the two paths have different bottlenecks.
 
@@ -252,7 +251,7 @@ When both paths share the same bottleneck, the two paths are assigned with diffe
 \subsection{UDP and Customization Routing}
 \label{sec:udp}
 
-In this section we try to evaluate the usage of UDP and customization routing in our MPIP system. We won't include any throughput enhancement here because the result is straightforward that we get nearly double throughput by applying multipath for UDP traffic in our experiment plat. Instead, we use Skype\cite{skype} as an experiment application to show how UDP works in our system. Meantime, we will show how our customization routing mechanism help improve Skype audio call quality and TCP throughput.
+In this section we try to evaluate the usage of UDP and customization routing in our MPIP system. We won't include any throughput enhancement here because the result is straightforward that we get nearly double throughput by applying multipath for UDP traffic in our blab experiment plat. Instead, we use Skype\cite{skype} as an experiment application to show how UDP works in our system. Meantime, we will show how our customization routing mechanism helps improve Skype audio call quality.
 
 \begin{figure*}[htp]
 \centering{
@@ -267,18 +266,18 @@ In this section we try to evaluate the usage of UDP and customization routing in
 \label{fig.skype}
 \end{figure*}
 
-Skype uses direct connection for two parties calls. All the video and audio packets are transmitted between two ends of the call directly through UDP protocol. Comparing to video streaming, Skype calls generally have higher requirement on the responsiveness of audio packets. According to our experiments, almost all Skype audio packets are less than $200$ bytes while video packets are generally larger than $1000$ bytes. To make optimization to audio packets, we add one entry to Table~\ref{tb.route}. For packets that is smaller than $200$ bytes, responsiveness consideration will be the first priority. Besides a Skype audio call, we also run an iperf3 TCP session between the two nodes.
+Skype uses direct connection for two parties calls. All the video and audio packets are transmitted between two ends of the call directly through UDP protocol. Comparing to video streaming, Skype calls generally have higher requirement on the responsiveness of audio packets. According to our experiments, almost all Skype audio packets are less than $200$ bytes while video packets are generally larger than $1000$ bytes. To make optimization to audio packets, we add one entry to Table~\ref{tb.route} to assign packets smaller than $200$ bytes responsiveness priority. Besides a Skype audio call, we also run an iperf3 TCP session between the two nodes to see how TCP and UDP coexists in MPIP.
 
-For this experiment, we only use one NIC on the server while on the client we still have two NICs working. For path $1$, we set the bandwidth to $2$Mbps and the delay to $50$ms. For path $2$, we set the bandwidth to $300$Kbps and the delay to $20$ms. Then we have one high bandwidth-delay product path and one low bandwidth-delay product path. By enabling and disabling customization routing, we get the result in Figure~\ref{fig.skype}. Figure~\ref{fig.skypetpcomp} shows the throughput of iperf3 TCP connection with/out customization, Figure~\ref{fig.skypedelaycomp} shows Skype's audio round trip time during the whole experiment with/out customization. This round trip time information is extracted from Skype's own real-time technical report, it shows the amount of delay the user experience during the audio call.
+For this experiment, we only use one NIC on the server while we still have two NICs working on the client. For path $1$, we set the bandwidth to $2$Mbps and the delay to $50$ms. For path $2$, we set the bandwidth to $300$Kbps and the delay to $20$ms. Then we have one high bandwidth-delay product path and one low bandwidth-delay product path. By enabling and disabling customization routing, we get the result in Figure~\ref{fig.skype}. Figure~\ref{fig.skypetpcomp} shows the throughput of iperf3 TCP connection with/out customization, Figure~\ref{fig.skypedelaycomp} shows Skype's audio round trip time during the whole experiment with/out customization. This round trip time information is extracted from Skype's own real-time technical report, it shows the amount of delay the user experiences during the audio call.
 
-From Figure~\ref{fig.skypedelaycomp}, we see the huge reduction of audio delay. The average RTT is $82$ms and $119$ ms with/out routing optimization. Because with queuing delay based algorithm, most Skype audio packet with be assigned to path $1$ because of its high bandwidth, but the by-product is higher delay. By assigning audio packets to path $2$, a much better audio call quality can be achieved. From Figure~\ref{fig.skypetpcomp}, we see that we get roughly the same throughput in both case, but the result with customization routing enabled is more consistent. This is because with customization routing enabled, path $2$ has its designated traffic. Because of its low bandwidth, the queuing delay accumulates, then the TCP traffic from the iperf3 session will probably only be assigned to path $1$ and results in a more consistent throughput.
+From Figure~\ref{fig.skypedelaycomp}, we see the huge reduction of audio delay. The average RTT is $82$ms and $119$ ms with/out routing optimization. With queuing delay based algorithm, most Skype audio packet with be assigned to path $1$ because of its high bandwidth, but the by-product is higher delay. By assigning audio packets to path $2$, a much better audio call quality can be achieved. Meantime, from Figure~\ref{fig.skypetpcomp}, we see that we get roughly the same TCP throughput in both case, but the result with customization routing enabled is more consistent. This is because with customization routing enabled, path $2$ has its designated traffic, the queuing delay accumulates because of its low bandwidth, then TCP traffic will probably be assigned to path $1$ and results in a more consistent throughput.
 
 
-In Figure~\ref{fig.routingack}, by applying customization routing, we prove that this mechanism can improve TCP throughput also. TCP ACK packets are generally very small. If these packets are assigned to a high delay path, probably, TCP congestion control will be trigger and pull down the overall performance of TCP.
+In Figure~\ref{fig.routingack}, by applying customization routing, we prove that this mechanism can also improve TCP throughput. TCP ACK packets are generally very small. If these packets are assigned to a high delay path, probably, TCP congestion control will be trigger and pull down the overall performance of TCP.
 
-We make the configuration same as the one for Figure~\ref{fig.outoforder} by replacing one wired NIC with wireless NIC, and also, fix all the path weight to the same value to generate substantial TCP congestion control because of ACK packets' assignment. In Figure~\ref{fig.routingack}, we do the same TCP transmission by enabling and disabling customization routing for small packet as in Skype. We can see obvious throughput enhancement in Figure~\ref{fig.routingack}. By calculating, the average throughput of the two cases are $24.2$Mbps and $28.5$Mbps.
+We make the configuration same as the one for Figure~\ref{fig.outoforder} by replacing one wired NIC with wireless NIC and assigning all the path weight to the same value. In Figure~\ref{fig.routingack}, we do the same TCP transmission by enabling and disabling customization routing for small packet as in Skype. We can see obvious throughput enhancement in Figure~\ref{fig.routingack}. By calculation, the average throughput of the two cases are $24.2$Mbps and $28.5$Mbps respectively.
 
-As we mentioned, this customization routing only considers packet length as the metric. Potential future work can be done based on this framework. Unlike MPTCP where each path is a regular TCP connection, in MPIP, we manage all the paths in a highly autonomous way, this provides good flexibility to do more customization.
+%As we mentioned, this customization routing only considers packet length as the metric. Potential future work can be done based on this framework. Unlike MPTCP where each path is a regular TCP connection, in MPIP, we manage all the paths in a highly autonomous way, this provides good flexibility to do more customization.
 
 
 %\begin{figure*}[htb]
