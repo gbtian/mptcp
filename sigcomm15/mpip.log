@@ -1,7 +1,7 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=pdflatex 2014.11.26)  4 DEC 2014 00:04
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=pdflatex 2014.11.26)  4 DEC 2014 18:53
 entering extended mode
-**D:/research/mpip/mptcp/conext14/mpip.tex
-(D:/research/mpip/mptcp/conext14/mpip.tex
+**D:/research/mpip/mptcp/sigcomm15/mpip.tex
+(D:/research/mpip/mptcp/sigcomm15/mpip.tex
 LaTeX2e <2011/06/27>
 Babel <v3.8m> and hyphenation patterns for english, afrikaans, ancientgreek, ar
 abic, armenian, assamese, basque, bengali, bokmal, bulgarian, catalan, coptic, 
@@ -13,7 +13,7 @@ german-x-2013-05-26, nynorsk, oriya, panjabi, pinyin, polish, portuguese, roman
 ian, russian, sanskrit, serbian, slovak, slovenian, spanish, swedish, swissgerm
 an, tamil, telugu, turkish, turkmen, ukenglish, ukrainian, uppersorbian, usengl
 ishmax, welsh, loaded.
-(D:\research\mpip\mptcp\conext14\sig-alternate-10pt.cls
+(D:\research\mpip\mptcp\sigcomm15\sig-alternate-10pt.cls
 ("C:\Program Files\MiKTeX 2.9\tex\latex\graphics\epsfig.sty"
 Package: epsfig 1999/02/16 v1.7a (e)psfig emulation (SPQR)
 
@@ -360,7 +360,7 @@ Package caption Info: subfigure package is loaded.
 LaTeX Warning: Unused global option(s):
     [conference].
 
-(D:\research\mpip\mptcp\conext14\mpip.aux
+(D:\research\mpip\mptcp\sigcomm15\mpip.aux
 
 LaTeX Warning: Label `fig.outoforder' multiply defined.
 
@@ -417,7 +417,7 @@ File: ulasy.fd 1998/08/17 v2.2e LaTeX symbol font definitions
 
 LaTeX Warning: No \author given.
 
-(D:\research\mpip\mptcp\conext14\intro.tex
+(D:\research\mpip\mptcp\sigcomm15\intro.tex
 Overfull \hbox (1.5778pt too wide) in paragraph at lines 10--11
 \T1/ptm/m/n/10 tro-duc-ing mul-ti-path at net-work layer has sev-eral ben-e-fit
 s over
@@ -433,8 +433,8 @@ Non-PDF special ignored!{C:/ProgramData/MiKTeX/2.9/pdftex/config/pdftex.map}
 
 
 ])
-(D:\research\mpip\mptcp\conext14\related.tex)
-(D:\research\mpip\mptcp\conext14\design.tex
+(D:\research\mpip\mptcp\sigcomm15\related.tex)
+(D:\research\mpip\mptcp\sigcomm15\design.tex
 LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <10> not available
 (Font)              Font shape `T1/ptm/b/n' tried instead on input line 38.
 
@@ -459,7 +459,7 @@ File: fig/handshake-eps-converted-to.pdf Graphic file (type pdf)
 Package pdftex.def Info: fig/handshake-eps-converted-to.pdf used on input line 
 101.
 (pdftex.def)             Requested size: 192.00073pt x 116.88774pt.
- [3 <D:/research/mpip/mptcp/conext14/fig/handshake-eps-converted-to.pdf>] [4]
+ [3 <D:/research/mpip/mptcp/sigcomm15/fig/handshake-eps-converted-to.pdf>] [4]
 Overfull \hbox (2.10759pt too wide) in paragraph at lines 212--213
 \T1/ptm/m/n/10 pre-set value, it makes a copy of the re-ceived packet, switches
 
@@ -515,7 +515,7 @@ Overfull \hbox (8.13182pt too wide) in paragraph at lines 302--314
  [][] 
  []
 
-[6 <D:/research/mpip/mptcp/conext14/fig/delay-eps-converted-to.pdf>]
+[6 <D:/research/mpip/mptcp/sigcomm15/fig/delay-eps-converted-to.pdf>]
 Overfull \hbox (4.12701pt too wide) in paragraph at lines 320--321
 \T1/ptm/m/n/10 all con-ges-tion con-trol al-go-rithms in-herit from tra-di-tion
 al TCP,
@@ -560,23 +560,23 @@ ort
  []
 
 Package epstopdf Info: Source file: <fig/workflow.eps>
-(epstopdf)                    date: 2014-12-03 23:56:34
-(epstopdf)                    size: 140344 bytes
+(epstopdf)                    date: 2014-12-04 18:52:13
+(epstopdf)                    size: 188755 bytes
 (epstopdf)             Output file: <fig/workflow-eps-converted-to.pdf>
-(epstopdf)                    date: 2014-12-03 23:59:34
-(epstopdf)                    size: 44823 bytes
+(epstopdf)                    date: 2014-12-04 18:53:46
+(epstopdf)                    size: 59613 bytes
 (epstopdf)             Command: <epstopdf --outfile=fig/workflow-eps-converted-
 to.pdf fig/workflow.eps>
 (epstopdf)             \includegraphics on input line 440.
 Package epstopdf Info: Output file is already uptodate.
-<fig/workflow-eps-converted-to.pdf, id=47, 1165.35374pt x 864.22874pt>
+<fig/workflow-eps-converted-to.pdf, id=47, 1144.275pt x 881.2925pt>
 File: fig/workflow-eps-converted-to.pdf Graphic file (type pdf)
 
 <use fig/workflow-eps-converted-to.pdf>
 Package pdftex.def Info: fig/workflow-eps-converted-to.pdf used on input line 4
 40.
-(pdftex.def)             Requested size: 240.0pt x 177.97244pt.
- [8 <D:/research/mpip/mptcp/conext14/fig/workflow-eps-converted-to.pdf>]
+(pdftex.def)             Requested size: 240.0pt x 184.83482pt.
+ [8 <D:/research/mpip/mptcp/sigcomm15/fig/workflow-eps-converted-to.pdf>]
 
 LaTeX Warning: File `fig/outoforder.eps' not found on input line 484.
 
@@ -604,13 +604,13 @@ Overfull \hbox (2.52791pt too wide) in paragraph at lines 500--501
 et
  []
 
-) (D:\research\mpip\mptcp\conext14\evaluation.tex
+) (D:\research\mpip\mptcp\sigcomm15\evaluation.tex
 Overfull \hbox (15.56485pt too wide) in paragraph at lines 12--13
 \T1/ptm/m/n/10 means that there are to-tally $\OT1/cmr/m/n/10 4$ \T1/ptm/m/n/10
  paths and the ca-pac-ity is $\OT1/cmr/m/n/10 200\OML/cmm/m/it/10 MBps$
  []
 
-[10 <D:/research/mpip/mptcp/conext14/fig/outoforder-eps-converted-to.pdf>]
+[10 <D:/research/mpip/mptcp/sigcomm15/fig/outoforder-eps-converted-to.pdf>]
 Package epstopdf Info: Source file: <fig/clock.eps>
 (epstopdf)                    date: 2014-11-27 00:15:54
 (epstopdf)                    size: 10445 bytes
@@ -685,9 +685,9 @@ Overfull \hbox (18.6271pt too wide) in paragraph at lines 67--68
 mr/m/n/10 171$\T1/ptm/m/n/10 Mbps,
  []
 
-[11 <D:/research/mpip/mptcp/conext14/fig/clock-eps-converted-to.pdf> <D:/resear
-ch/mpip/mptcp/conext14/fig/out_of_order_w_sack-eps-converted-to.pdf> <D:/resear
-ch/mpip/mptcp/conext14/fig/switch-eps-converted-to.pdf>]
+[11 <D:/research/mpip/mptcp/sigcomm15/fig/clock-eps-converted-to.pdf> <D:/resea
+rch/mpip/mptcp/sigcomm15/fig/out_of_order_w_sack-eps-converted-to.pdf> <D:/rese
+arch/mpip/mptcp/sigcomm15/fig/switch-eps-converted-to.pdf>]
 Package epstopdf Info: Source file: <fig/tp_bar.eps>
 (epstopdf)                    date: 2014-11-27 00:48:51
 (epstopdf)                    size: 5577735 bytes
@@ -766,10 +766,10 @@ File: fig/twopaths_qd_comp-eps-converted-to.pdf Graphic file (type pdf)
 Package pdftex.def Info: fig/twopaths_qd_comp-eps-converted-to.pdf used on inpu
 t line 129.
 (pdftex.def)             Requested size: 117.59567pt x 101.17694pt.
- [12 <D:/research/mpip/mptcp/conext14/fig/tp_bar-eps-converted-to.pdf> <D:/rese
-arch/mpip/mptcp/conext14/fig/path_tp_bar-eps-converted-to.pdf> <D:/research/mpi
-p/mptcp/conext14/fig/twopaths_tp_comp-eps-converted-to.pdf> <D:/research/mpip/m
-ptcp/conext14/fig/twopaths_qd_comp-eps-converted-to.pdf>]
+ [12 <D:/research/mpip/mptcp/sigcomm15/fig/tp_bar-eps-converted-to.pdf> <D:/res
+earch/mpip/mptcp/sigcomm15/fig/path_tp_bar-eps-converted-to.pdf> <D:/research/m
+pip/mptcp/sigcomm15/fig/twopaths_tp_comp-eps-converted-to.pdf> <D:/research/mpi
+p/mptcp/sigcomm15/fig/twopaths_qd_comp-eps-converted-to.pdf>]
 Package epstopdf Info: Source file: <fig/emulab_tp_bar.eps>
 (epstopdf)                    date: 2014-11-27 00:49:01
 (epstopdf)                    size: 5577742 bytes
@@ -867,31 +867,32 @@ e 263.
 
 Underfull \vbox (badness 1009) has occurred while \output is active []
 
- [13 <D:/research/mpip/mptcp/conext14/fig/emulab_tp_bar-eps-converted-to.pdf> <
-D:/research/mpip/mptcp/conext14/fig/emulab_patp_bar-eps-converted-to.pdf>])
+ [13 <D:/research/mpip/mptcp/sigcomm15/fig/emulab_tp_bar-eps-converted-to.pdf> 
+<D:/research/mpip/mptcp/sigcomm15/fig/emulab_patp_bar-eps-converted-to.pdf>])
 Overfull \hbox (5.66739pt too wide) in paragraph at lines 194--195
 \T1/ptm/m/n/10 each in-ter-face to achieve op-ti-mal per-for-mance. Be-sides hi
 gher
  []
 
-(D:\research\mpip\mptcp\conext14\mpip.bbl [14 <D:/research/mpip/mptcp/conext14/
-fig/skype_tp_comp-eps-converted-to.pdf> <D:/research/mpip/mptcp/conext14/fig/sk
-ype_delay_comp-eps-converted-to.pdf> <D:/research/mpip/mptcp/conext14/fig/routi
-ng_ack-eps-converted-to.pdf>]) [15
+(D:\research\mpip\mptcp\sigcomm15\mpip.bbl [14 <D:/research/mpip/mptcp/sigcomm1
+5/fig/skype_tp_comp-eps-converted-to.pdf> <D:/research/mpip/mptcp/sigcomm15/fig
+/skype_delay_comp-eps-converted-to.pdf> <D:/research/mpip/mptcp/sigcomm15/fig/r
+outing_ack-eps-converted-to.pdf>]) [15
 
-] (D:\research\mpip\mptcp\conext14\mpip.aux)
+]
+(D:\research\mpip\mptcp\sigcomm15\mpip.aux)
 
 LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
  4781 strings out of 493921
- 67802 string characters out of 3147257
+ 67821 string characters out of 3147257
  140840 words of memory out of 3000000
  7936 multiletter control sequences out of 15000+200000
  54940 words of font info for 69 fonts, out of 3000000 for 9000
  841 hyphenation exceptions out of 8191
- 42i,12n,38p,1353b,596s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 42i,12n,38p,1354b,596s stack positions out of 5000i,500n,10000p,200000b,50000s
 {C:/Program Files/MiKTeX 2.9/fonts/enc/dvips/fontname/8r.enc}<C:/Program File
 s/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Program Files/MiKTeX
  2.9/fonts/type1/public/amsfonts/cmextra/cmex7.pfb><C:/Program Files/MiKTeX 2.9
@@ -907,7 +908,7 @@ ts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1
 /urw/helvetic/uhvb8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/times/utm
 b8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/times/utmr8a.pfb><C:/Progr
 am Files/MiKTeX 2.9/fonts/type1/urw/times/utmri8a.pfb>
-Output written on mpip.pdf (15 pages, 523478 bytes).
+Output written on mpip.pdf (15 pages, 538349 bytes).
 PDF statistics:
  179 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
