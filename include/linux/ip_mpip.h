@@ -29,24 +29,40 @@
 #include <net/snmp.h>
 #include <net/flow.h>
 
+//The length of the CM block
+//This value should better be calculated
 #define MPIP_CM_LEN 25
+//Node ID length, now it is 2. When changing this value, the length of CM also needs to be changed.
 #define MPIP_CM_NODE_ID_LEN 2
+
+//minimum/maximum buffer size of the out of order buffer
 #define MPIP_TCP_BUF_MIN_LEN 5
 #define MPIP_TCP_BUF_MAX_LEN 5
 
+//different flags
+
+//normal packet
 #define MPIP_NORMAL_FLAGS 0
+//ip address notification
 #define MPIP_NOTIFY_FLAGS 1
+//heartbeat packet
 #define MPIP_HB_FLAGS 2
+//mpip query packet
 #define MPIP_ENABLE_FLAGS 3
+//mpip confirmation packet
 #define MPIP_ENABLED_FLAGS 4
+//handshake packet
 #define MPIP_SYNC_FLAGS 5
+//maximum number of flags. Needs to be updated when adding flags.
 #define MPIP_MAX_FLAGS 5
 
+//priority value, for customization routing
 #define MPIP_DELAY_PRIORITY 0
 #define MPIP_QUEUING_DELAY_PRIORITY 1
 
 //#define MPIP_FLAG_
 
+//the sysctls. Explained in ip_mpip.c
 extern int sysctl_mpip_enabled;
 extern int sysctl_mpip_send;
 extern int sysctl_mpip_rcv;
@@ -62,6 +78,7 @@ extern int sysctl_mpip_hb;
 extern int sysctl_mpip_use_tcp;
 extern int sysctl_mpip_tcp_buf_count;
 
+//deprecated variables
 extern int max_pkt_len;
 extern int global_stat_1;
 extern int global_stat_2;
@@ -74,6 +91,7 @@ extern int global_stat_3;
 //extern struct list_head la_head;
 //extern struct list_head ps_head;
 
+//The struct of the CM block
 struct mpip_cm
 {
 	unsigned char	len;
@@ -89,17 +107,20 @@ struct mpip_cm
 	__s16			checksum;
 };
 
+//Log table
 struct mpip_log_table
 {
 	unsigned long				logjiffies;
-	int							delay;
-	int							min_delay;
-	int 						queuing_delay;
+	int					delay;
+	int					min_delay;
+	int 					queuing_delay;
 	unsigned long				tp;
 	struct list_head 			list;
 };
 
-
+//mpip query table. This table is for TCP only.
+//Everytime we receive a mpip query, buffer it and piggyback
+//with next TCP packet
 struct mpip_query_table
 {
 	__be32				saddr; /* source ip address*/
@@ -109,6 +130,7 @@ struct mpip_query_table
 	struct list_head 	list;
 };
 
+//mpip enable table, Table 2 in the paper
 struct mpip_enabled_table
 {
 	__be32				addr; /* receiver' ip seen by sender */
@@ -118,6 +140,7 @@ struct mpip_enabled_table
 	struct list_head 	list;
 };
 
+//IP address change notification table
 struct addr_notified_table
 {
 	unsigned char		node_id[MPIP_CM_NODE_ID_LEN]; /*receiver's node id. */
@@ -126,7 +149,7 @@ struct addr_notified_table
 	struct list_head 	list;
 };
 
-
+//working IP table. Mapping between node id and ip:port
 struct working_ip_table
 {
 	unsigned char		node_id[MPIP_CM_NODE_ID_LEN]; /*receiver's node id. */
@@ -137,6 +160,7 @@ struct working_ip_table
 	struct list_head 	list;
 };
 
+//customized routing table
 struct route_rule_table
 {
 	char *				dest_addr; /* receiver' ip seen by sender */
@@ -148,6 +172,7 @@ struct route_rule_table
 	struct list_head 	list;
 };
 
+//path table
 struct path_info_table
 {
 	/*when sending pkts, check the bw to choose the fastest one*/
@@ -188,6 +213,7 @@ struct path_info_table
 	struct list_head 	list;
 };
 
+//out of order buffer
 struct tcp_skb_buf
 {
 	__u32				seq;
@@ -196,12 +222,16 @@ struct tcp_skb_buf
 //	struct list_head 	list;
 };
 
+//this is stored in the session table. To store all the paths that belong to one session.
+//should be deprecated, replace by path_bw_info
 struct sort_path
 {
 	struct path_info_table *path_info;
 	struct list_head 	list;
 };
 
+//path bandwidth. 
+//this is stored in the session table. To store all the paths that belong to one session.
 struct path_bw_info
 {
 	unsigned char		path_id; /* path id: 0,1,2,3,4....*/
@@ -209,6 +239,7 @@ struct path_bw_info
 	struct list_head 	list;
 };
 
+//session table. 
 struct socket_session_table
 {
 	unsigned char		src_node_id[MPIP_CM_NODE_ID_LEN]; /* local node id*/
@@ -241,6 +272,7 @@ struct socket_session_table
 	struct list_head 	list;
 };
 
+//path feedback table
 struct path_stat_table
 {
 	unsigned char		node_id[MPIP_CM_NODE_ID_LEN]; /* sender's node id*/
@@ -252,6 +284,7 @@ struct path_stat_table
 	struct list_head 	list;
 };
 
+//local ip list
 struct local_addr_table
 {
 	__be32				addr;
