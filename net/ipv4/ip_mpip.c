@@ -21,26 +21,45 @@
 //int MPIP_CM_LEN = sizeof(struct mpip_options);
 //int MPIP_CM_LEN = 9;
 //int MPIP_CM_NODE_ID_LEN = 3;
+
+//the node id of an instance
 static unsigned char *static_node_id = NULL;
+//for log
 static char log_buf[256];
 
 //static struct mpip_cm send_mpip_cm;
 //static struct mpip_cm rcv_mpip_cm;
 
+// sysctl, can be called at application layer
+//enable or disable mpip
 int sysctl_mpip_enabled __read_mostly = 0;
+//for test
 int sysctl_mpip_send __read_mostly = 0;
+//for test
 int sysctl_mpip_rcv __read_mostly = 0;
+//enable or disable log, for performance tuning
 int sysctl_mpip_log __read_mostly = 0;
+//the time granularity for updating thoughput
 int sysctl_mpip_tp_time __read_mostly = 2000;
+//the time granularity for updating bandwidth
 int sysctl_mpip_bw_time __read_mostly = 100;
+//this is the initialization time of a session. For throughput update
 int sysctl_mpip_exp_time __read_mostly = 1200000;
+//the step to change the bandwidth of each path in each iteration
 int sysctl_mpip_bw_step __read_mostly = 10;
+//path delay difference threshold, deprecated
 int sysctl_mpip_path_diff __read_mostly = 50;
+//deprecated
 int sysctl_mpip_qd __read_mostly = 1;
+//skype specific process
 int sysctl_mpip_skype __read_mostly = 0;
+//heartbeat expiration time
 int sysctl_mpip_hb __read_mostly = 1000;
+//UDP wrapper or fake TCP
 int sysctl_mpip_use_tcp __read_mostly = 0;
+//the maximum buffer size for out of order packets.
 int sysctl_mpip_tcp_buf_count __read_mostly = 10;
+//deprecated
 int max_pkt_len = 65500;
 
 
@@ -174,6 +193,7 @@ static int mpip_inetaddr_event(struct notifier_block *this,
 	return NOTIFY_DONE;
 }
 
+//this method catches the NIC up/down events
 /* React on ifup/down-events */
 static int netdev_event(struct notifier_block *this, unsigned long event,
 			void *ptr)
@@ -198,6 +218,7 @@ static int netdev_event(struct notifier_block *this, unsigned long event,
 	return NOTIFY_DONE;
 }
 
+//hooks
 static struct notifier_block mpip_netdev_notifier = {
 		.notifier_call = netdev_event,
 };
@@ -206,13 +227,17 @@ static struct notifier_block mpip_inetaddr_notifier = {
 		.notifier_call = mpip_inetaddr_event,
 };
 
+//mpip initialization. Mainly register the ip address change events.
 int mpip_init(void)
 {
 	struct ctl_table_header *mptcp_sysctl;
 	int ret;
     //In kernel, __MPIP__ will be checked to decide which functions to call.
+    	//register sysctls
 	mptcp_sysctl = register_net_sysctl(&init_net, "net/mpip", mpip_table);
+	//register ip change event
 	ret = register_inetaddr_notifier(&mpip_inetaddr_notifier);
+	//register NIC up/down event
 	ret = register_netdevice_notifier(&mpip_netdev_notifier);
 
 	//get_available_local_addr();
@@ -221,7 +246,7 @@ int mpip_init(void)
 }
 
 
-
+//logging. This is the main log method that is used in the system
 void mpip_log(const char *fmt, ...)
 {
 	va_list args;
@@ -263,6 +288,7 @@ void mpip_log(const char *fmt, ...)
 }
 EXPORT_SYMBOL(mpip_log);
 
+//print the CM
 void print_mpip_cm(struct mpip_cm *cm)
 {
 
@@ -281,6 +307,7 @@ void print_mpip_cm(struct mpip_cm *cm)
 }
 EXPORT_SYMBOL(print_mpip_cm);
 
+//another CM printer
 void print_mpip_cm_1(struct mpip_cm *cm, int id)
 {
 
@@ -299,7 +326,7 @@ void print_mpip_cm_1(struct mpip_cm *cm, int id)
 }
 EXPORT_SYMBOL(print_mpip_cm_1);
 
-
+//get the node id of a node. Just the first MPIP_CM_NODE_ID_LEN bytes of the mac address
 unsigned char *get_node_id(void)
 {
 	struct net_device *dev;
@@ -321,6 +348,8 @@ unsigned char *get_node_id(void)
 	return NULL;
 }
 
+//get session id. When there is no such session, add a new session.
+//one very important thing is that session id is only generated at the sender side, not at the receiver side
 unsigned char get_session_id(unsigned char *src_node_id, unsigned char *dst_node_id,
 					__be32 saddr, __be16 sport,
 					__be32 daddr, __be16 dport,
@@ -367,6 +396,8 @@ unsigned char get_session_id(unsigned char *src_node_id, unsigned char *dst_node
 	return socket_session->session_id;
 }
 
+//find the path that will be assigned to send out the packet
+//the entry for path assignment
 unsigned char get_path_id(unsigned char *node_id,
 		__be32 *saddr, __be32 *daddr, __be16 *sport, __be16 *dport,
 		__be32 origin_saddr, __be32 origin_daddr, __be16 origin_sport,
@@ -387,7 +418,7 @@ unsigned char get_path_id(unsigned char *node_id,
 								protocol, len, is_short);
 }
 
-
+//get the path stat id from ps_head, to decide which path's delay will be feedback
 unsigned char get_path_stat_id(unsigned char *dest_node_id,  __s32 *delay)
 {
 	if (!dest_node_id)
@@ -401,6 +432,7 @@ unsigned char get_path_stat_id(unsigned char *dest_node_id,  __s32 *delay)
 	return find_earliest_path_stat_id(dest_node_id,  delay);
 }
 
+//check bad ip addresses.
 bool check_bad_addr(__be32 addr)
 {
 	__be32 myaddr = convert_addr(127, 0, 0, 1);
@@ -433,6 +465,7 @@ bool check_bad_addr(__be32 addr)
 	return true;
 }
 
+//calculate the checksum of mpip
 __s16 calc_checksum(unsigned char *cm)
 {
 	__s16 checksum = 0;
@@ -446,6 +479,7 @@ __s16 calc_checksum(unsigned char *cm)
 	return checksum;
 }
 
+//get the port number values from a sk_buff.
 bool get_skb_port(struct sk_buff *skb, __be16 *sport, __be16 *dport)
 {
 	struct iphdr *iph = NULL;
@@ -501,6 +535,7 @@ bool get_skb_port(struct sk_buff *skb, __be16 *sport, __be16 *dport)
 	return true;
 }
 
+//check whether one packet is a handshake packet
 bool is_syn_pkt(struct sk_buff *skb)
 {
 	struct tcphdr *tcph = NULL;
@@ -521,6 +556,7 @@ bool is_syn_pkt(struct sk_buff *skb)
 	return false;
 }
 
+//check whether one packet is a handshake packet
 bool is_synack_pkt(struct sk_buff *skb)
 {
 	struct tcphdr *tcph = NULL;
@@ -541,6 +577,7 @@ bool is_synack_pkt(struct sk_buff *skb)
 	return false;
 }
 
+//check whether one packet is a handshake packet
 bool is_ack_pkt(struct sk_buff *skb)
 {
 	struct tcphdr *tcph = NULL;
@@ -561,6 +598,8 @@ bool is_ack_pkt(struct sk_buff *skb)
 	return false;
 }
 
+//check whether one packet is short packet. 
+//This is a debugging method for customization routing. Deprecated.
 bool is_short_pkt(struct sk_buff *skb)
 {
 	if (!skb)
@@ -579,6 +618,7 @@ bool is_short_pkt(struct sk_buff *skb)
 	return false;
 }
 
+//copy a skb and send out ack. Deprecated.
 bool send_pure_ack(struct sk_buff *old_skb)
 {
 	struct sk_buff *myskb = NULL;
@@ -675,6 +715,8 @@ bool send_pure_ack(struct sk_buff *old_skb)
 }
 
 
+//create a new skb and send out.
+//deprecated, now we just copy and send
 static bool new_and_send(struct sk_buff *skb_in, unsigned char flags)
 {
 	struct iphdr *iph, *iph_in;
@@ -805,7 +847,7 @@ static bool new_and_send(struct sk_buff *skb_in, unsigned char flags)
 	return true;
 }
 
-
+//send out the mpip query packet
 void send_mpip_enable(struct sk_buff *skb, bool sender, bool reverse)
 {
 	struct iphdr *iph = NULL;
@@ -878,6 +920,7 @@ void send_mpip_enable(struct sk_buff *skb, bool sender, bool reverse)
 	}
 }
 
+//send out the mpip confirmation 
 void send_mpip_enabled(struct sk_buff *skb, bool sender, bool reverse)
 {
 	struct iphdr *iph = NULL;
@@ -912,6 +955,7 @@ void send_mpip_enabled(struct sk_buff *skb, bool sender, bool reverse)
 	}
 }
 
+//swap the source and destination addr and port number for a skb
 static void reverse_addr_and_port(struct sk_buff *skb)
 {
 	struct iphdr *iph;
@@ -971,6 +1015,7 @@ static void reverse_addr_and_port(struct sk_buff *skb)
 	}
 }
 
+//Copy one skb and send out the copied one with CM attached.
 static bool copy_and_send(struct sk_buff *skb, bool reverse,
 		unsigned char flags, unsigned char session_id)
 {
@@ -1263,6 +1308,8 @@ static bool copy_and_send(struct sk_buff *skb, bool reverse,
 //	return true;
 //}
 //
+
+//Change the IP routing information of the packet
 bool ip_route_out( struct sk_buff *skb, __be32 saddr, __be32 daddr)
 {
     struct flowi4 fl = {};
@@ -1284,6 +1331,8 @@ bool ip_route_out( struct sk_buff *skb, __be32 saddr, __be32 daddr)
 
 }
 
+//the Utility method to send mpip message. 
+//This method is used a lot
 bool send_mpip_msg(struct sk_buff *skb_in, bool sender, bool reverse,
 		unsigned char flags, unsigned char session_id)
 {
@@ -1291,7 +1340,7 @@ bool send_mpip_msg(struct sk_buff *skb_in, bool sender, bool reverse,
 	return copy_and_send(skb_in, reverse, flags, session_id);
 }
 
-
+//send syn, for handshake
 bool send_mpip_syn(struct sk_buff *skb_in, __be32 saddr, __be32 daddr,
 		__be16 sport, __be16 dport,	bool syn, bool ack,
 		unsigned char session_id)
@@ -1563,7 +1612,7 @@ bool send_mpip_syn(struct sk_buff *skb_in, __be32 saddr, __be32 daddr,
 	return true;
 }
 
-
+//For debugging, deprecated
 bool insert_mpip_cm_1(struct sk_buff *skb, __be32 old_saddr, __be32 old_daddr,
 		__be32 *new_saddr, __be32 *new_daddr, unsigned int protocol,
 		unsigned char flags, unsigned char session_id)
@@ -1877,7 +1926,10 @@ bool insert_mpip_cm_1(struct sk_buff *skb, __be32 old_saddr, __be32 old_daddr,
 }
 EXPORT_SYMBOL(insert_mpip_cm_1);
 
-
+//Insert the CM module into the packet.
+//This is one of the most important two methods in the system. It is the first entry of 
+//all mpip related functionality.
+//The other one is proces_mpip_cm
 bool insert_mpip_cm(struct sk_buff *skb, __be32 old_saddr, __be32 old_daddr,
 		__be32 *new_saddr, __be32 *new_daddr, unsigned int protocol,
 		unsigned char flags, unsigned char session_id)
@@ -2217,7 +2269,9 @@ bool insert_mpip_cm(struct sk_buff *skb, __be32 old_saddr, __be32 old_daddr,
 }
 EXPORT_SYMBOL(insert_mpip_cm);
 
-
+//When receiving a packet, this method process the CM block.
+//This is one of the most important two methods in the system
+//The other one is insert_mpip_cm
 int process_mpip_cm(struct sk_buff *skb)
 {
 	struct iphdr *iph;
@@ -2586,6 +2640,8 @@ fail:
 }
 EXPORT_SYMBOL(process_mpip_cm);
 
+//from a TCP skb, get the session information
+//deprecated
 unsigned char get_tcp_session(struct sk_buff *skb)
 {
 	struct iphdr *iph;
