@@ -9,29 +9,45 @@
 #include <linux/ip_mpip.h>
 
 
+//When generating a new session id, this value will be used. Make it static to be gloablly unique
 static unsigned char static_session_id = 1;
+//When generating a new path id, this value will be used. Make it static to be gloablly unique
 static unsigned char static_path_id = 1;
+//The feedback time for each path. jiffies is the clock tick from system start.
 static unsigned long earliest_fbjiffies = 0;
 
-
+//mpip query table, TCP only, when receiving a mpip query, it buffers the query, and piggyback the reply 
+//in next TCP packet. Because TCP has the NAT issue.
 static LIST_HEAD(mq_head);
+//mpip query table, for handshake, Table 2 in the paper
 static LIST_HEAD(me_head);
+//When local ip address changes, the is used to track the notification to the other ends of connections
 static LIST_HEAD(an_head);
+//working ip address of each node. each node id can have multiple ip address
 static LIST_HEAD(wi_head);
+//path information table, Table 5 in the paper
 static LIST_HEAD(pi_head);
+//session table, Table 4 in the paper
 static LIST_HEAD(ss_head);
+//local IP address table
 static LIST_HEAD(la_head);
+//path statistics table, Table 6 in the paper
 static LIST_HEAD(ps_head);
+//customized routing table, Table 7 in the paper
 static LIST_HEAD(rr_head);
 
+//debug only
 int global_stat_1;
+//debug only
 int global_stat_2;
+//debug only
 int global_stat_3;
-
+//debug only
 static unsigned char s_s_id = 0;
+//debug only
 static unsigned char s_p_id = 0;
 
-
+//Judge whether two node ids are the same. byte by byte comparison
 bool is_equal_node_id(unsigned char *node_id_1, unsigned char *node_id_2)
 {
 	int i;
@@ -48,6 +64,7 @@ bool is_equal_node_id(unsigned char *node_id_1, unsigned char *node_id_2)
 	return true;
 }
 
+//Print user friendly node id.
 void print_node_id(unsigned char *node_id)
 {
 	if (!node_id)
@@ -55,6 +72,8 @@ void print_node_id(unsigned char *node_id)
 	mpip_log( "%02x-%02x\n", node_id[0], node_id[1]);
 }
 
+//Judge whether the IP address is local one, 192.168.*.*
+//used in debug
 bool is_lan_addr(__be32 addr)
 {
 	char *p = (char *) &addr;
@@ -67,6 +86,7 @@ bool is_lan_addr(__be32 addr)
 	return false;
 }
 
+//Print IP address in user friendly format
 void print_addr(__be32 addr)
 {
 	char *p = (char *) &addr;
@@ -75,7 +95,7 @@ void print_addr(__be32 addr)
 
 }
 
-
+//Print IP address in user friendly format. The same for now. Had different implementation during debug
 void print_addr_1(__be32 addr)
 {
 	char *p = (char *) &addr;
@@ -84,7 +104,7 @@ void print_addr_1(__be32 addr)
 
 }
 
-
+//convert string IP to __be32 format
 __be32 convert_addr(char a1, char a2, char a3, char a4)
 {
 	__be32 addr;
@@ -97,7 +117,7 @@ __be32 convert_addr(char a1, char a2, char a3, char a4)
 	return (__be32)addr;
 }
 
-
+//convert IP address to string format
 char *in_ntoa(unsigned long in)
 {
 	char *buff = kzalloc(18, GFP_ATOMIC);
@@ -110,6 +130,7 @@ char *in_ntoa(unsigned long in)
 	return(buff);
 }
 
+//find a mpip_query_table item in the table of mq_head
 struct mpip_query_table *find_mpip_query(__be32 saddr, __be32 daddr, __be16 sport, __be16 dport)
 {
 	struct mpip_query_table *mpip_query;
@@ -125,6 +146,7 @@ struct mpip_query_table *find_mpip_query(__be32 saddr, __be32 daddr, __be16 spor
 
 	return NULL;
 }
+//remove mpip_query_table item from mq_head
 int delete_mpip_query(__be32 saddr, __be32 daddr, __be16 sport, __be16 dport)
 {
 	struct mpip_query_table *mpip_query;
@@ -145,6 +167,7 @@ int delete_mpip_query(__be32 saddr, __be32 daddr, __be16 sport, __be16 dport)
 	return 0;
 }
 
+//add one mpip_query_table item into mq_head
 int add_mpip_query(__be32 saddr, __be32 daddr, __be16 sport, __be16 dport)
 {
 	struct mpip_query_table *item = find_mpip_query(saddr, daddr, sport, dport);
@@ -169,6 +192,7 @@ int add_mpip_query(__be32 saddr, __be32 daddr, __be16 sport, __be16 dport)
 	return 1;
 }
 
+//find mpip_enable_table item from me_head
 struct mpip_enabled_table *find_mpip_enabled(__be32 addr, __be16 port)
 {
 	struct mpip_enabled_table *mpip_enabled;
@@ -184,7 +208,7 @@ struct mpip_enabled_table *find_mpip_enabled(__be32 addr, __be16 port)
 	return NULL;
 }
 
-
+//add mpip_enabled_table item into table me_head
 int add_mpip_enabled(__be32 addr, __be16 port, bool enabled)
 {
 	/* todo: need sanity checks, leave it for now */
@@ -211,6 +235,7 @@ int add_mpip_enabled(__be32 addr, __be16 port, bool enabled)
 	return 1;
 }
 
+//check whether a ip:port is mpip enabled.
 bool is_mpip_enabled(__be32 addr, __be16 port)
 {
 	bool enabled = false;
@@ -229,6 +254,7 @@ bool is_mpip_enabled(__be32 addr, __be16 port)
 	return enabled;
 }
 
+//add customized routing entry into rr_head
 void add_route_rule(const char *dest_addr, const char *dest_port,
 					int protocol, int startlen,
 					int endlen, int priority)
@@ -252,6 +278,8 @@ void add_route_rule(const char *dest_addr, const char *dest_port,
 	list_add(&(item->list), &rr_head);
 }
 
+//From table rr_head, given all these inputs, return whether this packet is 
+//throughput piroity or responsiveness priority
 int get_pkt_priority(__be32 dest_addr, __be16 dest_port,
 					unsigned int protocol, unsigned int len)
 {
@@ -291,6 +319,7 @@ int get_pkt_priority(__be32 dest_addr, __be16 dest_port,
 	return -1;
 }
 
+//get the first local ip address from la_head
 __be32 get_local_addr1(void)
 {
 	struct local_addr_table *local_addr;
@@ -306,6 +335,7 @@ __be32 get_local_addr1(void)
 	return 0;
 }
 
+//get the second local ip address from la_head
 __be32 get_local_addr2(void)
 {
 	struct local_addr_table *local_addr;
@@ -323,6 +353,7 @@ __be32 get_local_addr2(void)
 	return 0;
 }
 
+//judge whether one ip address is local ip address
 bool is_local_addr(__be32 addr)
 {
 	if (find_local_addr(addr) > 0)
@@ -331,6 +362,7 @@ bool is_local_addr(__be32 addr)
 	return false;
 }
 
+//add on ip:port into wi_head for one node
 int add_working_ip(unsigned char *node_id, __be32 addr, __be16 port,
 					unsigned char session_id, unsigned int protocol)
 {
@@ -372,6 +404,7 @@ int add_working_ip(unsigned char *node_id, __be32 addr, __be16 port,
 	return 1;
 }
 
+//find one working_ip_table entry from wi_head
 struct working_ip_table *find_working_ip(unsigned char *node_id, __be32 addr,
 		__be16 port, unsigned int protocol)
 {
@@ -394,6 +427,7 @@ struct working_ip_table *find_working_ip(unsigned char *node_id, __be32 addr,
 	return NULL;
 }
 
+//given the protocol and ip:port, return the node id from wi_head
 unsigned char * find_node_id_in_working_ip(__be32 addr, __be16 port,
 											unsigned int protocol)
 {
@@ -411,6 +445,7 @@ unsigned char * find_node_id_in_working_ip(__be32 addr, __be16 port,
 	return NULL;
 }
 
+//find a addr_notified_table item from an_head. This is for dynamic IP change
 struct addr_notified_table *find_addr_notified(unsigned char *node_id)
 {
 	struct addr_notified_table *addr_notified;
@@ -429,6 +464,7 @@ struct addr_notified_table *find_addr_notified(unsigned char *node_id)
 	return NULL;
 }
 
+//return whether whether one node has been notified about the ip address change
 bool get_addr_notified(unsigned char *node_id)
 {
 	bool notified = true;
@@ -455,6 +491,7 @@ bool get_addr_notified(unsigned char *node_id)
 	return true;
 }
 
+//add a add_notified_table item into an_head
 int add_addr_notified(unsigned char *node_id)
 {
 	struct addr_notified_table *item = NULL;
@@ -487,6 +524,8 @@ int add_addr_notified(unsigned char *node_id)
 	return 1;
 }
 
+//when receiving a address notified event, the receiver will clear up all 
+//relative tables, and reset the whole mpip
 void process_addr_notified_event(unsigned char *node_id, unsigned char flags)
 {
 
@@ -545,6 +584,7 @@ void process_addr_notified_event(unsigned char *node_id, unsigned char flags)
 	}
 }
 
+//when receiving a packet, update the one way delay information of the incoming path
 int update_path_stat_delay(unsigned char *node_id, unsigned char path_id, u32 timestamp)
 {
 /* todo: need sanity checks, leave it for now */
@@ -574,6 +614,7 @@ int update_path_stat_delay(unsigned char *node_id, unsigned char path_id, u32 ti
 	return 1;
 }
 
+//when receiving a feedback, update the delay value in the path info table.
 int update_path_delay(unsigned char path_id, __s32 delay)
 {
     struct path_info_table *path_info;
@@ -716,6 +757,8 @@ int update_path_delay(unsigned char path_id, __s32 delay)
 //	return si;
 //}
 
+//calculate the difference of two values. Make it a function because I tried to 
+//add the smooth index into the calculation.
 __s32 calc_diff(__s32 value, __s32 min_value, bool is_delay)
 {
 	__s32 diff = value - min_value;
@@ -724,6 +767,8 @@ __s32 calc_diff(__s32 value, __s32 min_value, bool is_delay)
 	return diff;
 }
 
+//When sorting different paths, checke whether one path has already been added into the sorted list.
+//It is for packet assignment among paths. It is called in update_path_info wheneven receiving a packet.
 bool is_in_sorted_list(struct list_head *sorted_list, struct path_info_table *path_info)
 {
 	if (!sorted_list)
@@ -740,6 +785,8 @@ bool is_in_sorted_list(struct list_head *sorted_list, struct path_info_table *pa
 
 }
 
+//calculate the similarity of all paths that belong to the same session.
+//This method is deprecated. Don't use it anymore. It was for packet assignment among paths.
 int calc_path_similarity(unsigned char session_id)
 {
 	struct path_info_table *path_info = NULL;
@@ -788,6 +835,8 @@ int calc_path_similarity(unsigned char session_id)
 	return si;
 }
 
+//get the bandwidth of a path that belongs to a session id. bw is the default value 
+//if the path is not in the table
 __u64 get_path_bw(unsigned char path_id, unsigned char session_id, __u64 bw)
 {
 	struct path_bw_info *path_bw = NULL;
@@ -811,6 +860,8 @@ __u64 get_path_bw(unsigned char path_id, unsigned char session_id, __u64 bw)
 	return bw;
 }
 
+//everytime a node receives a packet, it updates the table of path info. This method is very important.
+//it mainly updates the weight of each path.
 int update_path_info(unsigned char session_id)
 {
 	struct path_info_table *path_info;
@@ -1183,6 +1234,9 @@ int update_path_info(unsigned char session_id)
 	return 1;
 }
 
+//this is for the mpip handshake, if the path_info has a status value of 0, 
+//means the path has been three way handshaked. otherwise, some handshake 
+//packet will be sent out.
 bool check_path_info_status(struct sk_buff *skb,
 		unsigned char *node_id, unsigned char session_id)
 {
@@ -1209,6 +1263,7 @@ bool check_path_info_status(struct sk_buff *skb,
 }
 
 
+//find path_stat_table from ps_head
 struct path_stat_table *find_path_stat(unsigned char *node_id, unsigned char path_id)
 {
 	struct path_stat_table *path_stat;
@@ -1228,6 +1283,7 @@ struct path_stat_table *find_path_stat(unsigned char *node_id, unsigned char pat
 	return NULL;
 }
 
+//add a path_stat_table into ps_head
 int add_path_stat(unsigned char *node_id, unsigned char path_id)
 {
 	struct path_stat_table *item = NULL;
@@ -1263,8 +1319,9 @@ int add_path_stat(unsigned char *node_id, unsigned char path_id)
 }
 
 
+//get the session entry from ss_head when sending a packet.
 struct socket_session_table *get_sender_session(__be32 saddr, __be16 sport,
-								 __be32 daddr, __be16 dport, unsigned int protocol)
+						__be32 daddr, __be16 dport, unsigned int protocol)
 {
 	struct socket_session_table *socket_session;
 
@@ -1294,6 +1351,8 @@ struct socket_session_table *get_sender_session(__be32 saddr, __be16 sport,
 	return NULL;
 }
 
+//add session entry into ss_head. Here we generate the session_id from the static_session_id variable.
+//and some other default value. This is called when sending a packet.
 void add_sender_session(unsigned char *src_node_id, unsigned char *dst_node_id,
 					   __be32 saddr, __be16 sport,
 					   __be32 daddr, __be16 dport,
@@ -1360,7 +1419,7 @@ void add_sender_session(unsigned char *src_node_id, unsigned char *dst_node_id,
 }
 
 
-
+//find the session information when receiving a packet.
 struct socket_session_table *find_receiver_session(unsigned char *node_id, unsigned char session_id)
 {
 	struct socket_session_table *socket_session;
@@ -1380,6 +1439,7 @@ struct socket_session_table *find_receiver_session(unsigned char *node_id, unsig
 	return NULL;
 }
 
+//find the session information when receiving a packet. If it doesn't exist, add a new one.
 struct socket_session_table *get_receiver_session(unsigned char *src_node_id, unsigned char *dst_node_id,
 						__be32 saddr, __be16 sport,
 		 	 	 	 	__be32 daddr, __be16 dport,
@@ -1451,6 +1511,7 @@ struct socket_session_table *get_receiver_session(unsigned char *src_node_id, un
 	return item;
 }
 
+//get session info from ss_head,
 int get_receiver_session_info(unsigned char *node_id,	unsigned char session_id,
 						__be32 *saddr, __be16 *sport,
 						__be32 *daddr, __be16 *dport)
@@ -1481,6 +1542,7 @@ int get_receiver_session_info(unsigned char *node_id,	unsigned char session_id,
 	return 0;
 }
 
+//find session info from ss_head
 struct socket_session_table *find_socket_session(unsigned char session_id)
 {
 	struct socket_session_table *socket_session;
@@ -1500,6 +1562,8 @@ struct socket_session_table *find_socket_session(unsigned char session_id)
 
 }
 
+//each session maintain the bandwidth of all paths that belong to this session. 
+//This method updates that list.
 void update_path_bw_list(struct socket_session_table *socket_session)
 {
 	struct path_bw_info *path_bw = NULL;
@@ -1536,6 +1600,7 @@ void update_path_bw_list(struct socket_session_table *socket_session)
 	}
 }
 
+//add total number of bytes transmitted on one session
 void add_session_totalbytes(unsigned char session_id, unsigned int len)
 {
 	struct socket_session_table *socket_session = find_socket_session(session_id);
@@ -1546,6 +1611,7 @@ void add_session_totalbytes(unsigned char session_id, unsigned int len)
 	socket_session->tptotalbytes += len;
 }
 
+//update the real time throughput of one path
 void update_path_tp(struct path_info_table *path)
 {
 	if(!path)
@@ -1557,6 +1623,7 @@ void update_path_tp(struct path_info_table *path)
 
 }
 
+//update the throughput of one session
 void update_session_tp(unsigned char session_id, unsigned int len)
 {
 	struct socket_session_table *socket_session = find_socket_session(session_id);
@@ -1577,7 +1644,7 @@ void update_session_tp(unsigned char session_id, unsigned int len)
 
 }
 
-
+//whenever receiving one packet, check whether it is out of order. If yes, insert into the buffer.
 int add_to_tcp_skb_buf(struct sk_buff *skb, unsigned char session_id)
 {
 	//todo: dynamic MPIP_TCP_BUF_LEN
@@ -1750,6 +1817,7 @@ fail:
 	return 0;
 }
 
+//find path_inf_table from pi_head.
 struct path_info_table *find_path_info(__be32 saddr, __be32 daddr,
 		__be16 sport, __be16 dport, unsigned char session_id)
 {
@@ -1769,6 +1837,7 @@ struct path_info_table *find_path_info(__be32 saddr, __be32 daddr,
 	return NULL;
 }
 
+//start the three way handshake
 bool init_mpip_tcp_connection(struct sk_buff *skb,
 							__be32 daddr1, __be32 daddr2,
 							__be32 saddr, __be32 daddr,
@@ -1834,7 +1903,8 @@ bool init_mpip_tcp_connection(struct sk_buff *skb,
 	return true;
 }
 
-
+//check whether the original path has been added into pi_head.
+//This is for the fake TCP
 bool is_origin_path_info_added(unsigned char *node_id, unsigned char session_id, unsigned int protocol)
 {
 	struct path_info_table *path_info;
@@ -1854,7 +1924,7 @@ bool is_origin_path_info_added(unsigned char *node_id, unsigned char session_id,
 	return false;
 }
 
-
+//add the original path into pi_head for tcp.
 int add_origin_path_info_tcp(unsigned char *node_id, __be32 saddr, __be32 daddr, __be16 sport,
 		__be16 dport, unsigned char session_id, unsigned int protocol)
 {
@@ -1913,7 +1983,8 @@ int add_origin_path_info_tcp(unsigned char *node_id, __be32 saddr, __be32 daddr,
 	return 1;
 }
 
-
+//add path info into pi_head for tcp
+//TCP and UDP have different proces.
 int add_path_info_tcp(int id, unsigned char *node_id, __be32 saddr, __be32 daddr, __be16 sport,
 		__be16 dport, unsigned char session_id, unsigned int protocol)
 {
@@ -1982,7 +2053,7 @@ int add_path_info_tcp(int id, unsigned char *node_id, __be32 saddr, __be32 daddr
 	return 1;
 }
 
-
+//set the status of the path to 0, make it ready
 bool ready_path_info(int id, unsigned char *node_id, __be32 saddr, __be32 daddr,
 		__be16 sport, __be16 dport,	unsigned char session_id)
 {
@@ -2004,6 +2075,7 @@ bool ready_path_info(int id, unsigned char *node_id, __be32 saddr, __be32 daddr,
 	return false;
 }
 
+//check whether one path has been added into pi_head
 bool is_dest_added(unsigned char *node_id, __be32 addr, __be16 port,
 					unsigned char session_id, unsigned int protocol)
 {
@@ -2025,7 +2097,7 @@ bool is_dest_added(unsigned char *node_id, __be32 addr, __be16 port,
 	return false;
 }
 
-
+//check wheter one path is the original path
 bool is_original_path(unsigned char *node_id, __be32 saddr, __be32 daddr,
 		__be16 sport, __be16 dport,	unsigned char session_id)
 {
@@ -2045,6 +2117,8 @@ bool is_original_path(unsigned char *node_id, __be32 saddr, __be32 daddr,
 	return false;
 }
 
+//add path info into pi_head for UDP.
+//TCP and UDP have different proces.
 int add_path_info_udp(unsigned char *node_id, __be32 daddr, __be16 sport,
 		__be16 dport, unsigned char session_id, unsigned int protocol)
 {
@@ -2124,6 +2198,7 @@ int add_path_info_udp(unsigned char *node_id, __be32 daddr, __be16 sport,
 	return 1;
 }
 
+//find the path with the lowest delay. This is for the customized routing
 struct path_info_table *find_lowest_delay_path(unsigned char *node_id,
 		unsigned char session_id)
 {
@@ -2154,6 +2229,7 @@ struct path_info_table *find_lowest_delay_path(unsigned char *node_id,
 	return f_path;
 }
 
+//log
 void add_mpip_log(unsigned char session_id)
 {
 	struct path_info_table *path_info;
@@ -2201,6 +2277,7 @@ void add_mpip_log(unsigned char session_id)
 
 }
 
+//dreprecated. write log into file has performance issues.
 void write_mpip_log_to_file(unsigned char session_id)
 {
 	struct path_info_table *path_info;
@@ -2250,6 +2327,9 @@ void write_mpip_log_to_file(unsigned char session_id)
 
 }
 
+//find the best path to send out the packet. 
+//This method is very important. It choose the path according to the customized routing
+//also, the random number is generated here.
 unsigned char find_fastest_path_id(unsigned char *node_id,
 			   __be32 *saddr, __be32 *daddr,  __be16 *sport, __be16 *dport,
 			   __be32 origin_saddr, __be32 origin_daddr, __be16 origin_sport,
@@ -2422,7 +2502,7 @@ ret:
 	return f_path_id;
 }
 
-
+//send heartbeat
 void send_mpip_hb(struct sk_buff *skb, unsigned char session_id)
 {
 	if (!skb)
@@ -2439,6 +2519,7 @@ void send_mpip_hb(struct sk_buff *skb, unsigned char session_id)
 	}
 }
 
+//decide which path to feedback
 unsigned char find_earliest_path_stat_id(unsigned char *dest_node_id, __s32 *delay)
 {
 	struct path_stat_table *path_stat;
@@ -2484,6 +2565,7 @@ unsigned char find_earliest_path_stat_id(unsigned char *dest_node_id, __s32 *del
 }
 
 
+//get find local address. Mainly for deciding whether this address is local address.
 __be32 find_local_addr(__be32 addr)
 {
 	struct local_addr_table *local_addr;
@@ -2536,6 +2618,7 @@ void get_available_local_addr(void)
 	}
 }
 
+//when ip address changes, reset relative tables.
 void update_addr_change(void)
 {
 //	reset_mpip();
@@ -2584,6 +2667,7 @@ void update_addr_change(void)
 	mpip_log("%s, %s, %d\n", __FILE__, __FUNCTION__, __LINE__);
 }
 
+//find the ehternet card with ip address.
 struct net_device *find_dev_by_addr(__be32 addr)
 {
 	struct net_device *dev;
@@ -2605,7 +2689,7 @@ struct net_device *find_dev_by_addr(__be32 addr)
 	return NULL;
 }
 
-
+//reset everything
 void reset_mpip(void)
 {
 	struct mpip_enabled_table *mpip_enabled;
@@ -2712,7 +2796,8 @@ void reset_mpip(void)
 
 }
 
-
+//implement sys call for printing all tables into terminal. 
+//Sys calls can be called at application layer with bash shell script
 asmlinkage long sys_mpip(void)
 {
 	struct mpip_enabled_table *mpip_enbaled;
@@ -2919,6 +3004,7 @@ asmlinkage long sys_mpip(void)
 
 }
 
+//sys call for reset
 asmlinkage long sys_reset_mpip(void)
 {
 	reset_mpip();
@@ -2926,6 +3012,7 @@ asmlinkage long sys_reset_mpip(void)
 	return 0;
 }
 
+//sys call for add routing
 asmlinkage long sys_add_mpip_route_rule(const char *dest_addr, const char *dest_port,
 		int protocol, int startlen,
 		int endlen, int priority)
