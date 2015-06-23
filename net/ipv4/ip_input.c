@@ -392,7 +392,8 @@ static int ip_rcv_finish(struct sk_buff *skb)
 			return NET_RX_SUCCESS;
 
 		iph = ip_hdr(skb);
-
+		
+		//if sysctl_mpip_send is set, enable tcp outoforder process
 		if (sysctl_mpip_send && iph->protocol == IPPROTO_TCP)
 		{
 			unsigned char session_id = get_tcp_session(skb);
