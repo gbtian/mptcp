@@ -176,9 +176,15 @@ int ip_local_out(struct sk_buff *skb)
 	{
 		if (check_bad_addr(iph->saddr) && check_bad_addr(iph->daddr))
 		{
-
+			//send out the mpip query. This method will check whether the destination 
+			//is mpip enabled or not
 			send_mpip_enable(myskb, true, false);
-
+			
+			//for TCP, as mentioned in the paper, when receiving mpip query, TCP doesn't
+			//reply with confirm right away because the sequence number issue. Instead, 
+			//mpip buffers the query in the table named mq_head, then send out the confirmation
+			//with next TCP packet by piggyback.
+			
 			if (iph->protocol == IPPROTO_TCP)
 				send_mpip_enabled(myskb, true, false);
 		}
