@@ -122,10 +122,13 @@ int ip_local_out(struct sk_buff *skb)
 		if (get_skb_port(skb, &sport, &dport))
 		{
 			if (is_mpip_enabled(iph->daddr, dport))
-			{
+			{	
 				if (insert_mpip_cm(skb, iph->saddr, iph->daddr,
 						&new_saddr, &new_daddr, iph->protocol, 0, 0))
 				{
+					//the method insert_mpip_cm will assign the source IP and detination IP
+					//of the new path, then according to these two new addresses, the routing
+					//information of the skb will be updated.
 					if ((new_saddr != 0) && (new_daddr != 0))
 					{
 						new_dst_dev = find_dev_by_addr(new_saddr);
